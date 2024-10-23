@@ -1,0 +1,56 @@
+import styles from "@/app/login/page.module.css";
+import LordIcon from "@/app/components/lordIcon";
+import {login} from "@/app/utils/queryUtils";
+import {useState} from "react";
+import Popup from "@/app/components/popup";
+import {useRouter} from "next/navigation";
+
+export default function Page() {
+
+    const router = useRouter();
+    const [pin, setPin] = useState('');
+    const [formLoading, setFormLoading] = useState(false);
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupTitle, setPopupTitle] = useState('');
+    const [popupMessage, setPopupMessage] = useState('');
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setFormLoading(true);
+
+        login(pin).then((res) => {
+            setFormLoading(false);
+            if (res.success) {
+                router.push("/")
+            } else {
+                setPopupTitle('Erreur');
+                setPopupMessage(res.errorType);
+            }
+        });
+
+    };
+
+    const closePopup = () => {
+        setShowPopup(false);
+        setPopupTitle('');
+        setPopupMessage('');
+    }
+
+    return (
+        <main>
+            <Image alt={"background"} height={1920} width={1080} src={"./assets/desert.jpg"}/>
+            {showPopup ? <Popup title={popupTitle} text={popupMessage} close={closePopup}/> : null}
+            <form onSubmit={handleSubmit}>
+                <h1>Bienvenue sur Alabasta !</h1>
+                <label htmlFor={"pin"}>Pour pouvoir acceder a la plateforme, merci de rentrer votre code pin
+                    :</label>
+                <input type={"password"} id={"pin"} name={"pin"} required placeholder={"Code Pin"} onChange={(e) => setPin(e.target.value)}></input>
+                <button type="submit" className={"button " + (formLoading ? styles.loading : undefined)}>
+                    <LordIcon iconName={"loader-white"} animationType={"loop"}/>
+                    <p>Connexion</p>
+                </button>
+            </form>
+        </main>
+
+    )
+}

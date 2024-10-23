@@ -38,5 +38,5 @@ export async function middleware(req) {
  * @type {{matcher: string[]}}
  */
 export const config = {
-    matcher: ['/dashboard/:path*'], // Pages protégées
+    matcher: ['/:path*'], // Pages protégées
 };
