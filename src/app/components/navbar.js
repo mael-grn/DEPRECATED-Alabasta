@@ -99,7 +99,7 @@ export default function Navbar() {
                             showInfo ?
                                 <div className={styles.menuContent}>
                                     <Link className={styles.logoutBtn + " buttonLight"}
-                                          href={"/dashboard/settings/"} onClick={() => setShowInfo(false)}>Paramètres</Link>
+                                          href={"/src/app/settings/"} onClick={() => setShowInfo(false)}>Paramètres</Link>
                                     <Link className={styles.logoutBtn + " buttonLight"}
                                        href={"/dashboard"} onClick={() => setShowInfo(false)}>DashBoard</Link>
                                     <a className={styles.logoutBtn + " buttonLight"}

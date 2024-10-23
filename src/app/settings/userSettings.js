@@ -1,7 +1,7 @@
 import {recoverUserData, saveUserData, updateUser} from "@/app/controller/userController";
 import {useEffect, useState} from "react";
 import Popup from "@/app/components/popup";
-import styles from "@/app/dashboard/settings/userSettings.module.css";
+import styles from "@/app/settings/userSettings.module.css";
 import LordIcon from "@/app/components/lordIcon";
 
 export default function UserSettings() {

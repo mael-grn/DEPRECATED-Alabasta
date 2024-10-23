@@ -1,10 +1,10 @@
 "use client";
 
 import {useState} from "react";
-import UserSettings from "@/app/dashboard/settings/userSettings";
-import AppSettings from "@/app/dashboard/settings/appSettings";
-import DisplaySettings from "@/app/dashboard/settings/DisplaySettings";
-import styles from "@/app/dashboard/settings/page.module.css";
+import UserSettings from "@/app/settings/userSettings";
+import AppSettings from "@/app/settings/appSettings";
+import DisplaySettings from "@/app/settings/DisplaySettings";
+import styles from "@/app/settings/page.module.css";
 
 export default function Page() {
 

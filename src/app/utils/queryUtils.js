@@ -14,23 +14,21 @@ export const logout = async () => {
 
 /**
  * Send a request to the server to authenticate the user with the email and password
- * @param email
- * @param password
  * @returns {Promise<ServerResponse>}
  */
-export const login = async (email, password) => {
+export const login = async (secretKey) => {
     const res = await fetch('/api/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({email, password}),
+        body: JSON.stringify({secretKey}),
     });
 
     if (res.status === 200) {
 
         const data = await res.json();
-        let user = new User(data.data.id, data.data.name, data.data.surname, data.data.date_creat, data.data.email);
+        let user = new User(data.data.name, data.data.surname);
         await saveUserData(user);
         await setSecuredItem('token', data.token);
         return new ServerResponse(true, null, user);
@@ -68,7 +66,7 @@ export const loginToken = async () => {
     if (res.status === 200) {
         console.log("check success");
         const data = await res.json();
-        let user = new User(data.data.id, data.data.name, data.data.surname, data.data.date_creat, data.data.email);
+        let user = new User(data.data.name, data.data.surname);
         await saveUserData(user);
         return new ServerResponse(true, null, user);
     } else if (res.status === 404) {
@@ -76,29 +74,6 @@ export const loginToken = async () => {
     } else if (res.status === 401) {
         await logout();
         return new ServerResponse(false, ErrorTypes.WRONGTOKEN, null);
-    } else {
-        return new ServerResponse(false, ErrorTypes.SERVER, null);
-    }
-}
-
-/**
- * Send a request to the server to register a new user with the name, surname, email and password into the database
- * @returns {Promise<ServerResponse>}
- */
-export const register = async (name, surname, email, password) => {
-
-    const res = await fetch('/api/register', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({surname, name, email, password}),
-    });
-
-    if (res.status === 200) {
-        return new ServerResponse(true, null, null);
-    } else if (res.status === 400) {
-        return new ServerResponse(false, ErrorTypes.ALREADYUSER, null);
     } else {
         return new ServerResponse(false, ErrorTypes.SERVER, null);
     }

@@ -3,15 +3,6 @@ import User from "@/app/model/user";
 import {deleteEntity, loginToken, updateEntity} from "@/app/utils/queryUtils";
 
 /**
- * Format the name of the user to capitalize the first letter of the name and surname
- * @param name the name to format
- * @returns {string}
- */
-export const formatUserName =(name) => {
-    return  name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
-}
-
-/**
  * Save the user data in a secured cookie on the server
  * @returns {Promise<void>}
  */
@@ -29,11 +20,12 @@ export const saveUserData = async (user) => {
 export const recoverUserData = async () => {
     let user;
     try {
-        user = JSON.parse(await getItem('user'));
+        let item = await getItem('user');
+        user = JSON.parse(item.toString());
     } catch (e) {
         return null;
     }
-    return new User(user.id, user.name, user.surname, user.date_creat, user.email);
+    return new User(user.name, user.surname);
 }
 
 export const authenticateUser = async () => {
