@@ -8,11 +8,13 @@ export async function POST(req, res) {
             if (!req.body) {
                 return res.status(400).json({ message: "wrong cookies with the query. expected email and password" });
             }
-            const { email, password } = await req.json();
+            const { key } = await req.json();
+
+            const hashedKey = await bcrypt.hash(key, 10);
 
             // Requête SQL pour vérifier les identifiants
             const { rows } = await sql`
-                SELECT * FROM USERS WHERE email = ${email};
+                SELECT * FROM alabasta_account WHERE secretKey = ${hashedKey};
             `;
 
             // Vérification de l'existence de l'utilisateur
@@ -25,17 +27,8 @@ export async function POST(req, res) {
 
                 const user = rows[0];
 
-                // Comparaison du mot de passe avec le haché en base de données
-                const passwordMatch = await bcrypt.compare(password, user.password);
-                if (!passwordMatch) {
-                    return new Response(JSON.stringify({ message: 'Invalid password' }), {
-                        status: 401,
-                        headers: { 'Content-Type': 'application/json' },
-                    });
-                }
-
                 const secretKey = process.env.AUTH_SECRET;
-                const token = jwt.sign({ email: user.email }, secretKey, { expiresIn: '1h' });
+                const token = jwt.sign({ key: key }, secretKey, { expiresIn: '1h' });
                 return new Response(JSON.stringify({ message: 'user credentials are correct', data: user, token: token }), {
                     status: 200,
                     headers: { 'Content-Type': 'application/json' },

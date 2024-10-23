@@ -35,7 +35,7 @@ export async function POST(req, res) {
         }
 
         const { rows } = await sql`
-            SELECT * FROM USERS WHERE email = ${decoded.email};
+            SELECT * FROM alabasta_acount WHERE secretKey = ${decoded.key};
             `;
 
         if (rows.length === 0) {

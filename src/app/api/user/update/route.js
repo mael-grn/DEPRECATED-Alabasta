@@ -25,20 +25,16 @@ export async function POST(req, res) {
             });
         }
 
-        const { id, name, surname, email } = entity;
+        const { name, surname } = entity;
         let newUser;
+        const hashedKey = await bcrypt.hash(decoded.key, 10);
 
-        console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA " + `
-            UPDATE USERS
-            SET name = ${name}, surname = ${surname}, email = ${email}
-            WHERE id = ${id};
-            `)
         // Requête SQL pour modifier l'utilisateur
         try {
-            let newUser = await sql`
+            newUser = await sql`
             UPDATE USERS
-            SET name = ${name}, surname = ${surname}, email = ${email}
-            WHERE id = ${id};
+            SET name = ${name}, surname = ${surname}
+            WHERE secretKey = ${hashedKey};
             `;
         } catch (error) {
             return new Response(JSON.stringify({ message: `server error: ${error}` }), {
