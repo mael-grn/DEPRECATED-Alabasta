@@ -1,0 +1,82 @@
+
+:root {
+    --primary-color: #bb3e03;
+    --secondary-color: #ee9b00;
+    --background-color: #FFF1EA;
+    --valid: #005f73;
+    --invalid: #ae2012;
+    --text-color: black;
+    --color-hover: #e9d8a6;
+}
+
+* {
+    transition: all .3s ease;
+}
+
+.button, .buttonLight {
+    padding: 10px 20px;
+    font-size: 25px;
+    display: flex;
+    width: fit-content;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50px;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    user-select: none;
+    font-weight: bold;
+    border: none;
+
+}
+
+.button {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.buttonLight {
+    background-color: transparent;
+    color: black;
+}
+
+@media only screen and (min-width: 800px) {
+    .button:hover, .buttonLight:hover {
+        background-color: var(--color-hover);
+        transform: scale(1.05);
+    }
+}
+
+.button:active, .buttonLight:active {
+    transform: scale(.8);
+}
+
+body {
+    margin: 0;
+    background-color: white;
+}
+
+html {
+    min-width: 100%;
+    min-height: 100%;
+}
+
+html.lenis, html.lenis body {
+    height: auto;
+}
+
+.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+    overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+    pointer-events: none;
+}
