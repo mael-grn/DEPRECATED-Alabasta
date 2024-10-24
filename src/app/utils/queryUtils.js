@@ -1,6 +1,6 @@
 import ServerResponse, {ErrorTypes} from "@/app/model/serverResponse";
 import User from "@/app/model/user";
-import {getSecuredItem, removeItem, setSecuredItem} from "@/app/utils/cookiesUtils";
+import {checkIfExist, getSecuredItem, removeItem, setSecuredItem} from "@/app/utils/cookiesUtils";
 import {deleteUserData, saveUserData} from "@/app/controller/userController";
 
 /**
@@ -16,23 +16,21 @@ export const logout = async () => {
  * Send a request to the server to authenticate the user with the email and password
  * @returns {Promise<ServerResponse>}
  */
-export const login = async (secretKey) => {
+export const login = async (key) => {
     const res = await fetch('/api/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({secretKey}),
+        body: JSON.stringify({key}),
     });
 
     if (res.status === 200) {
-
         const data = await res.json();
         let user = new User(data.data.name, data.data.surname);
         await saveUserData(user);
         await setSecuredItem('token', data.token);
         return new ServerResponse(true, null, user);
-
     } else if (res.status === 404 || res.status === 401) {
         return new ServerResponse(false, ErrorTypes.NOUSER, null);
     } else {
@@ -49,9 +47,9 @@ export const login = async (secretKey) => {
 export const loginToken = async () => {
 
     let token;
-    try {
+    if (await checkIfExist('token')) {
         token = await getSecuredItem('token');
-    } catch (e) {
+    } else {
         return new ServerResponse(false, ErrorTypes.NOUSER, null);
     }
 
@@ -62,9 +60,9 @@ export const loginToken = async () => {
         },
         body: JSON.stringify({token}),
     });
-
+    console.log(res.status);
     if (res.status === 200) {
-        console.log("check success");
+
         const data = await res.json();
         let user = new User(data.data.name, data.data.surname);
         await saveUserData(user);
@@ -88,9 +86,9 @@ export const loginToken = async () => {
 export const insertEntity = async (tableName, entity) => {
 
     let token;
-    try {
+    if (await checkIfExist('token')) {
         token = await getSecuredItem('token');
-    } catch (e) {
+    } else {
         return new ServerResponse(false, ErrorTypes.NOUSER, null);
     }
 
@@ -119,9 +117,9 @@ export const insertEntity = async (tableName, entity) => {
 export const getAllEntity = async (tableName) => {
 
     let token;
-    try {
+    if (await checkIfExist('token')) {
         token = await getSecuredItem('token');
-    } catch (e) {
+    } else {
         return new ServerResponse(false, ErrorTypes.NOUSER, null);
     }
 
@@ -151,9 +149,9 @@ export const getAllEntity = async (tableName) => {
 export const updateEntity = async (tableName, entity) => {
 
     let token;
-    try {
+    if (await checkIfExist('token')) {
         token = await getSecuredItem('token');
-    } catch (e) {
+    } else {
         return new ServerResponse(false, ErrorTypes.NOUSER, null);
     }
 
@@ -183,9 +181,9 @@ export const updateEntity = async (tableName, entity) => {
 export const deleteEntity = async (tableName, entity) => {
 
     let token;
-    try {
+    if (await checkIfExist('token')) {
         token = await getSecuredItem('token');
-    } catch (e) {
+    } else {
         return new ServerResponse(false, ErrorTypes.NOUSER, null);
     }
 

@@ -35,7 +35,7 @@ export async function POST(req, res) {
         }
 
         const { rows } = await sql`
-            SELECT * FROM alabasta_acount WHERE secretKey = ${decoded.key};
+            SELECT * FROM alabasta_account;
             `;
 
         if (rows.length === 0) {
@@ -44,17 +44,38 @@ export async function POST(req, res) {
                 headers: { 'Content-Type': 'application/json' },
             });
 
-        } else if (rows.length > 1) {
-            return new Response(JSON.stringify({ message: 'multiple users found' }), {
-                status: 500,
-                headers: { 'Content-Type': 'application/json' },
-            });
-
         } else {
-            return new Response(JSON.stringify({ message: 'user found', data: rows[0] }), {
+
+            let userFound = false;
+            let i = 0;
+            let user;
+            while (!userFound && i < rows.length) {
+                user = rows[i];
+                try {
+                    userFound = await bcrypt.compare(decoded.key, user.secretkey);
+                    if (!userFound) {
+
+                    }
+                } catch (e) {
+                    console.log(e)
+                }
+                i++;
+            }
+
+            if (!userFound) {
+                return new Response(JSON.stringify({ message: 'wrong token' }), {
+                    status: 401,
+                    headers: { 'Content-Type': 'application/json' },
+                });
+            }
+
+            const secretKey = process.env.AUTH_SECRET;
+            const token = jwt.sign({ key: decoded }, secretKey, { expiresIn: '1h' });
+            return new Response(JSON.stringify({ message: 'good token', data: user, token: token }), {
                 status: 200,
                 headers: { 'Content-Type': 'application/json' },
             });
+
         }
 
     } catch (error) {

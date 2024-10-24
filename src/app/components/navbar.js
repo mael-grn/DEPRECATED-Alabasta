@@ -101,7 +101,7 @@ export default function Navbar() {
                                     <Link className={styles.logoutBtn + " buttonLight"}
                                           href={"/src/app/settings/"} onClick={() => setShowInfo(false)}>Paramètres</Link>
                                     <Link className={styles.logoutBtn + " buttonLight"}
-                                       href={"/dashboard"} onClick={() => setShowInfo(false)}>DashBoard</Link>
+                                       href={"/"} onClick={() => setShowInfo(false)}>DashBoard</Link>
                                     <a className={styles.logoutBtn + " buttonLight"}
                                        onClick={logoutBtn}>Déconnexion</a>
 

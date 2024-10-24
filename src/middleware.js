@@ -9,7 +9,7 @@ import {cookies} from 'next/headers';
  * @returns {NextResponse<unknown>}
  */
 export async function middleware(req) {
-    let validToken;
+    let validToken = false;
     const token = cookies().get("token")?.value;
 
     if (token) {
@@ -20,6 +20,8 @@ export async function middleware(req) {
             },
             body: JSON.stringify({token}),
         })
+
+
 
         validToken = res.status === 200;
     }
@@ -38,5 +40,6 @@ export async function middleware(req) {
  * @type {{matcher: string[]}}
  */
 export const config = {
-    matcher: ['/:path*'], // Pages protégées
+    matcher: [    '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|login).*)',
+        ], // Match toutes les routes sauf /login
 };

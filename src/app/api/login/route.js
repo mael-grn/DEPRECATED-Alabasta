@@ -4,17 +4,23 @@ import jwt from 'jsonwebtoken';
 
 export async function POST(req, res) {
         try {
+            //await addUser();
             // extraction des données de la requête
             if (!req.body) {
                 return res.status(400).json({ message: "wrong cookies with the query. expected email and password" });
             }
             const { key } = await req.json();
 
-            const hashedKey = await bcrypt.hash(key, 10);
+            if (!key) {
+                return new Response(JSON.stringify({ message: 'no key parameter found' }), {
+                    status: 500,
+                    headers: { 'Content-Type': 'application/json' },
+                });
+            }
 
             // Requête SQL pour vérifier les identifiants
             const { rows } = await sql`
-                SELECT * FROM alabasta_account WHERE secretKey = ${hashedKey};
+                SELECT * FROM alabasta_account;
             `;
 
             // Vérification de l'existence de l'utilisateur
@@ -24,8 +30,26 @@ export async function POST(req, res) {
                     headers: { 'Content-Type': 'application/json' },
                 });
             } else {
+                let userFound = false;
+                let i = 0;
+                let user;
+                while (!userFound && i < rows.length) {
+                    user = rows[i];
+                    try {
+                        userFound = await bcrypt.compare(key, user.secretkey);
+                    } catch (e) {
+                        console.log(e)
+                    }
 
-                const user = rows[0];
+                    i++;
+                }
+
+                if (!userFound) {
+                    return new Response(JSON.stringify({ message: 'user credentials are incorrect' }), {
+                        status: 401,
+                        headers: { 'Content-Type': 'application/json' },
+                    });
+                }
 
                 const secretKey = process.env.AUTH_SECRET;
                 const token = jwt.sign({ key: key }, secretKey, { expiresIn: '1h' });
@@ -41,4 +65,14 @@ export async function POST(req, res) {
                 headers: { 'Content-Type': 'application/json' },
             });
         }
+}
+
+async function addUser() {
+
+    const hashedKey = await bcrypt.hash('3575', 10);
+    await sql`
+            INSERT INTO alabasta_account (secretKey, name, surname) VALUES (${hashedKey}, 'Maël', 'Garnier');
+        `;
+
+
 }

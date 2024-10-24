@@ -35,3 +35,10 @@ export const getSecuredItem = async (key) => {
 export const removeItem = async (key) => {
     return cookies().delete(key);
 }
+
+export const checkIfExist = async (key) => {
+    return new Promise((resolve) => {
+        const cookie = cookies().get(key);
+        resolve(cookie !== undefined);
+    });
+}

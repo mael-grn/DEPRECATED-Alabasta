@@ -1,9 +1,12 @@
+'use client';
+
 import styles from "@/app/login/page.module.css";
 import LordIcon from "@/app/components/lordIcon";
 import {login} from "@/app/utils/queryUtils";
 import {useState} from "react";
 import Popup from "@/app/components/popup";
 import {useRouter} from "next/navigation";
+import Image from "next/image";
 
 export default function Page() {
 
@@ -23,6 +26,7 @@ export default function Page() {
             if (res.success) {
                 router.push("/")
             } else {
+                setShowPopup(true)
                 setPopupTitle('Erreur');
                 setPopupMessage(res.errorType);
             }
@@ -37,20 +41,19 @@ export default function Page() {
     }
 
     return (
-        <main>
-            <Image alt={"background"} height={1920} width={1080} src={"./assets/desert.jpg"}/>
+        <main className={styles.main}>
+            <Image alt="background" height={1920} width={1080} src="/assets/desert.jpg"/>
             {showPopup ? <Popup title={popupTitle} text={popupMessage} close={closePopup}/> : null}
             <form onSubmit={handleSubmit}>
                 <h1>Bienvenue sur Alabasta !</h1>
                 <label htmlFor={"pin"}>Pour pouvoir acceder a la plateforme, merci de rentrer votre code pin
                     :</label>
                 <input type={"password"} id={"pin"} name={"pin"} required placeholder={"Code Pin"} onChange={(e) => setPin(e.target.value)}></input>
-                <button type="submit" className={"button " + (formLoading ? styles.loading : undefined)}>
+                <button type="submit" className={"button " + (formLoading ? styles.loading : "")}>
                     <LordIcon iconName={"loader-white"} animationType={"loop"}/>
                     <p>Connexion</p>
                 </button>
             </form>
         </main>
-
     )
 }

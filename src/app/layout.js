@@ -6,8 +6,7 @@ import LenisScroll from "@/app/components/lenis";
 const rubik = Rubik({subsets: ['latin']})
 
 export const metadata = {
-    title: "Team Me",
-    description: "Discover a new way to manage your team.",
+    title: "Alabasta",
 };
 
 export default function RootLayout({children}) {
