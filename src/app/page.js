@@ -42,7 +42,7 @@ export default function Page() {
 
     return (
         <main className={styles.main}>
-            <Image alt="background" height={1920} width={1080} src="/assets/desert.jpg"/>
+            <Image alt="background" height={2912} width={1632} src="/assets/desert.jpg"/>
             {showPopup ? <Popup title={popupTitle} text={popupMessage} close={closePopup}/> : null}
             <form onSubmit={handleSubmit}>
                 <h1>Bienvenue sur Alabasta !</h1>
