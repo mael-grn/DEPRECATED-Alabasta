@@ -1,0 +1,198 @@
+@keyframes appname-intro {
+    0% {
+        transform: translateY(calc(50vh - 100px)) scale(0);
+        border: 0 solid black;
+        font-size: 40px;
+    }
+    50% {
+        transform: translateY(calc(50vh - 100px)) scale(1.2);
+        border: 0 solid black;
+        font-size: 40px;
+    }
+    50% {
+        transform: translateY(calc(50vh - 100px)) scale(1.2);
+        border: 0 solid black;
+        font-size: 40px;
+    }
+    100% {
+        transform: translateY(0) scale(1);
+        border: 2px solid black;
+        font-size: 25px;
+    }
+}
+
+@keyframes appname-intro-mobile {
+    0% {
+        transform: translate(0, calc(50vh - 50px)) scale(0);
+        left: calc(50% - 65px);
+    }
+    50% {
+        transform: translate(0, calc(50vh - 50px)) scale(1);
+        left: calc(50% - 65px);
+    }
+    50% {
+        transform: translate(0, calc(50vh - 50px));
+        left: calc(50% - 65px);
+    }
+    100% {
+        transform: translate(0, 0);
+        left: 25px;
+    }
+}
+
+@keyframes bg-intro {
+    0% {
+        opacity: 0;
+        transform: scale(0.8) translateY(-30%);
+    }
+    50% {
+        opacity: 0;
+        transform: scale(0.8) translateY(-30%);
+
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+
+    }
+}
+
+.appname {
+    animation: appname-intro 1.3s ease;
+    position: fixed;
+    top: 15px;
+    left: calc(50% - 125px);
+    width: 250px;
+    text-align: center;
+    font-size: 25px;
+    padding: 10px 20px;
+    border: 2px solid black;
+    border-radius: 50px;
+    margin: 0;
+    font-weight: bold;
+    transition: all .5s ease;
+}
+
+.scrolled .appname {
+    font-size: 35px;
+    top: 10px;
+    left: 10px;
+    text-align: start;
+}
+
+.heroDiv {
+    animation: bg-intro 1.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 75px;
+    height: calc(100vh - 50px);
+    gap: 50px;
+}
+
+.mainHeroDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    width: calc(100% - 40px);
+    height: fit-content;
+}
+
+.heroTextDiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: calc(45% - 50px);
+    padding: 20px;
+    gap: 50px;
+}
+
+.heroTextDiv h1 {
+    font-size: 60px;
+    margin: 0;
+    font-weight: bold;
+}
+
+.heroTextDiv p {
+    font-size: 20px;
+    margin: 0;
+}
+
+.heroImageDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: calc(35% - 10px);
+    height: fit-content;
+}
+
+.heroImageDiv img {
+    height: auto;
+    width: 90%;
+}
+
+.buttonsDiv {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    width: calc(80% - 80px);
+    justify-content: center;
+    align-items: center;
+    border-radius: 25px;
+    background-color: var(--background-color);
+    gap: 20px;
+}
+
+.buttonsDiv p {
+    font-size: 20px;
+    margin: 0;
+}
+
+
+@media only screen and (max-width: 800px) {
+
+    .appname {
+        animation: appname-intro-mobile 1s ease;
+        padding: 0;
+        text-align: start;
+        font-size: 30px;
+        left: 25px;
+        top: 30px;
+        width: 130px;
+        border: none;
+
+    }
+
+    .scrolled .appname {
+        left: calc(50% - 125px);
+        transform: translate(0, -200%);
+        text-align: center;
+    }
+
+    .heroDiv {
+        gap: 20px;
+    }
+
+    .mainHeroDiv {
+        flex-direction: column-reverse;
+    }
+
+    .heroTextDiv, .heroImageDiv {
+        width: calc(100% - 40px);
+        text-align: center;
+        gap: 20px;
+    }
+
+    .heroTextDiv h1 {
+        font-size: 45px;
+    }
+
+    .buttonsDiv {
+        width: calc(100% - 80px);
+        text-align: center;
+    }
+}

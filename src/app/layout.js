@@ -14,7 +14,6 @@ export default function RootLayout({children}) {
         <html lang="fr">
         <body className={rubik.className}>
         <LenisScroll/>
-        <Navbar/>
         {children}
         </body>
         </html>

@@ -1,12 +1,38 @@
 'use client';
 
+import styles from "@/app/page.module.css";
+import LordIcon from "@/app/components/lordIcon";
+import {login} from "@/app/utils/queryUtils";
 import {useState} from "react";
 import Popup from "@/app/components/popup";
+import {useRouter} from "next/navigation";
+import Image from "next/image";
 
-export default function Home() {
+export default function Page() {
+
+    const router = useRouter();
+    const [pin, setPin] = useState('');
+    const [formLoading, setFormLoading] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
     const [popupTitle, setPopupTitle] = useState('');
     const [popupMessage, setPopupMessage] = useState('');
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setFormLoading(true);
+
+        login(pin).then((res) => {
+            setFormLoading(false);
+            if (res.success) {
+                router.push("/home")
+            } else {
+                setShowPopup(true)
+                setPopupTitle('Erreur');
+                setPopupMessage(res.errorType);
+            }
+        });
+
+    };
 
     const closePopup = () => {
         setShowPopup(false);
@@ -15,10 +41,23 @@ export default function Home() {
     }
 
     return (
-        <div>
+        <main className={styles.main}>
+            <Image alt="background" height={1920} width={1080} src="/assets/desert.jpg"/>
             {showPopup ? <Popup title={popupTitle} text={popupMessage} close={closePopup}/> : null}
-            <Image alt={"background"} height={1920} width={1080} src={"./assets/desert.jpg"}/>
-            HOME
-        </div>
-    );
+            <form onSubmit={handleSubmit}>
+                <h1>Bienvenue sur Alabasta !</h1>
+                <label htmlFor={"pin"}>Pour pouvoir acceder a la plateforme, merci de rentrer votre code pin
+                    :</label>
+                <div>
+                    <input type={"password"} id={"pin"} name={"pin"} required placeholder={"Code Pin"}
+                           onChange={(e) => setPin(e.target.value)}></input>
+                    <button type="submit" className={"button " + (formLoading ? styles.loading : "")}>
+                        <LordIcon iconName={"arrow-white"} animationType={"hover"}/>
+                        <LordIcon iconName={"loader-white"} animationType={"loop"}/>
+                    </button>
+                </div>
+
+            </form>
+        </main>
+    )
 }

@@ -8,18 +8,15 @@ import Image from "next/image";
 
 import {logout} from "@/app/utils/queryUtils";
 import {useRouter} from "next/navigation";
-import {usePathname} from "next/navigation";
 import {authenticateUser, recoverUserData} from "@/app/controller/userController";
 import LordIcon from "@/app/components/lordIcon";
 
 export default function Navbar() {
     const router = useRouter();
-    const pathname = usePathname();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [bgClosing, setBgClosing] = useState(false);
     const [showInfo, setShowInfo] = useState(false);
-    const noNavbarRoutes = ['/login', '/register'];
 
     const handleUserUpdate = () => {
         setLoading(true);
@@ -72,7 +69,6 @@ export default function Navbar() {
     }
 
     return (
-        !noNavbarRoutes.includes(pathname) ?
         <nav>
             <span
                 className={`${styles.navBackground} 
@@ -122,6 +118,6 @@ export default function Navbar() {
                     )
             }
 
-        </nav> : ""
+        </nav>
     )
 }

@@ -28,7 +28,7 @@ export async function middleware(req) {
 
     if (!validToken) {
         // Redirection si l'utilisateur n'est pas authentifié
-        return NextResponse.redirect(new URL('/login', req.url));
+        return NextResponse.redirect(new URL('/', req.url));
     }
 
     // Si l'utilisateur est authentifié, laisser la requête passer
@@ -40,6 +40,6 @@ export async function middleware(req) {
  * @type {{matcher: string[]}}
  */
 export const config = {
-    matcher: [    '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|login).*)',
+    matcher: ['/home/:path*',
         ], // Match toutes les routes sauf /login
 };
