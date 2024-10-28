@@ -3,10 +3,11 @@
 import styles from "@/app/page.module.css";
 import LordIcon from "@/app/components/lordIcon";
 import {login} from "@/app/utils/queryUtils";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import Popup from "@/app/components/popup";
 import {useRouter} from "next/navigation";
 import Image from "next/image";
+import {recoverUserData} from "@/app/controller/userController";
 
 export default function Page() {
 
@@ -16,6 +17,14 @@ export default function Page() {
     const [showPopup, setShowPopup] = useState(false);
     const [popupTitle, setPopupTitle] = useState('');
     const [popupMessage, setPopupMessage] = useState('');
+
+    useEffect(() => {
+        recoverUserData().then(user => {
+            if (user) {
+                router.push("/home")
+            }
+        })
+    });
 
     const handleSubmit = async (e) => {
         e.preventDefault();

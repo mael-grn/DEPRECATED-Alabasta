@@ -1,9 +1,17 @@
 "use client";
 
-import {useEffect, useRef, useState} from "react";
+import {forwardRef, useEffect, useImperativeHandle, useRef, useState} from "react";
 import {Player} from "@lordicon/react";
 
-export default function LordIcon({iconName, animationType = 'none'}) {
+const LordIcon = forwardRef(({ iconName, animationType = 'none' }, ref) => {
+
+    useImperativeHandle(ref, () => ({
+        triggerAnimation() {
+            if (playerRef.current) {
+                playerRef.current.playFromBeginning();
+            }
+        },
+    }));
 
     const playerRef = useRef(null);
     const ICON = require(`/public/icons/${iconName}.json`);
@@ -30,4 +38,6 @@ export default function LordIcon({iconName, animationType = 'none'}) {
             />
         </span>
     );
-}
+});
+
+export default LordIcon;

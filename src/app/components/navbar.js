@@ -1,6 +1,6 @@
 "use client";
 
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import styles from "@/app/components/navbar.module.css";
 import Link from "next/link";
 
@@ -16,7 +16,12 @@ export default function Navbar() {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [bgClosing, setBgClosing] = useState(false);
-    const [showInfo, setShowInfo] = useState(false);
+    const [deploy, setDeploy] = useState(false);
+    const accountIconRef = useRef(null);
+    const homeIconRef = useRef(null);
+    const ticketIconRef = useRef(null);
+    const settingsIconRef = useRef(null);
+    const logoutIconRef = useRef(null);
 
     const handleUserUpdate = () => {
         setLoading(true);
@@ -61,7 +66,7 @@ export default function Navbar() {
 
     const closeShowUserData = () => {
         setBgClosing(true);
-        setShowInfo(false);
+        setDeploy(false);
         setTimeout(() => {
             setBgClosing(false);
         }, 400);
@@ -70,52 +75,40 @@ export default function Navbar() {
 
     return (
         <nav>
-            <span
-                className={`${styles.navBackground} 
-                    ${bgClosing ? styles.navBackgroundClosing : ""} 
-                    ${showInfo ? styles.navBackgroundVisible : ""}`}
-                onClick={closeShowUserData}/>
             {
-                user ?
-                    <div className={`${styles.nav} ${showInfo ? styles.showInfo : ''}`}
-                         onClick={() => {
-                             if (!showInfo) setShowInfo(true)
-                         }}>
+                !loading ?
+                    <div className={`${styles.nav} ${deploy ? styles.deploy : ''}`}
+                         onMouseEnter={() => {
+                             if (!deploy) setDeploy(true)
+                         }}
+                    onMouseLeave={() => {
+                        if (deploy) setDeploy(false)
+                    }}>
 
-                        <div className={styles.resume}>
+                        <div className={styles.navElem} onMouseEnter={() => {if (accountIconRef) accountIconRef.current.triggerAnimation()}}>
                             <p>{user.name}</p>
-                            <Image
-                                alt={"profile image"}
-                                src="/icons/user.png"
-                                width={1000}
-                                height={1000}
-                            />
+                            <LordIcon ref={accountIconRef} iconName={"account-white"} animationType={"hover"}/>
                         </div>
-                        {
-                            showInfo ?
-                                <div className={styles.menuContent}>
-                                    <Link className={styles.logoutBtn + " buttonLight"}
-                                          href={"/src/app/settings/"} onClick={() => setShowInfo(false)}>Paramètres</Link>
-                                    <Link className={styles.logoutBtn + " buttonLight"}
-                                       href={"/"} onClick={() => setShowInfo(false)}>DashBoard</Link>
-                                    <a className={styles.logoutBtn + " buttonLight"}
-                                       onClick={logoutBtn}>Déconnexion</a>
-
-                                    <a className={styles.closeBtn + " button"}
-                                       onClick={closeShowUserData}>Fermer</a>
-                                </div>
-                                : undefined
-                        }
+                        <div className={styles.navElem} onMouseEnter={() => {if (homeIconRef) homeIconRef.current.triggerAnimation()}}>
+                            <p>Accueil</p>
+                            <LordIcon ref={homeIconRef} iconName={"home-white"} animationType={"hover"}/>
+                        </div>
+                        <div className={styles.navElem} onMouseEnter={() => {if (ticketIconRef) ticketIconRef.current.triggerAnimation()}}>
+                            <p>Films</p>
+                            <LordIcon ref={ticketIconRef} iconName={"ticket-white"} animationType={"hover"}/>
+                        </div>
+                        <div className={styles.navElem} onMouseEnter={() => {if (settingsIconRef) settingsIconRef.current.triggerAnimation()}}>
+                            <p>Paramètres</p>
+                            <LordIcon ref={settingsIconRef} iconName={"settings-white"} animationType={"hover"}/>
+                        </div>
+                        <div className={styles.navElem} onClick={logoutBtn} onMouseEnter={() => {if (logoutIconRef) logoutIconRef.current.triggerAnimation()}}>
+                            <p>Déconnexion</p>
+                            <LordIcon ref={logoutIconRef} iconName={"cross-white"} animationType={"hover"}/>
+                        </div>
 
                     </div>
                     :
-                    (
-                        loading ?
-                            <div className={styles.loading}>
-                                <LordIcon iconName={"loader-black"} animationType={"loop"}/>
-                            </div>
-                            : <Link href={"/login"} className={"button " + styles.connection}>Connexion</Link>
-                    )
+                    undefined
             }
 
         </nav>
