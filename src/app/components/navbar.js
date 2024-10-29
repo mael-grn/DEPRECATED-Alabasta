@@ -85,11 +85,6 @@ export default function Navbar() {
                     onMouseLeave={() => {
                         if (deploy) setDeploy(false)
                     }}>
-
-                        <div className={`${styles.navElem}`} onMouseEnter={() => {if (accountIconRef) accountIconRef.current.triggerAnimation()}}>
-                            <p>{user.name}</p>
-                            <LordIcon ref={accountIconRef} iconName={"account-white"} animationType={"hover"}/>
-                        </div>
                         <div onClick={() => router.push("/home")} className={`${styles.navElem} ${pathname === "/home" ? styles.selected : ""}`} onMouseEnter={() => {if (homeIconRef) homeIconRef.current.triggerAnimation()}}>
                             <p>Accueil</p>
                             <LordIcon ref={homeIconRef} iconName={"home-white"} animationType={"hover"}/>

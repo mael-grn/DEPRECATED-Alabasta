@@ -1,8 +1,7 @@
 import peerflix from 'peerflix';
-import {getStream} from "@/app/api/scrape/stream/streamManager";
+import { getStream } from "@/app/api/scrape/stream/streamManager";
 
-
-// Fonction GET pour servir le flux vidéo
+// Fonction GET pour servir le flux vidéo avec support des Range
 export async function GET(req, { params }) {
     const { streamId } = params;
     const torrentUrl = getStream(streamId);
@@ -24,7 +23,7 @@ export async function GET(req, { params }) {
                     headers: { 'Content-Type': 'application/json' },
                 }));
             }
-            resolve(file.createReadStream());
+            resolve(file);
         });
         engine.on('error', (error) => {
             engine.destroy();
@@ -35,21 +34,33 @@ export async function GET(req, { params }) {
         });
     });
 
-    const readableStream = new ReadableStream({
-        start(controller) {
-            stream.on('data', (chunk) => controller.enqueue(chunk));
-            stream.on('end', () => controller.close());
-            stream.on('error', (err) => controller.error(err));
-        },
-        cancel() {
-            engine.destroy();
-        },
-    });
+    const range = req.headers.get('range');
+    const fileSize = stream.length;
 
-    return new Response(readableStream, {
-        headers: {
-            'Content-Type': 'video/mp4',
-            'Transfer-Encoding': 'chunked',
-        },
-    });
+    if (range) {
+        const parts = range.replace(/bytes=/, "").split("-");
+        const start = parseInt(parts[0], 10);
+        const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+
+        const chunkSize = (end - start) + 1;
+        const fileStream = stream.createReadStream({ start, end });
+
+        return new Response(fileStream, {
+            status: 206,
+            headers: {
+                'Content-Range': `bytes ${start}-${end}/${fileSize}`,
+                'Accept-Ranges': 'bytes',
+                'Content-Length': chunkSize,
+                'Content-Type': 'video/mp4',
+            },
+        });
+    } else {
+        // Diffusion sans requête "Range" (lecture depuis le début)
+        return new Response(stream.createReadStream(), {
+            headers: {
+                'Content-Type': 'video/mp4',
+                'Content-Length': fileSize,
+            },
+        });
+    }
 }

@@ -110,9 +110,9 @@ export default function Home() {
                                     )
                                 }
                             </div>
-                            <button onClick={() => scrollMovieList(popularMovieListRef, 600)} className={styles.rightButton}><LordIcon
+                            <button onClick={() => scrollMovieList(popularMovieListRef, 325)} className={styles.rightButton}><LordIcon
                                 iconName={"circleArrow-white"} animationType={"hover"}/></button>
-                            <button onClick={() => scrollMovieList(popularMovieListRef, -600)} className={styles.leftButton}><LordIcon
+                            <button onClick={() => scrollMovieList(popularMovieListRef, -325)} className={styles.leftButton}><LordIcon
                                 iconName={"circleArrow-white"} animationType={"hover"}/></button>
 
                         </div>

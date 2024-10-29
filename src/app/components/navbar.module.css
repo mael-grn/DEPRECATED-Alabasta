@@ -71,3 +71,68 @@
 .nav.deploy .navElem p {
     font-size: 20px;
 }
+
+@media only screen and (max-width: 600px) {
+    .nav {
+        animation: enter-anim 0.5s ease;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        height: 70px;
+        width: calc(100vw - 20px);
+        background-color: var(--background-color);
+        backdrop-filter: blur(20px);
+        padding: 10px;
+        border-radius: 25px 25px 0 0;
+        flex-direction: row;
+        gap: 10px;
+        align-items: center;
+        justify-content: space-around;
+    }
+
+    .nav .navElem p {
+        display: none;
+    }
+
+    .nav .navElem {
+        width: 55px;
+        padding: 0;
+        border-radius: 15px;
+        height: 55px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0;
+        cursor: pointer;
+    }
+
+    .nav .navElem.selected {
+        background-color: var(--secondary-color);
+    }
+
+    .nav .navElem:hover {
+        background-color: transparent;
+    }
+
+    .nav .navElem img, .nav .navElem span {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+
+    .nav.deploy {
+        width: calc(100vw - 20px);
+    }
+
+    .nav.deploy .navElem {
+        justify-content: center;
+        padding: 0;
+    }
+
+    .nav.deploy .navElem p {
+        font-size: 0;
+    }
+}
