@@ -7,12 +7,13 @@ import Link from "next/link";
 import Image from "next/image";
 
 import {logout} from "@/app/utils/queryUtils";
-import {useRouter} from "next/navigation";
+import {useRouter, usePathname} from "next/navigation";
 import {authenticateUser, recoverUserData} from "@/app/controller/userController";
 import LordIcon from "@/app/components/lordIcon";
 
 export default function Navbar() {
     const router = useRouter();
+    const pathname = usePathname();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [bgClosing, setBgClosing] = useState(false);
@@ -85,23 +86,23 @@ export default function Navbar() {
                         if (deploy) setDeploy(false)
                     }}>
 
-                        <div className={styles.navElem} onMouseEnter={() => {if (accountIconRef) accountIconRef.current.triggerAnimation()}}>
+                        <div className={`${styles.navElem}`} onMouseEnter={() => {if (accountIconRef) accountIconRef.current.triggerAnimation()}}>
                             <p>{user.name}</p>
                             <LordIcon ref={accountIconRef} iconName={"account-white"} animationType={"hover"}/>
                         </div>
-                        <div className={styles.navElem} onMouseEnter={() => {if (homeIconRef) homeIconRef.current.triggerAnimation()}}>
+                        <div onClick={() => router.push("/home")} className={`${styles.navElem} ${pathname === "/home" ? styles.selected : ""}`} onMouseEnter={() => {if (homeIconRef) homeIconRef.current.triggerAnimation()}}>
                             <p>Accueil</p>
                             <LordIcon ref={homeIconRef} iconName={"home-white"} animationType={"hover"}/>
                         </div>
-                        <div className={styles.navElem} onMouseEnter={() => {if (ticketIconRef) ticketIconRef.current.triggerAnimation()}}>
+                        <div className={`${styles.navElem} ${pathname === "/aaa" ? styles.selected : ""}`} onMouseEnter={() => {if (ticketIconRef) ticketIconRef.current.triggerAnimation()}}>
                             <p>Films</p>
                             <LordIcon ref={ticketIconRef} iconName={"ticket-white"} animationType={"hover"}/>
                         </div>
-                        <div className={styles.navElem} onMouseEnter={() => {if (settingsIconRef) settingsIconRef.current.triggerAnimation()}}>
+                        <div className={`${styles.navElem} ${pathname === "/aaa" ? styles.selected : ""}`} onMouseEnter={() => {if (settingsIconRef) settingsIconRef.current.triggerAnimation()}}>
                             <p>Paramètres</p>
                             <LordIcon ref={settingsIconRef} iconName={"settings-white"} animationType={"hover"}/>
                         </div>
-                        <div className={styles.navElem} onClick={logoutBtn} onMouseEnter={() => {if (logoutIconRef) logoutIconRef.current.triggerAnimation()}}>
+                        <div className={`${styles.navElem} ${pathname === "/aaa" ? styles.selected : ""}`} onClick={logoutBtn} onMouseEnter={() => {if (logoutIconRef) logoutIconRef.current.triggerAnimation()}}>
                             <p>Déconnexion</p>
                             <LordIcon ref={logoutIconRef} iconName={"cross-white"} animationType={"hover"}/>
                         </div>

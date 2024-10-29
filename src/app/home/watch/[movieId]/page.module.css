@@ -1,0 +1,15 @@
+.watch {
+    padding-left: 110px;
+    background-color: var(--dark-background-color);
+    min-height: 100vh;
+    width: calc(100% - 110px);
+}
+
+.watch h1 {
+    margin: 0;
+    color: var(--text-color);
+}
+
+.watch video {
+    z-index: 100;
+}

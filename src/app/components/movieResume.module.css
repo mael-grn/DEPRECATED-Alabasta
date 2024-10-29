@@ -1,0 +1,44 @@
+.movieResume {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    width: 300px;
+    height: 250px;
+    gap: 10px;
+}
+
+.movieResume img {
+
+    width: 300px;
+    height: 200px;
+    border-radius: 25px;
+    object-fit: cover ;
+}
+
+.movieResume p {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--text-color);
+    margin: 0;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.movieResume:hover {
+    cursor: pointer;
+
+}
+
+.movieResume:hover img {
+    cursor: pointer;
+    height: 250px;
+    opacity: .5;
+}
+
+.movieResume:hover p {
+    font-size: 0;
+
+}

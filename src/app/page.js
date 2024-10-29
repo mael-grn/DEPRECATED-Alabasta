@@ -58,7 +58,7 @@ export default function Page() {
                 <label htmlFor={"pin"}>Pour pouvoir acceder a la plateforme, merci de rentrer votre code pin
                     :</label>
                 <div>
-                    <input type={"password"} id={"pin"} name={"pin"} required placeholder={"Code Pin"}
+                    <input autoComplete={"off"} type={"password"} id={"pin"} name={"pin"} required placeholder={"Code Pin"}
                            onChange={(e) => setPin(e.target.value)}></input>
                     <button type="submit" className={"button " + (formLoading ? styles.loading : "")}>
                         <LordIcon iconName={"arrow-white"} animationType={"hover"}/>

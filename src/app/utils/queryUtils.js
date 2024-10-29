@@ -1,3 +1,5 @@
+
+
 import ServerResponse, {ErrorTypes} from "@/app/model/serverResponse";
 import User from "@/app/model/user";
 import {checkIfExist, getSecuredItem, removeItem, setSecuredItem} from "@/app/utils/cookiesUtils";
@@ -199,6 +201,113 @@ export const deleteEntity = async (tableName, entity) => {
         return new ServerResponse(true, null, null);
     } else if (res.status === 401) {
         return new ServerResponse(false, ErrorTypes.UNAUTHORIZED, null);
+    } else {
+        return new ServerResponse(false, ErrorTypes.SERVER, null);
+    }
+}
+
+export const getPopularMovies = async () => {
+
+    let token;
+    if (await checkIfExist('token')) {
+        token = await getSecuredItem('token');
+    } else {
+        return new ServerResponse(false, ErrorTypes.NOUSER, null);
+    }
+
+    const res = await fetch(`/api/scrape/popular/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token}),
+    });
+
+    if (res.status === 200) {
+        const data = await res.json();
+        return new ServerResponse(true, null, data.data.itemListElement);
+    } else if (res.status === 401) {
+        return new ServerResponse(false, ErrorTypes.UNAUTHORIZED, null);
+    } else {
+        return new ServerResponse(false, ErrorTypes.SERVER, null);
+    }
+}
+
+export const searchMovie = async (searchValue) => {
+
+    let token;
+    if (await checkIfExist('token')) {
+        token = await getSecuredItem('token');
+    } else {
+        return new ServerResponse(false, ErrorTypes.NOUSER, null);
+    }
+
+    const res = await fetch(`/api/scrape/search/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({searchValue, token}),
+    });
+
+    if (res.status === 200) {
+        const data = await res.json();
+        return new ServerResponse(true, null, data.data.itemListElement);
+    } else if (res.status === 401) {
+        return new ServerResponse(false, ErrorTypes.UNAUTHORIZED, null);
+    } else {
+        return new ServerResponse(false, ErrorTypes.SERVER, null);
+    }
+}
+
+export const getMovieDetails = async (movieUrl) => {
+
+    let token;
+    if (await checkIfExist('token')) {
+        token = await getSecuredItem('token');
+    } else {
+        return new ServerResponse(false, ErrorTypes.NOUSER, null);
+    }
+
+    const res = await fetch(`/api/scrape/details/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({movieId: movieUrl, token}),
+    });
+
+    if (res.status === 200) {
+        const data = await res.json();
+        return new ServerResponse(true, null, data.data);
+    } else if (res.status === 401) {
+        return new ServerResponse(false, ErrorTypes.UNAUTHORIZED, null);
+    } else {
+        return new ServerResponse(false, ErrorTypes.SERVER, null);
+    }
+}
+
+export const streamMovie = async (torrentUrl) => {
+
+    let token;
+    if (await checkIfExist('token')) {
+        token = await getSecuredItem('token');
+    } else {
+        return new ServerResponse(false, ErrorTypes.NOUSER, null);
+    }
+
+    const res = await fetch(`/api/scrape/stream/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({torrentUrl, token}),
+    });
+
+    if (res.ok) {
+        const { streamId } = await res.json();
+        const streamUrl = `/api/scrape/stream/${streamId}`;
+        return new ServerResponse(true, null, streamUrl);
     } else {
         return new ServerResponse(false, ErrorTypes.SERVER, null);
     }
