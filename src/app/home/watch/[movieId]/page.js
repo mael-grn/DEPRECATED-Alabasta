@@ -14,6 +14,7 @@ export default function Watch() {
                 streamMovie(response.data[0].magnetLink).then((response) => {
                     setMovieSrc(response.data);
                 });
+
             })
         });
 
