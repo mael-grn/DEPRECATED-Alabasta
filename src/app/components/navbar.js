@@ -23,6 +23,10 @@ export default function Navbar() {
         })
     }
 
+    if (pathname.startsWith("/home/watch")) {
+        return null;
+    }
+
     return (
         <nav>
 
