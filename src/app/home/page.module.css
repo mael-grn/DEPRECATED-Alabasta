@@ -58,7 +58,7 @@
 
 .home .movieListSection .movieList {
     display: flex;
-    gap: 25px;
+    gap: 0;
     max-width: calc(100% - 25px);
     margin-left: 25px;
     overflow: auto;
@@ -126,16 +126,17 @@
         flex-direction: column;
         justify-content: start;
         align-items: start;
-        width: calc(95% - 25px);
-        margin: 2.5% 2.5% 0 2.5%;
+        width: calc(90%);
+        margin: 0;
+        padding: 5%;
         gap: 25px;
     }
 
     .home .movieListSection .movieList {
         display: flex;
-        gap: 25px;
-        max-width: calc(100% - 25px);
-        margin-left: 25px;
+        gap: 5px;
+        max-width: calc(100%);
+        margin-left: 0;
         overflow: auto;
     }
 
@@ -156,7 +157,7 @@
 
     .home .movieListSection .rightButton {
         transform: rotate(-90deg);
-        right: -25px;
+        right: 10px;
     }
 
     .home .movieListSection .rightButton:hover {
@@ -165,7 +166,7 @@
 
     .home .movieListSection .leftButton {
         transform: rotate(90deg);
-        left: 0;
+        left: 10px;
     }
 
     .home .movieListSection .leftButton:hover {

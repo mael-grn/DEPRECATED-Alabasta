@@ -14,6 +14,10 @@
     transition: all .3s ease;
 }
 
+html {
+    background-color: var(--dark-background-color)
+}
+
 .button, .buttonLight {
     padding: 10px 20px;
     font-size: 25px;

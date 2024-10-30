@@ -81,3 +81,14 @@
     flex-wrap: wrap;
     gap: 30px;
 }
+
+@media only screen and (max-width: 600px) {
+    .search {
+        padding: 20px;
+        width: calc(100% - 40px);
+        min-height: calc(100vh - 40px);
+    }
+    .search > img {
+        height: 20vh;
+    }
+}
