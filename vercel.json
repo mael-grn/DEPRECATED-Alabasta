@@ -1,12 +1,12 @@
 {
   "functions": {
-    "api/scrape/stream/route.js": {
+    "app/api/scrape/stream/route.js": {
       "maxDuration": 60
     },
-    "api/scrape/stream/[streamId]/route.js": {
+    "app/api/scrape/stream/[streamId]/route.js": {
       "maxDuration": 60
     },
-    "api/*.js": {
+    "app/api/*.js": {
       "maxDuration": 15
     }
   }
