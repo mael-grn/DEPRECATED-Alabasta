@@ -12,7 +12,17 @@ export async function GET(req, { params }) {
         });
     }
 
-    const engine = peerflix(torrentUrl, {});
+    const engine = peerflix(torrentUrl, {
+        connections: 100,
+        path: '/tmp',
+        buffer: (1 * 1024 * 1024)
+    });
+
+    // Détruire l'engine automatiquement après usage pour libérer les ressources
+    engine.on('idle', () => {
+        engine.destroy();
+    });
+
     const stream = await new Promise((resolve, reject) => {
         engine.on('ready', () => {
             const file = engine.files.find(f => f.name.endsWith('.mp4'));
@@ -25,6 +35,7 @@ export async function GET(req, { params }) {
             }
             resolve(file);
         });
+
         engine.on('error', (error) => {
             engine.destroy();
             reject(new Response(JSON.stringify({ message: 'Error streaming video: ' + error }), {
