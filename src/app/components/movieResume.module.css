@@ -1,44 +1,62 @@
+@keyframes zoom-intro {
+   from {
+         transform: scale(0);
+    } to {
+    transform: scale(1);
+          }
+
+}
+
 .movieResume {
+    animation: zoom-intro 0.5s ease;
     position: relative;
     display: flex;
-    flex-direction: column;
     justify-content: start;
     align-items: start;
-    width: 300px;
-    height: 250px;
+    flex-direction: column;
+    width: 165px;
+    padding: 17.5px;
+    border-radius: 25px;
+    height: 350px;
     gap: 10px;
 }
 
 .movieResume img {
-
-    width: 300px;
-    height: 200px;
+    width: 165px;
+    height: 250px;
     border-radius: 25px;
     object-fit: cover ;
 }
 
 .movieResume p {
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 16px;
     color: var(--text-color);
     margin: 0;
     max-width: 100%;
-    white-space: nowrap;
     overflow: hidden;
 }
 
 .movieResume:hover {
     cursor: pointer;
-
+    background-color: var(--color-hover);
 }
 
 .movieResume:hover img {
-    cursor: pointer;
-    height: 250px;
-    opacity: .5;
+    transform: scale(.8);
 }
 
-.movieResume:hover p {
-    font-size: 0;
+@media only screen and (max-width: 600px) {
+    .movieResume:active {
+        transform: scale(.6);
+    }
 
+    .movieResume:hover img {
+        cursor: pointer;
+        height: 200px;
+        opacity: 1;
+    }
+
+    .movieResume:hover p {
+        font-size: 20px;
+    }
 }

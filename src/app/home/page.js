@@ -17,7 +17,6 @@ export default function Home() {
     const [popupMessage, setPopupMessage] = useState('');
     const [popularMovies, setPopularMovies] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [heroMovie, setHeroMovie] = useState(null);
     const popularMovieListRef = useRef(null); // Crée une référence pour la div
     const [scrolled, setScrolled] = useState(false);
 
@@ -44,7 +43,6 @@ export default function Home() {
     }
 
     const scrollMovieList = (movieListRef, scrollAmount) => {
-        console.log((popularMovieListRef.current.scrollLeft + popularMovieListRef.current.clientWidth) <= (popularMovieListRef.current.scrollWidth - 5))
         // Déclenche le défilement horizontal
         if (movieListRef.current) {
             movieListRef.current.scrollBy({
@@ -59,44 +57,26 @@ export default function Home() {
         getPopularMovies().then((response) => {
             setLoading(false);
             if (response.success) {
-                let movies = [];
-                for (let item of response.data) {
-                    movies.push(new Movie( item.item.image, item.item.name, item.item.url))
-                }
-                setPopularMovies(movies);
-                setHeroMovie(movies[Math.floor(Math.random() * movies.length)]);
-            }
-            else {
+
+                setPopularMovies(response.data);
+            } else {
                 setPopupTitle('Erreur');
                 setPopupMessage('Impossible de charger les films populaires');
                 setShowPopup(true);
             }
         });
-    },[]);
+    }, []);
+
 
     return (
         <div className={`${styles.home} ${scrolled ? styles.scrolled : ""}`}>
             {showPopup ? <Popup title={popupTitle} text={popupMessage} close={closePopup}/> : null}
 
             {
-                heroMovie ?
-                    <Image className={styles.bgImage} src={heroMovie?.imageUrl || ""} alt={heroMovie?.name} width={230} height={345}/>
-                    : ""
-            }
-            {
                 loading ?
                     <PageLoading/>
                     :
                     <div>
-                        {
-                            heroMovie ?
-                                <div className={styles.heroMovie}>
-                                    <Image src={heroMovie?.imageUrl || ""} alt={heroMovie?.name} width={230}
-                                           height={345}/>
-                                    <h2>{heroMovie?.name}</h2>
-                                </div>
-                                : ""
-                        }
                         <div className={styles.movieListSection}>
                             <h1>Films populaires</h1>
                             <div className={styles.movieList} ref={popularMovieListRef}>

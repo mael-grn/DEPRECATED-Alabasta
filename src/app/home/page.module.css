@@ -34,61 +34,8 @@
     margin: 0;
     padding-top: 2.5%;
     padding-bottom: 2.5%;
-}
-
-.home.scrolled {
+    min-height: 100vh;
     background-color: var(--dark-background-color);
-}
-
-.home .bgImage {
-    pointer-events: none;
-    animation: bg-intro 1s ease;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: blur(20px) brightness(30%);
-    transform: scale(1.1);
-}
-
-
-.home .heroMovie {
-    animation: hero-intro 1s ease;
-    width: 95%;
-    height: 50vh;
-    margin: 0 2.5% 2.5% 2.5%;
-    overflow: hidden;
-    position: relative;
-    border-radius: 50px;
-}
-
-.home .heroMovie img {
-    pointer-events: none;
-    animation: hero-img-intro 1s ease;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.home .heroMovie h2 {
-    user-select: none;
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    color: var(--text-color);
-    background-color: var(--background-color);
-    backdrop-filter: blur(20px);
-    padding: 20px;
-    border-radius: 30px;
-    font-size: 3em;
-    font-weight: 700;
-    margin: 0;
 }
 
 .home .movieListSection h1 {
@@ -164,58 +111,7 @@
         background-color: var(--dark-background-color);
     }
 
-    .home .bgImage {
-        pointer-events: none;
-        animation: bg-intro 1s ease;
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: -1;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        filter: blur(20px) brightness(30%);
-        transform: scale(1.2);
-    }
 
-
-    .home .heroMovie {
-        animation: hero-intro 1s ease;
-        width: 100%;
-        height: 30vh;
-        margin: 0 0 50px 0;
-        overflow: hidden;
-        position: relative;
-        border-radius: 0 0 50px 50px;
-    }
-
-    .home .heroMovie img {
-        pointer-events: none;
-        animation: hero-img-intro 1s ease;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .home .heroMovie h2 {
-        user-select: none;
-        position: absolute;
-        bottom: 20px;
-        left: 20px;
-        width: calc(100% - 80px);
-        text-align: center;
-        color: var(--text-color);
-        background-color: var(--background-color);
-        backdrop-filter: blur(20px);
-        padding: 20px;
-        border-radius: 30px;
-        font-size: 25px;
-        font-weight: 700;
-        margin: 0;
-    }
 
     .home .movieListSection h1 {
         color: var(--text-color);

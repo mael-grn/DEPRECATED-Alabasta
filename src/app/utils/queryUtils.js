@@ -4,6 +4,7 @@ import ServerResponse, {ErrorTypes} from "@/app/model/serverResponse";
 import User from "@/app/model/user";
 import {checkIfExist, getSecuredItem, removeItem, setSecuredItem} from "@/app/utils/cookiesUtils";
 import {deleteUserData, saveUserData} from "@/app/controller/userController";
+import Movie from "@/app/model/movie";
 
 /**
  * Delete the token and the user data from the cookies
@@ -225,7 +226,8 @@ export const getPopularMovies = async () => {
 
     if (res.status === 200) {
         const data = await res.json();
-        return new ServerResponse(true, null, data.data.itemListElement);
+        const movies = data.data.itemListElement.map(item => new Movie(item.item.image, item.item.name, item.item.url));
+        return new ServerResponse(true, null, movies);
     } else if (res.status === 401) {
         return new ServerResponse(false, ErrorTypes.UNAUTHORIZED, null);
     } else {
@@ -252,7 +254,8 @@ export const searchMovie = async (searchValue) => {
 
     if (res.status === 200) {
         const data = await res.json();
-        return new ServerResponse(true, null, data.data.itemListElement);
+        const movies = data.data.itemListElement.map(item => new Movie(item.item.image, item.item.name, item.item.url));
+        return new ServerResponse(true, null, movies);
     } else if (res.status === 401) {
         return new ServerResponse(false, ErrorTypes.UNAUTHORIZED, null);
     } else {
