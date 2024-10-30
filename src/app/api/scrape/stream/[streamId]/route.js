@@ -3,6 +3,7 @@ import { getStream } from "@/app/api/scrape/stream/streamManager";
 
 // Fonction GET pour servir le flux vidéo avec support des Range
 export async function GET(req, { params }) {
+
     const { streamId } = params;
     const torrentUrl = getStream(streamId);
     if (!torrentUrl) {
@@ -12,11 +13,7 @@ export async function GET(req, { params }) {
         });
     }
 
-    const engine = peerflix(torrentUrl, {
-        connections: 100,
-        path: '/tmp',
-        buffer: (1 * 1024 * 1024)
-    });
+    const engine = peerflix(torrentUrl, {});
 
     // Détruire l'engine automatiquement après usage pour libérer les ressources
     engine.on('idle', () => {
