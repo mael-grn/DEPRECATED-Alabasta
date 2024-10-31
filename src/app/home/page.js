@@ -16,12 +16,11 @@ export default function Home() {
     const [popupTitle, setPopupTitle] = useState('');
     const [popupMessage, setPopupMessage] = useState('');
     const [popularMovies, setPopularMovies] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const popularMovieListRef = useRef(null); // Crée une référence pour la div
     const [scrolled, setScrolled] = useState(false);
 
     useEffect(() => {
-
         const handleScroll = () => {
             if (window.scrollY > 50) {
                 setScrolled(true);
@@ -34,6 +33,20 @@ export default function Home() {
         return () => {
             window.removeEventListener('scroll', handleScroll);
         };
+    }, []);
+
+    useEffect(() => {
+        getPopularMovies().then((response) => {
+            setLoading(false);
+            if (response.success) {
+
+                setPopularMovies(response.data);
+            } else {
+                setPopupTitle('Erreur');
+                setPopupMessage('Impossible de charger les films populaires');
+                setShowPopup(true);
+            }
+        });
     }, []);
 
     const closePopup = () => {
@@ -52,20 +65,7 @@ export default function Home() {
         }
     };
 
-    useEffect(() => {
-        setLoading(true);
-        getPopularMovies().then((response) => {
-            setLoading(false);
-            if (response.success) {
 
-                setPopularMovies(response.data);
-            } else {
-                setPopupTitle('Erreur');
-                setPopupMessage('Impossible de charger les films populaires');
-                setShowPopup(true);
-            }
-        });
-    }, []);
 
 
     return (
@@ -74,7 +74,7 @@ export default function Home() {
 
             {
                 loading ?
-                    <PageLoading/>
+                    <PageLoading phrase={"Récupération des films populaires..."}/>
                     :
                     <div>
                         <div className={styles.movieListSection}>

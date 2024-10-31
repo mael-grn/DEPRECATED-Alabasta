@@ -12,14 +12,15 @@ export default function MovieResume({ movie }) {
     const openMoviePage = async () => {
         setLoading(true);
          saveMovieData(movie).then(() => {
-             setLoading(false);
              router.push("/home/watch/" + movie.id)
-         })
+         }).catch(() => {
+             setLoading(false);
+         });
 
     };
     return (
         <div className={styles.movieResume} onClick={openMoviePage}>
-            {loading ? <PageLoading/> : ""}
+            {loading ? <PageLoading phrase={"enregistrement de la selection..."}/> : ""}
             <Image src={movie.imageUrl} alt={movie.name} width={230} height={345} />
             <p>{movie.name}</p>
             <p>{movie.year}</p>

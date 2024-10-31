@@ -26,7 +26,7 @@ export default function Watch() {
 
     return (
         <div className={styles.watch}>
-            {loading ? <PageLoading/> : null}
+            {loading ? <PageLoading phrase={"Récuperation du lien..."}/> : null}
             <video src={movieSrc} controls autoPlay />
         </div>
     );
