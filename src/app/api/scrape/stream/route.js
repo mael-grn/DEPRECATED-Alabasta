@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import peerflix from 'peerflix';
 import {addStream} from "@/app/api/scrape/stream/streamManager";
+import {sql} from "@vercel/postgres";
 
 const activeStreams = new Map(); // Pour gérer les sessions actives
 
@@ -17,9 +18,12 @@ export async function POST(req) {
             });
         }
 
-        // Créer une URL temporaire pour le flux
         const streamId = Date.now().toString(); // ou un autre identifiant unique
-        addStream(streamId, torrentUrl); // Sauvegarder le torrent URL
+
+        await sql`
+            INSERT into streaming_url VALUES (${streamId}, ${torrentUrl});
+            `;
+
         return new Response(JSON.stringify({ streamId }), {
             status: 200,
             headers: { 'Content-Type': 'application/json' },

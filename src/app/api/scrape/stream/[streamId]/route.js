@@ -1,5 +1,7 @@
 import peerflix from 'peerflix';
 import { getStream } from "@/app/api/scrape/stream/streamManager";
+import jwt from "jsonwebtoken";
+import {sql} from "@vercel/postgres";
 
 // Fonction GET pour servir le flux vidéo avec support des Range
 export async function GET(req, { params }) {
@@ -9,13 +11,27 @@ export async function GET(req, { params }) {
     try {
 
         const {streamId} = params;
-        const torrentUrl = getStream(streamId);
-        if (!torrentUrl) {
+
+        const { rows } = await sql`
+            SELECT * FROM streaming_url WHERE streamId = ${streamId};
+            `;
+
+
+        if (rows.length === 0) {
             return new Response(JSON.stringify({message: 'Stream not found'}), {
                 status: 404,
                 headers: {'Content-Type': 'application/json'},
             });
+        } else if (rows.length > 1) {
+            return new Response(JSON.stringify({message: 'Multiple streams found'}), {
+                status: 500,
+                headers: {'Content-Type': 'application/json'},
+            });
         }
+
+        const torrentUrl = rows[0].torrenturl;
+
+        console.log("torrent url ", torrentUrl)
 
         const engine = peerflix(torrentUrl, {});
         console.log("engine created")
