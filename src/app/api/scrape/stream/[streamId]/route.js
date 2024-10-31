@@ -18,16 +18,14 @@ export async function GET(req, { params }) {
         }
 
         const engine = peerflix(torrentUrl, {});
+        console.log("engine created")
 
-        // Détruire l'engine automatiquement après usage pour libérer les ressources
-        engine.on('idle', () => {
-            console.log('Engine idle, destroying');
-            engine.destroy();
-        });
 
         const stream = await new Promise((resolve, reject) => {
             engine.on('ready', () => {
+                console.log('Engine ready, getting file');
                 const file = engine.files.find(f => f.name.endsWith('.mp4'));
+                if (file) console.log("got file")
                 if (!file) {
                     engine.destroy();
                     reject(new Response(JSON.stringify({message: 'No video file found'}), {
