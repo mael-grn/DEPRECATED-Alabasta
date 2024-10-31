@@ -21,7 +21,7 @@ export async function POST(req) {
         const streamId = Date.now().toString(); // ou un autre identifiant unique
 
         await sql`
-            INSERT into streaming_url VALUES (${streamId}, ${torrentUrl});
+            INSERT into streaming_url(streamid, torrenturl, userid) VALUES (${streamId}, ${torrentUrl}, ${decoded.key});
             `;
 
         return new Response(JSON.stringify({ streamId }), {
