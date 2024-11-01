@@ -9,7 +9,7 @@
 }
 
 .loadingPage {
-    z-index: 10000;
+    z-index: 500;
     position: fixed;
     top: 0;
     left: 0;

@@ -3,7 +3,7 @@
 import {forwardRef, useEffect, useImperativeHandle, useRef, useState} from "react";
 import {Player} from "@lordicon/react";
 
-const LordIcon = forwardRef(({ iconName, animationType = 'none' }, ref) => {
+const LordIcon = forwardRef(({ iconName, inAnimation, defaultAnimation, animationType}, ref) => {
 
     useImperativeHandle(ref, () => ({
         triggerAnimation() {
@@ -15,13 +15,25 @@ const LordIcon = forwardRef(({ iconName, animationType = 'none' }, ref) => {
 
     const playerRef = useRef(null);
     const ICON = require(`/public/icons/${iconName}.json`);
-
+    const [state, setState] = useState("");
     const [isLoop, setIsLoop] = useState(animationType === 'loop');
     const [isHover, setIsHover] = useState(animationType === 'hover');
 
     useEffect(() => {
         if (playerRef.current) {
+            if (!inAnimation) {
+                inAnimation = playerRef.current._states.find(element => element.name.startsWith("in"))?.name
+                console.log(inAnimation)
+            }
+            setState(inAnimation);
+
+            if (!defaultAnimation) {
+                defaultAnimation = playerRef.current._states.find(element => element.name.startsWith(animationType))?.name
+                console.log(defaultAnimation)
+            }
+
             playerRef.current.playFromBeginning();
+            console.log(playerRef.current)
         }
     }, [])
 
@@ -32,7 +44,9 @@ const LordIcon = forwardRef(({ iconName, animationType = 'none' }, ref) => {
             <Player
                 ref={playerRef}
                 icon={ICON}
+                state={state}
                 onComplete={() => {
+                    setState(defaultAnimation)
                     if (isLoop) playerRef.current?.playFromBeginning()
                 }}
             />
