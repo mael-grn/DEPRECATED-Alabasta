@@ -1,9 +1,9 @@
 {
   "functions": {
-    "src/app/api/scrape/stream/route.js": {
+    "src/app/api/media/initStream/route.js": {
       "maxDuration": 60
     },
-    "src/app/api/scrape/stream/[streamId]/route.js": {
+    "src/app/api/media/stream/[streamId]/route.js": {
       "maxDuration": 60
     },
     "src/app/api/*.js": {
