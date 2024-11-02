@@ -7,6 +7,7 @@ import Popup from "@/app/components/ui/popup";
 import {useRouter} from "next/navigation";
 import Image from "next/image";
 import {localRecoverUser, login} from "@/app/controller/userController";
+import {ErrorTypes} from "@/app/model/serverResponse";
 
 export default function Page() {
 
@@ -29,7 +30,21 @@ export default function Page() {
         e.preventDefault();
         setFormLoading(true);
         login(pin).then((res) => {
-            router.push("/home")
+            if (res.success) router.push("/home")
+            else {
+                if (res.errorType === ErrorTypes.NOUSER) {
+                    setFormLoading(false);
+                    setShowPopup(true)
+                    setPopupTitle('Aucun utilisateur trouvé pour ce code pin');
+                    setPopupMessage(e.message);
+                } else {
+                    setFormLoading(false);
+                    setShowPopup(true)
+                    setPopupTitle('Erreur');
+                    setPopupMessage("Une erreur s'est passé coté serveur, merci de réessayer plus tard");
+                }
+            }
+
         }).catch((e) => {
             setFormLoading(false);
             setShowPopup(true)
