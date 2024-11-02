@@ -1,0 +1,39 @@
+@keyframes phrase-appears {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    } to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.loadingPage {
+    z-index: 500;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--dark-background-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.loadingPage > div {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loadingPage p {
+    font-size: 20px;
+    max-width: 90%;
+    text-align: center;
+    color: var(--text-color);
+    animation: phrase-appears 0.5s ease;
+}

@@ -1,0 +1,14 @@
+import jwt from "jsonwebtoken";
+
+/**
+ * Authenticate the token
+ * Will return the user id if the token is valid, otherwise will return null
+ * @param token
+ * @returns {Promise<*>}
+ */
+export default async function authenticateToken(token) {
+    const secretKey = process.env.AUTH_SECRET
+
+    const decoded =  jwt.verify(token, secretKey);
+    return  decoded?.key;
+}

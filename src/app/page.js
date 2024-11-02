@@ -1,13 +1,12 @@
 'use client';
 
 import styles from "@/app/page.module.css";
-import LordIcon from "@/app/components/lordIcon";
-import {login} from "@/app/utils/queryUtils";
+import LordIcon from "@/app/components/ui/lordIcon";
 import {useEffect, useState} from "react";
-import Popup from "@/app/components/popup";
+import Popup from "@/app/components/ui/popup";
 import {useRouter} from "next/navigation";
 import Image from "next/image";
-import {recoverUserData} from "@/app/controller/userController";
+import {localRecoverUser, login} from "@/app/controller/userController";
 
 export default function Page() {
 
@@ -19,7 +18,7 @@ export default function Page() {
     const [popupMessage, setPopupMessage] = useState('');
 
     useEffect(() => {
-        recoverUserData().then(user => {
+        localRecoverUser().then(user => {
             if (user) {
                 router.push("/home")
             }
@@ -29,17 +28,14 @@ export default function Page() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setFormLoading(true);
-
         login(pin).then((res) => {
+            router.push("/home")
+        }).catch((e) => {
             setFormLoading(false);
-            if (res.success) {
-                router.push("/home")
-            } else {
-                setShowPopup(true)
-                setPopupTitle('Erreur');
-                setPopupMessage(res.errorType);
-            }
-        });
+            setShowPopup(true)
+            setPopupTitle('Erreur');
+            setPopupMessage(e.message);
+        })
 
     };
 

@@ -1,7 +1,7 @@
 import {Rubik} from "next/font/google";
 import "./globals.css";
-import Navbar from "@/app/components/navbar";
-import LenisScroll from "@/app/components/lenis";
+import Navbar from "@/app/components/ui/navbar";
+import LenisScroll from "@/app/components/tools/lenis";
 
 const rubik = Rubik({subsets: ['latin']})
 

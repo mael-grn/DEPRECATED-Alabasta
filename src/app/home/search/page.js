@@ -2,11 +2,11 @@
 
 import Image from "next/image";
 import styles from "@/app/home/search/page.module.css";
-import Popup from "@/app/components/popup";
-import LordIcon from "@/app/components/lordIcon";
-import {login, searchMovie} from "@/app/utils/queryUtils";
+import Popup from "@/app/components/ui/popup";
+import LordIcon from "@/app/components/ui/lordIcon";
 import {useState} from "react";
-import MovieResume from "@/app/components/movieResume";
+import MovieResume from "@/app/components/media/movieResume";
+import {searchMedia} from "@/app/controller/mediaController";
 
 export default function Search() {
 
@@ -29,7 +29,7 @@ export default function Search() {
             return;
         }
 
-        searchMovie(searchValue).then((res) => {
+        searchMedia(searchValue).then((res) => {
             setFormLoading(false);
             if (res.success) {
                 setSearchResults(res.data);

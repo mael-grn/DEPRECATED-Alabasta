@@ -1,17 +1,18 @@
 'use client';
 
 import {useEffect, useRef, useState} from "react";
-import Popup from "@/app/components/popup";
+import Popup from "@/app/components/ui/popup";
 import Image from "next/image";
 import styles from '@/app/home/page.module.css';
-import {getMovieDetails, getPopularMovies, searchMovie} from "@/app/utils/queryUtils";
-import VideoPlayer from "@/app/components/videoPlayer";
-import Movie from "@/app/model/movie";
-import MovieResume from "@/app/components/movieResume";
-import LordIcon from "@/app/components/lordIcon";
-import PageLoading from "@/app/components/pageLoading";
+import VideoPlayer from "@/app/components/media/videoPlayer";
+import Media from "@/app/model/media";
+import MovieResume from "@/app/components/media/movieResume";
+import LordIcon from "@/app/components/ui/lordIcon";
+import PageLoading from "@/app/components/ui/pageLoading";
+import {getPopularMovies} from "@/app/controller/mediaController";
 
 export default function Home() {
+    const hasFetched = useRef(false);
     const [showPopup, setShowPopup] = useState(false);
     const [popupTitle, setPopupTitle] = useState('');
     const [popupMessage, setPopupMessage] = useState('');
@@ -36,17 +37,19 @@ export default function Home() {
     }, []);
 
     useEffect(() => {
-        getPopularMovies().then((response) => {
-            setLoading(false);
-            if (response.success) {
-
-                setPopularMovies(response.data);
-            } else {
-                setPopupTitle('Erreur');
-                setPopupMessage('Impossible de charger les films populaires');
-                setShowPopup(true);
-            }
-        });
+        if (!hasFetched.current) {
+            getPopularMovies().then((response) => {
+                setLoading(false);
+                if (response.success) {
+                    setPopularMovies(response.data);
+                } else {
+                    setPopupTitle('Erreur');
+                    setPopupMessage('Impossible de charger les films populaires');
+                    setShowPopup(true);
+                }
+            });
+            hasFetched.current = true;
+        }
     }, []);
 
     const closePopup = () => {

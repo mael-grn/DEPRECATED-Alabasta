@@ -13,7 +13,7 @@ export async function middleware(req) {
     const token = cookies().get("token")?.value;
 
     if (token) {
-        const res = await fetch(`${req.nextUrl.origin}/api/loginToken`, {
+        const res = await fetch(`${req.nextUrl.origin}/api/user/loginToken`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
