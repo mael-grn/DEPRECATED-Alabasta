@@ -5,13 +5,14 @@ import {useRef, useState} from "react";
 import {useRouter} from "next/navigation";
 import Popup from "@/app/components/ui/popup";
 
-export default function VideoPlayer({src}) {
+export default function VideoPlayer({movie, src, changeLinkFctn}) {
     const router = useRouter();
     const [playPauseAnimation, setPlayPauseAnimation] = useState(null);
     const [progress, setProgress] = useState(0);
     const [duration, setDuration] = useState(0);
     const [subtitles, setSubtitles] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [showSettings, setShowSettings] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
     const videoRef = useRef(null);
 
@@ -27,7 +28,9 @@ export default function VideoPlayer({src}) {
     }
 
     const handleTimeUpdate = () => {
-        setProgress((videoRef.current.currentTime / videoRef.current.duration) * 100);
+        if (videoRef.current.duration) {
+            setProgress((videoRef.current.currentTime / videoRef.current.duration) * 100);
+        }
     };
 
     const handleSliderChange = (event) => {
@@ -54,17 +57,12 @@ export default function VideoPlayer({src}) {
                     setLoading(false)
                 }}
                 onTimeUpdate={handleTimeUpdate}
-                onError={() => setShowPopup(true)}
+                onError={(e) => {
+                    setShowPopup(true)
+                    console.log(e.target.error)
+                }}
             >
-                {subtitles.map((subtitle, index) => (
-                    <track
-                        key={index}
-                        label={subtitle.language} // Nom de la langue des sous-titres
-                        kind="subtitles" // Type de piste
-                        src={subtitle.url} // URL des sous-titres
-                        default // Affiche par défaut les sous-titres
-                    />
-                ))}
+
             </video>
 
             <div className={styles.playerElements}>
@@ -94,13 +92,38 @@ export default function VideoPlayer({src}) {
                     <Image src={"/icons/subtitles.png"} alt={"subs"} width={50} height={50}/>
                 </button>
 
+                <div className={`${styles.settings} ${showSettings ? styles.show : ""}`}>
+                    {
+                        showSettings ?
+                            <div>
+                                {
+                                    movie.qualitiesLinks.map((quality, index) => {
+                                        return (
+                                            <button key={index} onClick={() => {changeLinkFctn(quality.magnetLink)}}>
+                                                {quality.quality}
+                                            </button>
+                                        )
+                                    })
+                                }
+                                <button onClick={() => setShowSettings(false)}>
+                                    <LordIcon iconName={"cross-white"}/>
+                                </button>
+
+                            </div> :
+                            <button onClick={() => setShowSettings(true)} className={styles.cross}>
+                                <LordIcon iconName={"settings-white"}/>
+                            </button>
+
+                    }
+                </div>
+
                 <div className={styles.positionSlider}>
                     <input
 
                         type="range"
                         min="0"
                         max="100"
-                        value={progress}
+                        value={progress || 0}
                         onChange={handleSliderChange}
                     />
                 </div>

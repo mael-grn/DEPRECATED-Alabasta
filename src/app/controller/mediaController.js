@@ -61,10 +61,8 @@ export const searchMedia = async (searchValue) => {
     }
 }
 
-export const initStreamMedia = async (media) => {
-
+export const initStreamMedia = async (torrentUrl) => {
     let token = await getItem('token');
-    let torrentUrl = media.qualitiesLinks[0].magnetLink;
     if (!token) {
         return new ServerResponse(false, ErrorTypes.NOUSER, null);
     }
