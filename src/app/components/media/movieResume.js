@@ -40,8 +40,8 @@ export default function MovieResume({ movie }) {
         <div className={styles.movieResume} onClick={openMoviePage}>
             {showPopup ? <Popup title={popupTitle} text={popupMessage} close={closePopup}/> : null}
             {loading ? <PageLoading phrase={"enregistrement de la selection..."}/> : ""}
-            <Image src={movie.imageUrl} alt={movie.name} width={230} height={345} />
-            <p>{movie.name}</p>
+            <Image src={movie.poster} alt={movie.title} width={230} height={345} />
+            <p>{movie.title}</p>
             <p>{movie.year}</p>
         </div>
     );

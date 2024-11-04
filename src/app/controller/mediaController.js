@@ -86,7 +86,7 @@ export const initStreamMedia = async (torrentUrl) => {
 
 export const searchSubtitles = async (media) => {
 
-    const res = await fetch(`/api/subs/search/${media.imdb}`, {
+    const res = await fetch(`/api/media/subs/search/${media.imdbID}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -95,9 +95,32 @@ export const searchSubtitles = async (media) => {
 
     if (res.status === 200) {
         const data = await res.json();
-        return new ServerResponse(true, null, data);
+        return new ServerResponse(true, null, data.subsId);
     } else if (res.status === 401) {
         return new ServerResponse(false, ErrorTypes.UNAUTHORIZED, null);
+    } else {
+        return new ServerResponse(false, ErrorTypes.SERVER, null);
+    }
+}
+
+export const getSubtitles = async (subsId) => {
+
+    let token = await getItem('token');
+    if (!token) {
+        return new ServerResponse(false, ErrorTypes.NOUSER, null);
+    }
+
+    const res = await fetch(`/api/media/subs/download`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({subsId, token}),
+    });
+
+    if (res.ok) {
+        const data = await res.json();
+        return new ServerResponse(true, null, data.subsLink);
     } else {
         return new ServerResponse(false, ErrorTypes.SERVER, null);
     }

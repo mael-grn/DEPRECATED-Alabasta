@@ -2,7 +2,7 @@
 import {useParams, useRouter} from "next/navigation";
 import styles from "@/app/home/watch/[movieId]/page.module.css"
 import {useEffect, useRef, useState} from "react";
-import {initStreamMedia, localRecoverMedia} from "@/app/controller/mediaController";
+import {initStreamMedia, localRecoverMedia, searchSubtitles} from "@/app/controller/mediaController";
 import PageLoading from "@/app/components/ui/pageLoading";
 import VideoPlayer from "@/app/components/media/videoPlayer";
 
@@ -21,6 +21,7 @@ export default function Watch() {
                 setLoading(false);
             });
         });
+
 
     },[]);
 

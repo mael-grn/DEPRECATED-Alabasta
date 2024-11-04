@@ -4,6 +4,7 @@ import Image from "next/image";
 import {useRef, useState} from "react";
 import {useRouter} from "next/navigation";
 import Popup from "@/app/components/ui/popup";
+import {getSubtitles, searchSubtitles} from "@/app/controller/mediaController";
 
 export default function VideoPlayer({movie, src, changeLinkFctn}) {
     const router = useRouter();
@@ -15,6 +16,7 @@ export default function VideoPlayer({movie, src, changeLinkFctn}) {
     const [showSettings, setShowSettings] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
     const videoRef = useRef(null);
+    const [subsSrc, setSubsSrc] = useState(null);
 
     const togglePlayPause = () => {
         if (videoRef.current.paused) {
@@ -24,6 +26,20 @@ export default function VideoPlayer({movie, src, changeLinkFctn}) {
         } else {
             setPlayPauseAnimation('morph-pause-play')
             videoRef.current.pause();
+        }
+    }
+
+    const toggleSubs = () => {
+        if (!subsSrc) {
+            setLoading(true);
+            searchSubtitles(movie).then((response) => {
+                getSubtitles(response.data).then((response) => {
+                    setSubsSrc(response.data)
+                    setLoading(false);
+                });
+            });
+        } else {
+            setSubsSrc(null)
         }
     }
 
@@ -44,6 +60,26 @@ export default function VideoPlayer({movie, src, changeLinkFctn}) {
         router.push('/home')
     }
 
+    function formatTime(seconds) {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = Math.floor(seconds % 60);
+
+        if (hours > 0) {
+            return [
+                hours > 9 ? hours : `0${hours}`,
+                minutes > 9 ? minutes : `0${minutes}`,
+                secs > 9 ? secs : `0${secs}`
+            ].join(':');
+        } else {
+            return [
+                minutes > 9 ? minutes : `0${minutes}`,
+                secs > 9 ? secs : `0${secs}`
+            ].join(':');
+        }
+    }
+
+
     return (
         <div className={styles.player}>
             {showPopup ? <Popup title={"Erreur"} text={"Une erreur s'est produite lors du chargement du film. Veuillez réessayer."} close={closePopup}/> : null}
@@ -56,12 +92,24 @@ export default function VideoPlayer({movie, src, changeLinkFctn}) {
                 onLoadedData={() => {
                     setLoading(false)
                 }}
+                onWaiting={() => setLoading(true)}
+                onPlaying={() => setLoading(false)}
                 onTimeUpdate={handleTimeUpdate}
-                onError={(e) => {
+                onError={() => {
                     setShowPopup(true)
-                    console.log(e.target.error)
                 }}
             >
+
+                {
+                    subsSrc ?
+                        <track
+                            kind="subtitles"
+                            src={subsSrc}
+                            srcLang="fr"
+                            label="Français"
+                            default
+                        /> : ""
+                }
 
             </video>
 
@@ -88,7 +136,7 @@ export default function VideoPlayer({movie, src, changeLinkFctn}) {
                     }
                 </button>
 
-                <button className={styles.subs}>
+                <button className={styles.subs} onClick={toggleSubs}>
                     <Image src={"/icons/subtitles.png"} alt={"subs"} width={50} height={50}/>
                 </button>
 
@@ -126,6 +174,9 @@ export default function VideoPlayer({movie, src, changeLinkFctn}) {
                         value={progress || 0}
                         onChange={handleSliderChange}
                     />
+                    <p>
+                        {formatTime(videoRef.current?.currentTime)}/{formatTime(videoRef.current?.duration)}
+                    </p>
                 </div>
 
             </div>
