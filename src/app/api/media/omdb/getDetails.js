@@ -11,7 +11,7 @@ export default async function getDetails(media) {
     const json = await response.json();
 
     media.title = json.Title;
-    media.poster = json.Poster;
+    media.poster = json.Poster === "N/A" ? media.poster : json.Poster;
     media.year = json.Year;
     media.runtime = json.Runtime;
     media.genre = json.Genre;
