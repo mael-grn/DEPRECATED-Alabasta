@@ -1,7 +1,7 @@
 'use client'
 
 import {useEffect, useRef, useState} from "react";
-import {getMediaDetails, localRecoverMedia} from "@/app/controller/mediaController";
+import {getMediaDetails, localRecoverMedia, localSaveMedia} from "@/app/controller/mediaController";
 import Popup from "@/app/components/ui/popup";
 import LordIcon from "@/app/components/ui/lordIcon";
 import styles from "@/app/home/media/[mediaId]/page.module.css"
@@ -25,8 +25,10 @@ export default function media() {
             getMediaDetails(movie).then((response) => {
                 console.log(response);
                 if (response.success) {
-                    setMedia(response.data);
-                    setLoading(false)
+                    localSaveMedia(response.data).then(() => {
+                        setMedia(response.data);
+                        setLoading(false)
+                    })
                 } else {
                     setPopupTitle('Erreur');
                     setPopupMessage(response.errorType);

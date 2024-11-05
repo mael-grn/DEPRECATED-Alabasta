@@ -110,7 +110,7 @@ export const initStreamMedia = async (torrentUrl) => {
 }
 
 export const searchSubtitles = async (media) => {
-
+    console.log(media)
     const res = await fetch(`/api/media/subs/search/${media.imdbID}`, {
         method: 'GET',
         headers: {

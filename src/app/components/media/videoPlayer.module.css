@@ -22,7 +22,7 @@
 
 .playerElements {
     animation: intro 1s ease;
-    z-index: 150;
+    z-index: 10;
     position: fixed;
     top: 0;
     left: 0;
