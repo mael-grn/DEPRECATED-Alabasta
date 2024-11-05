@@ -169,7 +169,7 @@ export default function VideoPlayer({movie, src, changeLinkFctn}) {
                         <LordIcon iconName="arrow-white" animationType="hover" />
                     </button>
 
-                    <button onClick={togglePlayPause} className={styles.playPause}>
+                    <button onClick={togglePlayPause} className={`${styles.playPause}`}>
                         {loading && <LordIcon iconName="loader-white" animationType="loop" />}
                         {!videoRef.current?.paused && !loading && (
                             <LordIcon iconName="pause-white" inAnimation={playPauseAnimation} animationType="hover" />
