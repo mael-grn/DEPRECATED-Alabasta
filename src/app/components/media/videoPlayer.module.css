@@ -71,6 +71,14 @@
     left: calc(50% - 25px);
 }
 
+.playerElements.hide .playPause {
+    transform: scale(0);
+}
+
+.playerElements.hide .playPause.loading {
+    transform: scale(1) !important;
+}
+
 .playerElements .subs {
     position: absolute;
     top: 20px;
