@@ -33,7 +33,7 @@ export default function Watch() {
 
     return (
         <div className={styles.watch}>
-            {loading && movieSrc ?
+            {loading || !movieSrc ?
                 <PageLoading phrase={'Récuperation du lien...'}/> :
                 <VideoPlayer movie={movie} src={movieSrc} changeLinkFctn={getLink}/>
             }
