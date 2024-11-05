@@ -1,7 +1,9 @@
+'use client';
+
 import styles from "@/app/components/media/videoPlayer.module.css";
 import LordIcon from "@/app/components/ui/lordIcon";
 import Image from "next/image";
-import {useRef, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {useRouter} from "next/navigation";
 import Popup from "@/app/components/ui/popup";
 import {getSubtitles, searchSubtitles} from "@/app/controller/mediaController";
@@ -18,6 +20,23 @@ export default function VideoPlayer({movie, src, changeLinkFctn}) {
     const videoRef = useRef(null);
     const playerRef = useRef(null);
     const [subsSrc, setSubsSrc] = useState(null);
+    const [showControls, setShowControls] = useState(true);
+    const hideControlsTimeout = useRef(null);
+
+    // Fonction pour afficher les contrôles et réinitialiser le timer d'inactivité
+    const showPlayerControls = useCallback(() => {
+        setShowControls(true);
+        clearTimeout(hideControlsTimeout.current);
+        hideControlsTimeout.current = setTimeout(() => setShowControls(false), 3000); // Masque après 3s d'inactivité
+    }, []);
+
+    // Réinitialise le timer d'inactivité lorsqu'il y a interaction avec la souris
+    useEffect(() => {
+        if (showControls) {
+            hideControlsTimeout.current = setTimeout(() => setShowControls(false), 3000);
+        }
+        return () => clearTimeout(hideControlsTimeout.current);
+    }, [showControls]);
 
     const togglePlayPause = () => {
         if (videoRef.current.paused) {
@@ -77,6 +96,14 @@ export default function VideoPlayer({movie, src, changeLinkFctn}) {
         setProgress(event.target.value);
     };
 
+    const handleMouseMove = () => {
+        showPlayerControls();
+    };
+
+    const handleVideoClick = () => {
+        setShowControls(!showControls); // Toggle des contrôles lors du clic sur la vidéo
+    };
+
     const closePopup = () => {
         setShowPopup(false);
         router.push('/home')
@@ -102,124 +129,104 @@ export default function VideoPlayer({movie, src, changeLinkFctn}) {
     }
 
     return (
-        <div className={styles.player} ref={playerRef}>
-            {showPopup ? <Popup title={"Erreur"} text={popupText} close={closePopup}/> : null}
+        <div
+            className={styles.player}
+            ref={playerRef}
+            onMouseMove={handleMouseMove}
+        >
+            {showPopup ? <Popup title="Erreur" text={popupText} close={closePopup} /> : null}
             <video
                 crossOrigin="anonymous"
-                ref={videoRef} src={src}
+                ref={videoRef}
+                src={src}
                 autoPlay
-                onLoad={() => {
-                    
-                }}
-                onLoadStart={() => {
-                    setLoading(true)
-                }}
-                onLoadedData={() => {
-                    setLoading(false)
-                }}
-                onWaiting={() => {
-                    setLoading(true)
-                    videoRef.current.pause()
-                }}
+                onLoadStart={() => setLoading(true)}
+                onLoadedData={() => setLoading(false)}
+                onWaiting={() => setLoading(true)}
                 onPlaying={() => setLoading(false)}
                 onTimeUpdate={handleTimeUpdate}
                 onError={() => {
-                    setShowPopup(true)
-                    setPopupText("Une erreur s'est produite lors du chargement de la vidéo")
+                    setShowPopup(true);
+                    setPopupText("Une erreur s'est produite lors du chargement de la vidéo");
                 }}
             >
-
-                {
-                    subsSrc ?
-                        <track
-                            kind={"subtitles"}
-                            crossOrigin="anonymous"
-                            src={subsSrc}
-                            srcLang={"fr"}
-                            label={"Français"}
-                            default
-                        /> : ""
-                }
-
+                {subsSrc && (
+                    <track
+                        kind="subtitles"
+                        crossOrigin="anonymous"
+                        src={subsSrc}
+                        srcLang="fr"
+                        label="Français"
+                        default
+                    />
+                )}
             </video>
 
-            <div className={styles.playerElements}>
 
-                <button className={styles.back} onClick={() => router.back()}>
-                    <LordIcon iconName={"arrow-white"} animationType={"hover"}/>
-                </button>
+                <div className={`${styles.playerElements} ${showControls ? "" : styles.hide}`}>
+                    {/* Boutons et contrôles du lecteur */}
+                    <button className={styles.back} onClick={() => router.back()}>
+                        <LordIcon iconName="arrow-white" animationType="hover" />
+                    </button>
 
-                <button onClick={togglePlayPause} className={styles.playPause}>
-                    {
-                        loading ?
-                            <LordIcon iconName={"loader-white"} animationType={"loop"}/> : ""
-                    }
-                    {
-                        !videoRef.current?.paused && !loading ?
-                            <LordIcon iconName={"pause-white"} inAnimation={playPauseAnimation}
-                                      animationType={"hover"}/> : ""
-                    }
-                    {
-                        videoRef.current?.paused && !loading ?
-                            <LordIcon iconName={"play-white"} inAnimation={playPauseAnimation}
-                                      animationType={"hover"}/> : ""
-                    }
-                </button>
+                    <button onClick={togglePlayPause} className={styles.playPause}>
+                        {loading && <LordIcon iconName="loader-white" animationType="loop" />}
+                        {!videoRef.current?.paused && !loading && (
+                            <LordIcon iconName="pause-white" inAnimation={playPauseAnimation} animationType="hover" />
+                        )}
+                        {videoRef.current?.paused && !loading && (
+                            <LordIcon iconName="play-white" inAnimation={playPauseAnimation} animationType="hover" />
+                        )}
+                    </button>
 
-                <button className={`${styles.subs} ${subsSrc ? styles.activated : ""}`} onClick={toggleSubs}>
-                    <Image src={"/icons/subtitles.png"} alt={"subs"} width={50} height={50}/>
-                </button>
+                    <button className={`${styles.subs} ${subsSrc ? styles.activated : ""}`} onClick={toggleSubs}>
+                        <Image src="/icons/subtitles.png" alt="subs" width={50} height={50} />
+                    </button>
 
-                <button className={styles.fullscreen} onClick={toggleFullscreen}>
-                    <LordIcon iconName={"ration-white"} animationType={"hover"}/>
-                </button>
+                    <button className={styles.fullscreen} onClick={toggleFullscreen}>
+                        <LordIcon iconName="ration-white" animationType="hover" />
+                    </button>
 
-                <div className={`${styles.settings} ${showSettings ? styles.show : ""}`}>
-                    {
-                        showSettings ?
+                    {/* Settings panel */}
+                    <div className={`${styles.settings} ${showSettings ? styles.show : ""}`}>
+                        {showSettings ? (
                             <div>
-                                {
-                                    movie.qualitiesLinks.map((quality, index) => {
-                                        return (
-                                            <button className={selectedQuality === index ? styles.selected : ""} key={index} onClick={() => {
-                                                setSelectedQuality(index)
-                                                changeLinkFctn(quality.magnetLink)
-                                            }}>
-                                                {quality.quality}
-                                            </button>
-                                        )
-                                    })
-                                }
+                                {movie.qualitiesLinks.map((quality, index) => (
+                                    <button
+                                        className={selectedQuality === index ? styles.selected : ""}
+                                        key={index}
+                                        onClick={() => {
+                                            setSelectedQuality(index);
+                                            changeLinkFctn(quality.magnetLink);
+                                        }}
+                                    >
+                                        {quality.quality}
+                                    </button>
+                                ))}
                                 <button onClick={() => setShowSettings(false)}>
-                                    <LordIcon iconName={"cross-white"}/>
+                                    <LordIcon iconName="cross-white" />
                                 </button>
-
-                            </div> :
+                            </div>
+                        ) : (
                             <button onClick={() => setShowSettings(true)} className={styles.cross}>
-                                <LordIcon iconName={"settings-white"}/>
+                                <LordIcon iconName="settings-white" />
                             </button>
+                        )}
+                    </div>
 
-                    }
+                    {/* Slider and time */}
+                    <div className={styles.positionSlider}>
+                        <input
+                            type="range"
+                            min="0"
+                            max="100"
+                            value={progress || 0}
+                            onChange={handleSliderChange}
+                        />
+                        <p>{videoRef.current ? formatTime(videoRef.current.duration - videoRef.current.currentTime) : ""}</p>
+                    </div>
                 </div>
 
-                <div className={styles.positionSlider}>
-                    <input
-
-                        type="range"
-                        min="0"
-                        max="100"
-                        value={progress || 0}
-                        onChange={handleSliderChange}
-                    />
-                    <p>
-                        {
-                            videoRef.current ?
-                                formatTime(videoRef.current.duration - videoRef.current.currentTime) : ""
-                        }
-                    </p>
-                </div>
-
-            </div>
         </div>
-    )
+    );
 }
