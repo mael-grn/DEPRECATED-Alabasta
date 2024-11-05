@@ -10,16 +10,17 @@ export default function VideoPlayer({movie, src, changeLinkFctn}) {
     const router = useRouter();
     const [playPauseAnimation, setPlayPauseAnimation] = useState(null);
     const [progress, setProgress] = useState(0);
-    const [duration, setDuration] = useState(0);
-    const [subtitles, setSubtitles] = useState([]);
+    const [selectedQuality, setSelectedQuality] = useState(0);
     const [loading, setLoading] = useState(true);
     const [showSettings, setShowSettings] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
+    const [popupText, setPopupText] = useState("");
     const videoRef = useRef(null);
+    const playerRef = useRef(null);
     const [subsSrc, setSubsSrc] = useState(null);
 
     const togglePlayPause = () => {
-        if (videoRef.current.paused) {
+        if (videoRef.current.paused && !loading) {
             setPlayPauseAnimation('morph-play-pause')
 
             videoRef.current.play();
@@ -29,13 +30,34 @@ export default function VideoPlayer({movie, src, changeLinkFctn}) {
         }
     }
 
+    const toggleFullscreen = () => {
+        if (!document.fullscreenElement) {
+            playerRef.current.requestFullscreen().catch(err => {
+                setShowPopup(true);
+                setPopupText(`Erreur lors du passage en plein écran: ${err.message}`);
+            });
+        } else {
+            document.exitFullscreen();
+        }
+    };
+
     const toggleSubs = () => {
         if (!subsSrc) {
             setLoading(true);
+            videoRef.current.pause();
             searchSubtitles(movie).then((response) => {
                 getSubtitles(response.data).then((response) => {
-                    setSubsSrc(response.data)
+                    if (!response.success) {
+                        setLoading(false);
+                        setShowPopup(true);
+                        setPopupText("Une erreur s'est produite lors du chargement des sous-titres")
+                        return;
+                    }
+                    const vttText = response.data;
+                    const vttBlob = new Blob([vttText], { type: "text/vtt" });
+                    setSubsSrc(URL.createObjectURL(vttBlob))
                     setLoading(false);
+                    videoRef.current.play();
                 });
             });
         } else {
@@ -79,34 +101,42 @@ export default function VideoPlayer({movie, src, changeLinkFctn}) {
         }
     }
 
-
     return (
-        <div className={styles.player}>
-            {showPopup ? <Popup title={"Erreur"} text={"Une erreur s'est produite lors du chargement du film. Veuillez réessayer."} close={closePopup}/> : null}
+        <div className={styles.player} ref={playerRef}>
+            {showPopup ? <Popup title={"Erreur"} text={popupText} close={closePopup}/> : null}
             <video
+                crossOrigin="anonymous"
                 ref={videoRef} src={src}
                 autoPlay
+                onLoad={() => {
+                    
+                }}
                 onLoadStart={() => {
                     setLoading(true)
                 }}
                 onLoadedData={() => {
                     setLoading(false)
                 }}
-                onWaiting={() => setLoading(true)}
+                onWaiting={() => {
+                    setLoading(true)
+                    videoRef.current.pause()
+                }}
                 onPlaying={() => setLoading(false)}
                 onTimeUpdate={handleTimeUpdate}
                 onError={() => {
                     setShowPopup(true)
+                    setPopupText("Une erreur s'est produite lors du chargement de la vidéo")
                 }}
             >
 
                 {
                     subsSrc ?
                         <track
-                            kind="subtitles"
+                            kind={"subtitles"}
+                            crossOrigin="anonymous"
                             src={subsSrc}
-                            srcLang="fr"
-                            label="Français"
+                            srcLang={"fr"}
+                            label={"Français"}
                             default
                         /> : ""
                 }
@@ -136,8 +166,12 @@ export default function VideoPlayer({movie, src, changeLinkFctn}) {
                     }
                 </button>
 
-                <button className={styles.subs} onClick={toggleSubs}>
+                <button className={`${styles.subs} ${subsSrc ? styles.activated : ""}`} onClick={toggleSubs}>
                     <Image src={"/icons/subtitles.png"} alt={"subs"} width={50} height={50}/>
+                </button>
+
+                <button className={styles.fullscreen} onClick={toggleFullscreen}>
+                    <LordIcon iconName={"ration-white"} animationType={"hover"}/>
                 </button>
 
                 <div className={`${styles.settings} ${showSettings ? styles.show : ""}`}>
@@ -147,7 +181,10 @@ export default function VideoPlayer({movie, src, changeLinkFctn}) {
                                 {
                                     movie.qualitiesLinks.map((quality, index) => {
                                         return (
-                                            <button key={index} onClick={() => {changeLinkFctn(quality.magnetLink)}}>
+                                            <button className={selectedQuality === index ? styles.selected : ""} key={index} onClick={() => {
+                                                setSelectedQuality(index)
+                                                changeLinkFctn(quality.magnetLink)
+                                            }}>
                                                 {quality.quality}
                                             </button>
                                         )
@@ -175,7 +212,10 @@ export default function VideoPlayer({movie, src, changeLinkFctn}) {
                         onChange={handleSliderChange}
                     />
                     <p>
-                        {formatTime(videoRef.current?.currentTime)}/{formatTime(videoRef.current?.duration)}
+                        {
+                            videoRef.current ?
+                                formatTime(videoRef.current.duration - videoRef.current.currentTime) : ""
+                        }
                     </p>
                 </div>
 

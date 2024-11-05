@@ -120,7 +120,7 @@ export const getSubtitles = async (subsId) => {
 
     if (res.ok) {
         const data = await res.json();
-        return new ServerResponse(true, null, data.subsLink);
+        return new ServerResponse(true, null, data.subs);
     } else {
         return new ServerResponse(false, ErrorTypes.SERVER, null);
     }
