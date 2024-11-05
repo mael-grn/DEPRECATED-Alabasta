@@ -2,6 +2,7 @@
 import jwt from 'jsonwebtoken';
 import ytsSearch from "@/app/api/media/yts/search";
 import authenticateToken from "@/app/api/authenticateToken";
+import search from "@/app/api/media/omdb/search";
 
 export async function POST(req, res) {
     try {

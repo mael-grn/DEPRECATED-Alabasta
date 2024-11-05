@@ -28,12 +28,18 @@
     object-fit: cover ;
 }
 
-.movieResume p {
+.movieResume > p {
     font-size: 16px;
+    font-weight: bold;
     color: var(--text-color);
     margin: 0;
     max-width: 100%;
     overflow: hidden;
+}
+
+.movieResume > p:last-child {
+    font-weight: normal;
+    font-size: 14px;
 }
 
 .movieResume:hover {

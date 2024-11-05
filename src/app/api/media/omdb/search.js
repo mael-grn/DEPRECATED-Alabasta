@@ -1,6 +1,9 @@
-export default async function getDetails(media) {
+import Media from "@/app/model/media";
 
-    const targetUrl = `http://www.omdbapi.com/?apikey=${process.env.OMDB_API_KEY}&t=${media.title.replace(/ /g, '+')}&y=${media.year}`;
+export default async function search(searchValue, year = null) {
+
+    const targetUrl = `http://www.omdbapi.com/?apikey=${process.env.OMDB_API_KEY}&t=${searchValue.replace(/ /g, '+')}${year ? `&y=${year}` : ''}`;
+
     const response = await fetch(targetUrl, {
         method: 'GET',
         headers: {
@@ -9,6 +12,8 @@ export default async function getDetails(media) {
     });
 
     const json = await response.json();
+    console.log(json);
+    const media = new Media(json.Title, "", "");
 
     media.title = json.Title;
     media.poster = json.Poster === "N/A" ? media.poster : json.Poster;

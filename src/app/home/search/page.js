@@ -5,7 +5,7 @@ import styles from "@/app/home/search/page.module.css";
 import Popup from "@/app/components/ui/popup";
 import LordIcon from "@/app/components/ui/lordIcon";
 import {useState} from "react";
-import MovieResume from "@/app/components/media/movieResume";
+import MediaTile from "@/app/components/media/mediaTile";
 import {searchMedia} from "@/app/controller/mediaController";
 
 export default function Search() {
@@ -70,7 +70,7 @@ export default function Search() {
                     <div className={styles.results}>
                         {searchResults.map((movie) => {
                             return (
-                                <MovieResume movie={movie}/>
+                                <MediaTile movie={movie}/>
                             )
                         })}
                     </div>

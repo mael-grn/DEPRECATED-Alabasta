@@ -6,7 +6,7 @@ import Image from "next/image";
 import styles from '@/app/home/page.module.css';
 import VideoPlayer from "@/app/components/media/videoPlayer";
 import Media from "@/app/model/media";
-import MovieResume from "@/app/components/media/movieResume";
+import MediaTile from "@/app/components/media/mediaTile";
 import LordIcon from "@/app/components/ui/lordIcon";
 import PageLoading from "@/app/components/ui/pageLoading";
 import {getPopularMovies} from "@/app/controller/mediaController";
@@ -87,7 +87,7 @@ export default function Home() {
                                     popularMovies.map(
                                         (movie) => {
                                             return (
-                                                <MovieResume movie={movie}/>
+                                                <MediaTile movie={movie}/>
                                             );
                                         }
                                     )

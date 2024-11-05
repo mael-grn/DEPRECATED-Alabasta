@@ -61,6 +61,31 @@ export const searchMedia = async (searchValue) => {
     }
 }
 
+export const getMediaDetails = async (media) => {
+
+    let token = await getItem('token');
+    if (!token) {
+        return new ServerResponse(false, ErrorTypes.NOUSER, null);
+    }
+
+    const res = await fetch(`/api/media/getDetails/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({media, token}),
+    });
+
+    if (res.status === 200) {
+        const data = await res.json();
+        return new ServerResponse(true, null, data.media);
+    } else if (res.status === 401) {
+        return new ServerResponse(false, ErrorTypes.UNAUTHORIZED, null);
+    } else {
+        return new ServerResponse(false, ErrorTypes.SERVER, null);
+    }
+}
+
 export const initStreamMedia = async (torrentUrl) => {
     let token = await getItem('token');
     if (!token) {

@@ -12,7 +12,7 @@ export default class Media {
         this.genre = "";
         this.director = "";
         this.writer = "";
-        this.actors = "";
+        this.actors = [];
         this.plot = "";
         this.awards = "";
         this.country = "";
