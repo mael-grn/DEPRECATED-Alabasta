@@ -20,7 +20,7 @@ export default function VideoPlayer({movie, src, changeLinkFctn}) {
     const [subsSrc, setSubsSrc] = useState(null);
 
     const togglePlayPause = () => {
-        if (videoRef.current.paused && !loading) {
+        if (videoRef.current.paused) {
             setPlayPauseAnimation('morph-play-pause')
 
             videoRef.current.play();
