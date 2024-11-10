@@ -1,15 +1,12 @@
 
-import {sql} from "@vercel/postgres";
-import {deleteOSToken, getOSToken} from "@/app/api/subs/openSubtitle/OSToken";
 import openSubtitleSearch from "@/app/api/subs/openSubtitle/openSubtitleSearch";
 
 export async function GET(req, { params }) {
     try {
 
-        const {imdbId} = params;
+        const {imdb} = params;
 
-        const subsId = await openSubtitleSearch(imdbId)
-
+        const subsId = await openSubtitleSearch(imdb)
         if (!subsId) {
             return new Response(JSON.stringify({error: "impossible to get subtitles"}), {
                 status: 500,

@@ -116,9 +116,9 @@ export default function media() {
                                 onClick={() => router.push("/home/watch/" + media.id)}
                             >
                                 {streamLinkLoading ? <LordIcon iconName={"loader-black"} animationType={"loop"}/> : (
-                                    streamLinks && streamLinks.length > 0 ?
+                                    streamLinks.yts && streamLinks.yts.length > 0 ?
                                         <div>
-                                            {streamLinks[0].hasOwnProperty('yts') ?
+                                            {streamLinks.yts ?
                                                 <Image className={styles.providerLogo} src={"/icons/logo-YTS.svg"}
                                                        alt={"yts icon"} width={100} height={100}/> : ""}
                                             <p>Regarder</p>

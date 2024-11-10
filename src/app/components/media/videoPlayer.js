@@ -6,7 +6,7 @@ import Image from "next/image";
 import {useCallback, useEffect, useRef, useState} from "react";
 import {useRouter} from "next/navigation";
 import Popup from "@/app/components/ui/popup";
-import {getSubtitles, searchSubtitles} from "@/app/controller/mediaController";
+import {getMediaDetails, getSubtitles, searchSubtitles} from "@/app/controller/mediaController";
 
 export default function VideoPlayer({movieId, magnetLinks, src, changeLinkFctn}) {
     const router = useRouter();
@@ -65,21 +65,31 @@ export default function VideoPlayer({movieId, magnetLinks, src, changeLinkFctn})
         if (!subsSrc) {
             setLoading(true);
             videoRef.current.pause();
-            searchSubtitles(movieId).then((response) => {
-                getSubtitles(response.data).then((response) => {
-                    if (!response.success) {
-                        setLoading(false);
-                        setShowPopup(true);
-                        setPopupText("Une erreur s'est produite lors du chargement des sous-titres")
-                        return;
-                    }
-                    const vttText = response.data;
-                    const vttBlob = new Blob([vttText], { type: "text/vtt" });
-                    setSubsSrc(URL.createObjectURL(vttBlob))
+            getMediaDetails(movieId).then((movieData) => {
+                if (!movieData.success) {
                     setLoading(false);
-                    videoRef.current.play();
+                    setShowPopup(true);
+                    setPopupText("Une erreur s'est produite lors du chargement des détails du film")
+                    return;
+                }
+                console.log(movieData)
+                searchSubtitles(movieData.data.imdbId).then((response) => {
+                    getSubtitles(response.data).then((response) => {
+                        if (!response.success) {
+                            setLoading(false);
+                            setShowPopup(true);
+                            setPopupText("Une erreur s'est produite lors du chargement des sous-titres")
+                            return;
+                        }
+                        const vttText = response.data;
+                        const vttBlob = new Blob([vttText], { type: "text/vtt" });
+                        setSubsSrc(URL.createObjectURL(vttBlob))
+                        setLoading(false);
+                        videoRef.current.play();
+                    });
                 });
             });
+
         } else {
             setSubsSrc(null)
         }

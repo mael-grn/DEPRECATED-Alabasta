@@ -209,9 +209,8 @@ export const initStreamMedia = async (torrentUrl) => {
     }
 }
 
-export const searchSubtitles = async (media) => {
-    console.log(media)
-    const res = await fetch(`/api/media/subs/search/${media.imdbID}`, {
+export const searchSubtitles = async (imdbId) => {
+    const res = await fetch(`/api/subs/search/${imdbId}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -235,7 +234,7 @@ export const getSubtitles = async (subsId) => {
         return new ServerResponse(false, ErrorTypes.NOUSER, null);
     }
 
-    const res = await fetch(`/api/media/subs/download`, {
+    const res = await fetch(`/api/subs/download`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
