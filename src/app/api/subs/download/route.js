@@ -1,6 +1,5 @@
 
 import jwt from 'jsonwebtoken';
-import ytsSearch from "@/app/api/media/yts/search";
 import authenticateToken from "@/app/api/authenticateToken";
 import {deleteOSToken, getOSToken} from "@/app/api/subs/openSubtitle/OSToken";
 import openSubtitleDownload from "@/app/api/subs/openSubtitle/openSubtitleDownload";
