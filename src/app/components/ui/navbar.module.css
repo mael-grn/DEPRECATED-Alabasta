@@ -15,10 +15,10 @@
     left: 20px;
     height: calc(100vh - 60px);
     width: 50px;
-    background-color: var(--background-color);
+    background-color: var(--transparent-background-color);
     backdrop-filter: blur(20px);
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 40px;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -29,7 +29,7 @@
 .nav .navElem {
     width: calc(100% - 20px);
     padding: 10px 18px 10px 10px;
-    border-radius: 10px;
+    border-radius: 50px;
     height: 40px;
     display: flex;
     justify-content: center;
@@ -69,7 +69,8 @@
 
 .nav.deploy .navElem {
     justify-content: space-between;
-    padding: 10px;
+    padding: 10px 20px;
+    width: calc(100% - 40px);
 }
 
 .nav.deploy .navElem p {
@@ -92,7 +93,6 @@
         left: 20px;
         height: 60px;
         width: calc(100vw - 60px);
-        background-color: var(--background-color);
         backdrop-filter: blur(20px);
         padding: 10px;
         border-radius: 50px;
@@ -104,33 +104,46 @@
 
 
     .nav .navElem p {
-        display: none;
+
+        font-size: 0;
     }
     .nav .navElem.elemBottom {
         margin-top: 0;
     }
 
-    .nav .navElem {
-        width: 55px;
+    .nav .navElem, .nav .navElem:hover, .nav.deploy .navElem {
+        width: fit-content;
+        flex: 1;
         padding: 0;
         border-radius: 30px;
         height: 55px;
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 0;
+        gap: 10px;
         cursor: pointer;
-    }
-
-
-
-    .nav .navElem.selected {
-        background-color: var(--secondary-color);
-    }
-
-    .nav .navElem:hover {
         background-color: transparent;
+        font-size: 0 !important;
+        flex-direction: row-reverse;
     }
+
+    .nav .navElem.selected, .nav .navElem.selected:hover, .nav.deploy .navElem.selected {
+        background-color: var(--secondary-color);
+        padding: 0 10px 0 0;
+    }
+
+    .nav.deploy .navElem p {
+        font-size: 0;
+    }
+
+    .nav.deploy .navElem.selected p {
+        font-size: 20px;
+    }
+
+    .nav .navElem.selected p {
+        font-size: 20px;
+    }
+
 
     .nav .navElem img, .nav .navElem span {
         width: 40px;
@@ -145,12 +158,4 @@
         width: calc(100vw - 60px);
     }
 
-    .nav.deploy .navElem {
-        justify-content: center;
-        padding: 0;
-    }
-
-    .nav.deploy .navElem p {
-        font-size: 0;
-    }
 }

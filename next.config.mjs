@@ -9,7 +9,7 @@ const nextConfig = {
         ]
     },
     images: {
-        domains: ['image.yts.rs', 'm.media-amazon.com'],
+        domains: ['image.yts.rs', 'm.media-amazon.com', 'image.tmdb.org'],
     },
 };
 

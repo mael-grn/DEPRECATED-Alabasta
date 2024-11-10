@@ -53,7 +53,7 @@ export async function POST(req, res) {
 
                 const secretKey = process.env.AUTH_SECRET;
                 const token = jwt.sign({ key: user.id }, secretKey, { expiresIn: '1h' });
-                return new Response(JSON.stringify({ message: 'user credentials are correct', data: user, token: token }), {
+                return new Response(JSON.stringify({ message: 'user credentials are correct', res: {user: user, token: token }}), {
                     status: 200,
                     headers: { 'Content-Type': 'application/json' },
                 });

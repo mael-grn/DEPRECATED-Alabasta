@@ -2,7 +2,8 @@
 import jwt from 'jsonwebtoken';
 import ytsSearch from "@/app/api/media/yts/search";
 import authenticateToken from "@/app/api/authenticateToken";
-import search from "@/app/api/media/omdb/search";
+import {deleteOSToken, getOSToken} from "@/app/api/subs/openSubtitle/OSToken";
+import openSubtitleDownload from "@/app/api/subs/openSubtitle/openSubtitleDownload";
 
 export async function POST(req, res) {
     try {
@@ -13,7 +14,7 @@ export async function POST(req, res) {
             });
         }
 
-        const { searchValue, token } = await req.json();
+        const { subsId, token } = await req.json();
 
         const userId = authenticateToken(token);
 
@@ -24,17 +25,26 @@ export async function POST(req, res) {
             });
         }
 
-        const searchResult = await ytsSearch(searchValue);
+        const subs = await openSubtitleDownload(subsId);
 
-        return new Response(JSON.stringify({ movies: searchResult }), {
+        if (!subs) {
+            return new Response(JSON.stringify({ error: "impossible to download subtitles from open subtitle" }), {
+                status: 500,
+                headers: { 'Content-Type': 'application/json' },
+            });
+        }
+
+        return new Response(JSON.stringify({ res: subs }), {
             status: 200,
             headers: { 'Content-Type': 'application/json' },
         });
 
     } catch (error) {
+        await deleteOSToken();
         return new Response(JSON.stringify({message: 'server error : ' + error}), {
             status: 500,
             headers: {'Content-Type': 'application/json'},
         });
     }
 }
+

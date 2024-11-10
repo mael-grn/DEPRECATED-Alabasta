@@ -3,18 +3,31 @@
     --primary-color: #A91D3A;
     --secondary-color: #C73659;
     --background-color: #232323;
+    --transparent-background-color: rgba(35, 35, 35, 0.7);
     --dark-background-color: #151515;
+    --transparent-dark-background-color: rgba(21, 21, 21, 0.7);
     --valid: #08d38a;
     --invalid: #dd2b1a;
     --text-color: #EEEEEE;
     --color-hover: #202020;
 }
 
-* {
-    transition: all .3s ease;
+@media (hover: none) and (pointer: coarse) {
+    *:focus {
+        outline: none;
+    }
 }
 
-html {
+* {
+    transition: all .3s ease;
+    user-select: none;
+}
+
+img {
+    pointer-events: none
+}
+
+html, main {
     background-color: var(--dark-background-color)
 }
 

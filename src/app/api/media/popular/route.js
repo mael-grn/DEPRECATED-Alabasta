@@ -1,19 +1,17 @@
-import { sql } from '@vercel/postgres';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import ytsPopular from "@/app/api/media/yts/popular";
-import authenticateToken from "@/app/api/authenticateToken";
 
-export async function POST(req, res) {
+import authenticateToken from "@/app/api/authenticateToken";
+import tmdbGetPopular from "@/app/api/media/tmdb/tmdbGetPopular";
+
+export async function GET(req, res) {
     try {
-        if (!req.body) {
-            return new Response(JSON.stringify({ message: 'wrong data in the query' }), {
-                status: 400,
-                headers: { 'Content-Type': 'application/json' },
+        const token = req.headers.get('Authorization');
+
+        if (!token) {
+            return new Response(JSON.stringify({error: "Missing or invalid Authorization header"}), {
+                status: 401,
+                headers: {'Content-Type': 'application/json'},
             });
         }
-
-        const { token } = await req.json();
 
         const userId = authenticateToken(token);
 
@@ -24,9 +22,9 @@ export async function POST(req, res) {
             });
         }
 
-        const popular = await ytsPopular();
+        const popular = await tmdbGetPopular();
 
-        return new Response(JSON.stringify({ movies: popular }), {
+        return new Response(JSON.stringify({ res: popular }), {
             status: 200,
             headers: { 'Content-Type': 'application/json' },
         });

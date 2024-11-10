@@ -36,9 +36,9 @@ export const login = async (key) => {
 
     if (res.status === 200) {
         const data = await res.json();
-        let user = new User(data.data.name, data.data.surname);
+        let user = new User(data.res.user.name, data.res.user.surname);
         await localSaveUser(user);
-        await setItem('token', data.token);
+        await setItem('token', data.res.token);
         return new ServerResponse(true, null, user);
     } else if (res.status === 404 || res.status === 401) {
         return new ServerResponse(false, ErrorTypes.NOUSER, null);
@@ -70,7 +70,7 @@ export const loginToken = async () => {
     if (res.status === 200) {
 
         const data = await res.json();
-        let user = new User(data.data.name, data.data.surname);
+        let user = new User(data.res.user.name, data.res.user.surname);
         await localSaveUser(user);
         return new ServerResponse(true, null, user);
     } else if (res.status === 404) {

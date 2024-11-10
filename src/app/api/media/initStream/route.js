@@ -1,4 +1,3 @@
-import jwt from 'jsonwebtoken';
 import ytsInitStream from "@/app/api/media/yts/ytsInitStream";
 import authenticateToken from "@/app/api/authenticateToken";
 
@@ -16,7 +15,7 @@ export async function POST(req) {
 
         const streamId = await ytsInitStream(torrentUrl, userId);
 
-        return new Response(JSON.stringify({ streamId }), {
+        return new Response(JSON.stringify({ res: streamId }), {
             status: 200,
             headers: { 'Content-Type': 'application/json' },
         });

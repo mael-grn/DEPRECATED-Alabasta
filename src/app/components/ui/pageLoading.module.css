@@ -8,7 +8,19 @@
     }
 }
 
+@keyframes page-intro {
+    from {
+        opacity: 0;
+        transform: scale(1.2);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
 .loadingPage {
+    animation: page-intro .5s ease;
     z-index: 500;
     position: fixed;
     top: 0;

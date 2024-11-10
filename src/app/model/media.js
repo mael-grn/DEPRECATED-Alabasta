@@ -1,25 +1,24 @@
 
 export default class Media {
-    constructor(title, provider, pageUrl) {
-        this.id = title.replace(/[^a-zA-Z0-9 ]/g, "").replace(/ /g, "-") + "-" + provider;
+    constructor(id, title) {
+        this.id = id
         this.title = title;
-        this.year = title.match(/\d{4}/) ? title.match(/\d{4}/)[0] : null;
-        this.provider = provider
-        this.pageUrl = pageUrl;
+        this.year = "";
         this.poster = "";
+        this.backdrop = ""
         this.qualitiesLinks = [];
-        this.runtime = "";
-        this.genre = "";
-        this.director = "";
-        this.writer = "";
-        this.actors = [];
-        this.plot = "";
-        this.awards = "";
+        this.genres = [];
+        this.budget = 0;
+        this.imdbId = "";
+        this.language = "";
+        this.overview = "";
         this.country = "";
-        this.ratings = [];
-        this.type = "";
-        this.imdbID = "";
-        this.imdbRating = "";
-        this.imdbVotes = "";
+        this.productionCompany = "";
+        this.revenue = ""
+        this.runtime = 0;
+        this.status = "";
+        this.vote = 0;
+        this.voteCount = 0;
+        this.popularity = 0;
     }
 }

@@ -12,7 +12,7 @@
     left: 25px;
 }
 
-.backButton span {
+.backButton > span {
     transform: rotate(180deg);
 }
 

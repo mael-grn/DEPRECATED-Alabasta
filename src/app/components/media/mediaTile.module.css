@@ -7,6 +7,17 @@
 
 }
 
+@keyframes loading-intro {
+    from {
+        background-color: transparent;
+        backdrop-filter: blur(0);
+    } to {
+              background-color: var(--transparent-background-color);
+              backdrop-filter: blur(10px);
+      }
+
+}
+
 .movieResume {
     animation: zoom-intro 0.5s ease;
     position: relative;
@@ -14,41 +25,72 @@
     justify-content: start;
     align-items: start;
     flex-direction: column;
-    width: 165px;
-    padding: 17.5px;
+    width: 200px;
+    height: 300px;
     border-radius: 25px;
-    height: fit-content;
-    gap: 10px;
+    cursor: pointer;
 }
 
-.movieResume img {
-    width: 165px;
-    height: 250px;
+.movieResume > img {
+    width: 200px;
+    height: 300px ;
     border-radius: 25px;
     object-fit: cover ;
 }
 
 .movieResume > p {
-    font-size: 16px;
+    position: absolute;
+    font-size: 25px;
     font-weight: bold;
     color: var(--text-color);
     margin: 0;
-    max-width: 100%;
+    width: calc(100% - 20px);
+    padding: 0 10px;
+    text-align: center;
     overflow: hidden;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
 }
 
 .movieResume > p:last-child {
     font-weight: normal;
-    font-size: 14px;
+    font-size: 20px;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+    width: 100%;
+    padding: 0;
+    text-align: center;
 }
 
-.movieResume:hover {
-    cursor: pointer;
-    background-color: var(--color-hover);
+.movieResume:hover > img {
+    filter: brightness(0.3);
+    transform: scale(.95);
 }
 
-.movieResume:hover img {
-    transform: scale(.9);
+.movieResume:hover > p {
+    opacity: 1;
+    bottom: 50px;
+}
+
+.movieResume:hover > p:last-child {
+    bottom: 15px;
+}
+
+.movieResume .loading {
+    animation: loading-intro .3s ease;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: var(--transparent-background-color);
+    backdrop-filter: blur(10px);
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 25px;
 }
 
 @media only screen and (max-width: 600px) {
@@ -56,13 +98,79 @@
         transform: scale(.6);
     }
 
-    .movieResume:hover img {
+    .movieResume {
+        animation: zoom-intro 0.5s ease;
+        position: relative;
+        display: flex;
+        justify-content: start;
+        align-items: start;
+        flex-direction: column;
+        width: 165px;
+        height: 250px;
+        border-radius: 25px;
         cursor: pointer;
-        height: 200px;
-        opacity: 1;
     }
 
-    .movieResume:hover p {
-        font-size: 20px;
+    .movieResume > img {
+        width: 165px;
+        height: 250px ;
+        border-radius: 25px;
+        object-fit: cover ;
     }
+
+    .movieResume > p {
+        position: absolute;
+        font-size: 25px;
+        font-weight: bold;
+        color: var(--text-color);
+        margin: 0;
+        width: calc(100% - 20px);
+        padding: 0 10px;
+        text-align: center;
+        overflow: hidden;
+        bottom: 0;
+        left: 0;
+        opacity: 0;
+    }
+
+    .movieResume > p:last-child {
+        font-weight: normal;
+        font-size: 20px;
+        bottom: 0;
+        left: 0;
+        opacity: 0;
+        width: 100%;
+        padding: 0;
+        text-align: center;
+    }
+
+    .movieResume:hover > img {
+        filter: none;
+        transform: scale(1);
+    }
+
+    .movieResume:hover > p {
+        opacity: 0;
+        bottom: 50px;
+    }
+
+    .movieResume:hover > p:last-child {
+        bottom: 15px;
+    }
+
+    .movieResume .loading {
+        animation: loading-intro .3s ease;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: var(--transparent-background-color);
+        backdrop-filter: blur(10px);
+        top: 0;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 25px;
+    }
+
 }

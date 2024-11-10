@@ -1,16 +1,7 @@
 @keyframes bg-intro {
     from {
         transform: scale(2);
-    }
-    to {
-        transform: scale(1.1);
-    }
-}
-
-@keyframes hero-intro {
-    from {
         opacity: 0;
-        transform: scale(0);
     }
     to {
         opacity: 1;
@@ -18,158 +9,195 @@
     }
 }
 
-@keyframes hero-img-intro {
+@keyframes heroImg-intro {
     from {
-        transform: scale(2);
-    }
-    to {
-        transform: scale(1);
-    }
+        opacity: 0;
+        transform: scale(0);
+    } to {
+          opacity: 1;
+          transform: scale(1);
+      }
 }
 
-.home {
-    display: block;
-    width: calc(100% - 110px);
-    padding-left: 110px;
-    margin: 0;
-    padding-top: 2.5%;
-    padding-bottom: 2.5%;
-    min-height: 100vh;
+.homeContainer {
     background-color: var(--dark-background-color);
 }
 
-.home .movieListSection h1 {
-    color: var(--text-color);
-    font-size: 2.2em;
-    font-weight: 700;
-    margin: 0;
-}
-
-.home .movieListSection {
-    display: flex;
-    position: relative;
-    flex-direction: column;
-    justify-content: start;
-    align-items: start;
-    width: calc(95% - 25px);
-    margin: 2.5% 2.5% 0 2.5%;
-    gap: 25px;
-}
-
-.home .movieListSection .movieList {
-    display: flex;
-    gap: 0;
-    max-width: calc(100% - 25px);
-    margin-left: 25px;
+.home {
     overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: calc(100% - 130px);
+    padding: 20px 20px 20px 110px;
+    margin: 0;
+    min-height: 100vh;
 }
 
-.home .movieListSection button {
-    position: absolute;
-    height: 50px;
-    padding: 0;
-    width: 50px;
+
+.bgImage {
+    animation: bg-intro 1s ease;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    filter: blur(20px) opacity(0.5);
+}
+
+.bgImageHide {
+    opacity: 0;
+}
+.home .heroMovieLoading {
+    width: 100%;
+    height: 50vh;
     background-color: var(--background-color);
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-color);
+    animation: heroImg-intro 1s ease;
+}
+
+.home .heroMovie {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    height: 50vh;
+    border-radius: 25px;
+
+    overflow: hidden;
+    color: var(--text-color);
+}
+
+.home .heroMovie.dark {
+    color: var(--dark-background-color);
+}
+
+.home .heroMovie > img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 25px;
+}
+
+.home .heroMovie .heroMovieInfo {
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+}
+
+.home .heroMovie .heroMovieInfo h1 {
+    margin: 0;
+    font-size: 30px;
+}
+
+.home .heroMovie .heroMovieInfo .genreTag {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.home .heroMovie .heroMovieInfo .genreTag > p {
+    margin: 0;
+    padding: 5px 10px;
+    background-color: var(--transparent-background-color);
     backdrop-filter: blur(20px);
-    border-radius: 50px;
-    border: none;
-    top: calc(50% - 25px);
+    border-radius: 25px;
+    font-size: 15px;
+    color: var(--text-color);
+}
+
+.home .heroMovie .heroMovieInfo .overview {
+    font-size: 17px;
+    margin: 0;
+    max-width: 40%;
+}
+
+.home .heroMovie .heroMovieInfo .btnDiv {
+    display: flex;
+    gap: 20px;
+}
+
+.home .heroMovie .heroMovieInfo .btnDiv > button:hover {
+    transform: scale(1.1);
+}
+
+.home .heroMovie .heroMovieInfo .btnDiv .btnWatch {
+    font-family: inherit;
+    cursor: pointer;
+    font-size: 20px;
+    height: 50px;
+    width: fit-content;
+    padding: 0 20px;
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    border: none;
+    gap: 10px;
+    border-radius: 25px;
 }
 
-.home .movieListSection .rightButton {
-    transform: rotate(-90deg);
-    right: -25px;
-}
-
-.home .movieListSection .rightButton:hover {
-    transform: scale(1.1) rotate(-90deg);
-}
-
-.home .movieListSection .leftButton {
-    transform: rotate(90deg);
-    left: 0;
-}
-
-.home .movieListSection .leftButton:hover {
-    transform: scale(1.1) rotate(90deg);
+.home .heroMovie .heroMovieInfo .btnDiv .btnInfo {
+    height: 50px;
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--transparent-background-color);
+    backdrop-filter: blur(20px);
+    border-radius: 25px;
+    border: none;
 }
 
 @media only screen and (max-width: 600px) {
+
     .home {
-        display: block;
-        width: 100% ;
-        padding-left: 0;
+        width: calc(100% - 40px);
+        padding: 20px 20px 20px 20px;
         margin: 0;
-        padding-top: 0;
-        padding-bottom: 100px;
+        min-height: 100vh;
     }
 
-    .home.scrolled {
-        background-color: var(--dark-background-color);
+    .bgImage {
+        object-fit: cover;
     }
 
-
-
-    .home .movieListSection h1 {
-        color: var(--text-color);
-        font-size: 25px;
-        font-weight: 700;
-        margin: 0;
+    .home .heroMovieLoading {
+        height: 30vh;
     }
 
-    .home .movieListSection {
+    .home .heroMovie {
+        width: 100%;
+        height: 30vh;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+
+    .home .heroMovie .heroMovieInfo {
         display: flex;
-        position: relative;
         flex-direction: column;
-        justify-content: start;
-        align-items: start;
-        width: calc(90%);
-        margin: 0;
-        padding: 5%;
-        gap: 25px;
+        gap: 20px;
+        padding: 20px;
     }
 
-    .home .movieListSection .movieList {
+
+    .home .heroMovie .heroMovieInfo .genreTag {
         display: flex;
-        gap: 5px;
-        max-width: calc(100%);
-        margin-left: 0;
-        overflow: auto;
+        gap: 10px;
     }
 
-    .home .movieListSection button {
-        position: absolute;
-        height: 50px;
-        padding: 0;
-        width: 50px;
-        background-color: var(--background-color);
-        backdrop-filter: blur(20px);
-        border-radius: 50px;
-        border: none;
-        top: calc(50% - 25px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    .home .heroMovie .heroMovieInfo .overview {
+        display: none;
     }
 
-    .home .movieListSection .rightButton {
-        transform: rotate(-90deg);
-        right: 10px;
-    }
-
-    .home .movieListSection .rightButton:hover {
-        transform: scale(1) rotate(-90deg);
-    }
-
-    .home .movieListSection .leftButton {
-        transform: rotate(90deg);
-        left: 10px;
-    }
-
-    .home .movieListSection .leftButton:hover {
-        transform: scale(1) rotate(90deg);
-    }
 }

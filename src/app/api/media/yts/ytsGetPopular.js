@@ -1,11 +1,11 @@
-
-import formatMovie from "@/app/api/media/yts/formatMovie";
+import Media from "@/app/model/media";
+import ytsMovie from "@/app/api/media/yts/ytsMovie";
 
 /**
- * Fetches the popular movies from YTS.
- * @returns {Promise<any>}
+ * Fetches the popular movies from YTS home page.
+ * @returns {Promise<any>} a list of media object
  */
-export default async function ytsPopular() {
+export default async function ytsGetPopular() {
     const response = await fetch(`https://yts.rs/`, {
         method: 'GET',
         headers: {
@@ -25,7 +25,10 @@ export default async function ytsPopular() {
 
             if (jsonData["@type"] === "ItemList") {
                 for (const rawMovie of jsonData.itemListElement) {
-                    const movie = await formatMovie(rawMovie);
+                    let name = rawMovie.item.name.replace(/\(\d{4}\)/, "").trim()
+                    const yearMatch = rawMovie.item.name.match(/\((\d{4})\)/);
+                    let year = yearMatch ? yearMatch[1] : null;
+                    let movie = new ytsMovie(name, year, rawMovie.item.url, [])
                     movieList.push(movie);
                 }
             }

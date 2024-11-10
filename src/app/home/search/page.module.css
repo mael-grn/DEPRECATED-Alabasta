@@ -1,3 +1,12 @@
+.search input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.search input[type="search"]::-ms-clear {
+    display: none;
+}
+
 .search {
     min-height: 100vh;
     padding-left: 110px;
@@ -25,13 +34,14 @@
     justify-content: center;
     align-items: center;
     gap: 10px;
+    position: relative;
 }
 
 .search form input {
     background-color: var(--background-color);
-    padding: 0 25px;
-    height: 50px;
-    border-radius: 25px;
+    padding: 0 50px 0 25px;
+    height: 60px;
+    border-radius: 60px;
     border: none;
     outline: none;
     font-family: inherit;
@@ -42,12 +52,14 @@
 
 
 .search form button {
-    width: 50px;
-    height: 50px;
-    position: relative;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
 }
 
 .search form button.loading:hover {

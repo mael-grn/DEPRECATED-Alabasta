@@ -1,44 +1,59 @@
 'use client'
 
 import {useEffect, useRef, useState} from "react";
-import {getMediaDetails, localRecoverMedia, localSaveMedia} from "@/app/controller/mediaController";
+import {
+    getMediaDetails,
+    localRecoverMedia,
+    localSaveMedia,
+    searchStreamingLinks
+} from "@/app/controller/mediaController";
 import Popup from "@/app/components/ui/popup";
 import LordIcon from "@/app/components/ui/lordIcon";
 import styles from "@/app/home/media/[mediaId]/page.module.css"
 import Image from "next/image";
 import {useParams, useRouter} from "next/navigation";
 import PageLoading from "@/app/components/ui/pageLoading";
+import {addToWatchList, checkIfInWatchList, removeFromWatchList} from "@/app/controller/watchListController";
 
 export default function media() {
     const [loading, setLoading] = useState(true);
     const [showPopup, setShowPopup] = useState(false);
     const [popupTitle, setPopupTitle] = useState('');
     const [popupMessage, setPopupMessage] = useState('');
-    const [media, setMedia] = useState(null);
+    const [inWatchList, setInWatchList] = useState(false);
+    const [watchListLoading, setWatchListLoading] = useState(true);
+    const [streamLinkLoading, setStreamLinkLoading] = useState(true);
+    const [streamLinks, setStreamLinks] = useState([]);
+    const [loadingMessage, setLoadingMessage] = useState("Récuperation des données du média...");
+    const [media, setMedia] = useState([]);
     const params = useParams();
     const watchBtnRef = useRef(null);
     const backBtnRef = useRef(null);
     const router = useRouter()
 
     useEffect(() => {
-        localRecoverMedia(params.mediaId).then((movie) => {
-            getMediaDetails(movie).then((response) => {
-                console.log(response);
-                if (response.success) {
-                    localSaveMedia(response.data).then(() => {
-                        setMedia(response.data);
-                        setLoading(false)
-                    })
-                } else {
-                    setPopupTitle('Erreur');
-                    setPopupMessage(response.errorType);
-                    setShowPopup(true);
-                }
-            }).catch(() => {
-                setPopupTitle('Erreur');
-                setPopupMessage('Erreur lors de la récupération des détails du film');
+        getMediaDetails(params.mediaId).then((media) => {
+            if (media) {
+                setMedia(media.data);
+                setLoading(false)
+                checkIfInWatchList(params.mediaId).then((response) => {
+                    setWatchListLoading(false);
+                    if (response.data) {
+                        setInWatchList(true);
+                    }
+                });
+
+            } else {
                 setShowPopup(true);
-            });
+                setPopupTitle('Erreur');
+                setPopupMessage('Impossible de récuperer les données du film');
+            }
+        });
+        searchStreamingLinks(params.mediaId).then((response) => {
+            setStreamLinkLoading(false);
+            if (response.success) {
+                setStreamLinks(response.data);
+            }
         });
     }, []);
 
@@ -48,63 +63,99 @@ export default function media() {
         setPopupMessage('');
     }
 
+    const toggleWatchList = () => {
+        setWatchListLoading(true)
+        if (inWatchList) {
+            removeFromWatchList(media.id).then((response) => {
+                setWatchListLoading(false)
+                if (response.success) {
+                    setInWatchList(false);
+                } else {
+                    setPopupTitle('Erreur');
+                    setPopupMessage(response.errorType);
+                    setShowPopup(true);
+                }
+            });
+        } else {
+            addToWatchList(media.id).then((response) => {
+                setWatchListLoading(false)
+                if (response.success) {
+                    setInWatchList(true);
+                } else {
+                    setPopupTitle('Erreur');
+                    setPopupMessage(response.errorType);
+                    setShowPopup(true);
+                }
+            });
+        }
+    }
+
     return (
-        <div>
-            {showPopup ? <Popup title={popupTitle} text={popupMessage} close={closePopup}/> : null}
-            {loading ? <PageLoading phrase={"Récuperation des données du média..."}/> :
-                <div className={styles.mediaResume}>
-                    <div className={styles.mediaContentDiv}>
-                        <button className={styles.backButton} onClick={() => router.back()} onMouseEnter={() => {if (backBtnRef) backBtnRef.current.triggerAnimation()}}>
-                            <LordIcon ref={backBtnRef} iconName={"arrow-white"} animationType={"hover"}/>
+        <div className={styles.mediaDetails}>
+
+            {loading ? null : <img className={`${styles.bgImage}`} src={media.poster} alt={"backdrop"}/>}
+            {loading ? <PageLoading phrase={loadingMessage}/> :
+                <div>
+                    <div className={styles.mediaDetailsMain}>
+                        <button className={styles.backButton} onClick={() => router.back()}>
+                            <LordIcon iconName={"arrow-white"} animationType={"hover"}/>
                             Retour
                         </button>
                         <h1>{media.title}</h1>
-                        <p>{media.year}   ●   {media.genre}</p>
-                        <div className={styles.buttonDiv}>
-
-                            <button disabled={!media.qualitiesLinks || media.qualitiesLinks===0} onMouseEnter={() => {if (watchBtnRef) watchBtnRef.current.triggerAnimation()}} onClick={() => router.push("/home/watch/" + media.id)}>
-                                Regarder
-                                <LordIcon ref={watchBtnRef} iconName={"play-white"} animationType={"hover"}/>
-                            </button>
-                            <button>
-                                <LordIcon iconName={"bookmark-black"} animationType={"hover"}/>
-                            </button>
-                        </div>
-                        <div className={styles.actorDiv}>
-                            <div>
-                                <Image src={"/assets/profile_placeholder.png"} alt={"director"} width={100} height={100}/>
-                                <p>{media.director} (réalisateur)</p>
-                            </div>
+                        <div className={styles.genreTag}>
                             {
-                                media.actors.map((actor, index) => {
-                                    return (
-                                        <div key={index}>
-                                            <Image src={"/assets/profile_placeholder.png"} alt={"director"} width={100} height={100}/>
-                                            <p>{actor}</p>
-                                        </div>
-                                    )
+                                media.genres.map((genre) => {
+                                    return <p>{genre}</p>
                                 })
                             }
                         </div>
+                        <div className={styles.buttonDiv}>
+                            <button
+                                className={styles.watchBtn}
+                                disabled={!streamLinkLoading && (!streamLinks || streamLinks.length === 0)}
+                                onClick={() => router.push("/home/watch/" + media.id)}
+                            >
+                                {streamLinkLoading ? <LordIcon iconName={"loader-black"} animationType={"loop"}/> : (
+                                    streamLinks && streamLinks.length > 0 ?
+                                        <div>
+                                            {streamLinks[0].hasOwnProperty('yts') ?
+                                                <Image className={styles.providerLogo} src={"/icons/logo-YTS.svg"}
+                                                       alt={"yts icon"} width={100} height={100}/> : ""}
+                                            <p>Regarder</p>
+                                            <LordIcon ref={watchBtnRef} iconName={"play-white"}
+                                                      animationType={"hover"}/>
+                                        </div>
+                                        : "Aucun lien disponible pour le moment"
 
-                        <p className={styles.plot}>{media.plot}</p>
+                                )}
+                            </button>
+                            <button
+                                onClick={toggleWatchList}
+                                className={inWatchList && !watchListLoading ? styles.inWatchList : ""}
+                            >
+                                {watchListLoading ? <LordIcon iconName={"loader-black"} animationType={"loop"}/> : null}
+                                {!watchListLoading ?
+                                    <LordIcon iconName={inWatchList ? "bookmark-white" : "bookmark-black"}
+                                              animationType={"hover"}/> : null}
+                                {inWatchList && !watchListLoading ? "Dans la liste de lecture" : null}
+                            </button>
+                        </div>
+
+                        <p className={styles.overview}>{media.overview}</p>
                     </div>
-                    <div className={styles.mediaDetailsDiv}>
-                        <Image src={media.poster} alt={media.title} width={1080} height={1620}/>
+                    <div className={styles.mediaDetailsSecondary}>
+                        <img src={media.poster} alt={"poster"}/>
+                        <div className={styles.secondaryContent}>
                         <p>Durée : {media.runtime}</p>
-                        <p>Pays : {media.country}</p>
-                        <p>Récompenses : {media.awards}</p>
-                        <p>Scénariste : {media.writer}</p>
-                        <p>Qualités disponibles : <ul> {
-                            media.qualitiesLinks.map((quality, index) => {
-                                return <li key={index}>{quality.quality}</li>
-                            })
-                        }</ul> </p>
-                        <p>Source : {media.provider}</p>
+                            <p>Pays : {media.country}</p>
+                            <p>Langue : {media.language}</p>
+                            {media.budget ? <p>Budget : {media.budget}</p> : null}
+                            {media.revenue ? <p>revenue : {media.revenue}</p> : null}
+                        </div>
                     </div>
                 </div>
             }
-
+            {showPopup ? <Popup title={popupTitle} text={popupMessage} close={closePopup}/> : null}
         </div>
     );
 }

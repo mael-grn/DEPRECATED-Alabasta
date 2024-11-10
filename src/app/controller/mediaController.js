@@ -3,11 +3,11 @@ import ServerResponse, {ErrorTypes} from "@/app/model/serverResponse";
 import {getItem, setItem} from "@/app/utils/cookieUtils";
 
 export const localSaveMedia = async (media) => {
-    await setItem(media.id, JSON.stringify(media));
+    await setItem(media.imdbID, JSON.stringify(media));
 }
 
-export const localRecoverMedia = async (mediaId) => {
-    const data = await getItem(mediaId);
+export const localRecoverMedia = async (imdbId) => {
+    const data = await getItem(imdbId);
     return data? JSON.parse(data) : null;
 }
 
@@ -19,16 +19,91 @@ export const getPopularMovies = async () => {
     }
 
     const res = await fetch(`/api/media/popular/`, {
-        method: 'POST',
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ token}),
+            Authorization: `${token}`
+        }
     });
 
     if (res.status === 200) {
         const data = await res.json();
-        return new ServerResponse(true, null, data.movies);
+        return new ServerResponse(true, null, data.res);
+    } else if (res.status === 401) {
+        return new ServerResponse(false, ErrorTypes.UNAUTHORIZED, null);
+    } else {
+        return new ServerResponse(false, ErrorTypes.SERVER, null);
+    }
+}
+
+export const getNowPlayingMovies = async () => {
+
+    let token = await getItem('token');
+    if (!token) {
+        return new ServerResponse(false, ErrorTypes.NOUSER, null);
+    }
+
+    const res = await fetch(`/api/media/nowPlaying/`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `${token}`
+        },
+    });
+
+    if (res.status === 200) {
+        const data = await res.json();
+        return new ServerResponse(true, null, data.res);
+    } else if (res.status === 401) {
+        return new ServerResponse(false, ErrorTypes.UNAUTHORIZED, null);
+    } else {
+        return new ServerResponse(false, ErrorTypes.SERVER, null);
+    }
+}
+
+export const getTopRatedMovies = async () => {
+
+    let token = await getItem('token');
+    if (!token) {
+        return new ServerResponse(false, ErrorTypes.NOUSER, null);
+    }
+
+    const res = await fetch(`/api/media/topRated/`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `${token}`
+        },
+    });
+
+    if (res.status === 200) {
+        const data = await res.json();
+        return new ServerResponse(true, null, data.res);
+    } else if (res.status === 401) {
+        return new ServerResponse(false, ErrorTypes.UNAUTHORIZED, null);
+    } else {
+        return new ServerResponse(false, ErrorTypes.SERVER, null);
+    }
+}
+
+export const getUpcomingMovies = async () => {
+
+    let token = await getItem('token');
+    if (!token) {
+        return new ServerResponse(false, ErrorTypes.NOUSER, null);
+    }
+
+    const res = await fetch(`/api/media/upcoming/`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `${token}`
+        },
+    });
+
+    if (res.status === 200) {
+        const data = await res.json();
+        return new ServerResponse(true, null, data.res);
     } else if (res.status === 401) {
         return new ServerResponse(false, ErrorTypes.UNAUTHORIZED, null);
     } else {
@@ -43,17 +118,17 @@ export const searchMedia = async (searchValue) => {
         return new ServerResponse(false, ErrorTypes.NOUSER, null);
     }
 
-    const res = await fetch(`/api/media/search/`, {
-        method: 'POST',
+    const res = await fetch(`/api/media/search/${searchValue}`, {
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json',
+            Authorization: `${token}`
         },
-        body: JSON.stringify({searchValue, token}),
     });
 
     if (res.status === 200) {
         const data = await res.json();
-        return new ServerResponse(true, null, data.movies);
+        return new ServerResponse(true, null, data.res);
     } else if (res.status === 401) {
         return new ServerResponse(false, ErrorTypes.UNAUTHORIZED, null);
     } else {
@@ -61,24 +136,49 @@ export const searchMedia = async (searchValue) => {
     }
 }
 
-export const getMediaDetails = async (media) => {
+export const getMediaDetails = async (mediaId) => {
 
     let token = await getItem('token');
     if (!token) {
         return new ServerResponse(false, ErrorTypes.NOUSER, null);
     }
 
-    const res = await fetch(`/api/media/getDetails/`, {
-        method: 'POST',
+    const res = await fetch(`/api/media/details/${mediaId}`, {
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json',
+            Authorization: `${token}`
         },
-        body: JSON.stringify({media, token}),
     });
 
     if (res.status === 200) {
         const data = await res.json();
-        return new ServerResponse(true, null, data.media);
+        return new ServerResponse(true, null, data.res);
+    } else if (res.status === 401) {
+        return new ServerResponse(false, ErrorTypes.UNAUTHORIZED, null);
+    } else {
+        return new ServerResponse(false, ErrorTypes.SERVER, null);
+    }
+}
+
+export const searchStreamingLinks = async (mediaId) => {
+
+    let token = await getItem('token');
+    if (!token) {
+        return new ServerResponse(false, ErrorTypes.NOUSER, null);
+    }
+
+    const res = await fetch(`/api/media/searchLink/${mediaId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `${token}`
+        },
+    });
+
+    if (res.status === 200) {
+        const data = await res.json();
+        return new ServerResponse(true, null, data.res);
     } else if (res.status === 401) {
         return new ServerResponse(false, ErrorTypes.UNAUTHORIZED, null);
     } else {
@@ -101,8 +201,8 @@ export const initStreamMedia = async (torrentUrl) => {
     });
 
     if (res.ok) {
-        const { streamId } = await res.json();
-        const streamUrl = `/api/media/stream/${streamId}`;
+        const data = await res.json();
+        const streamUrl = `/api/media/stream/${data.res}`;
         return new ServerResponse(true, null, streamUrl);
     } else {
         return new ServerResponse(false, ErrorTypes.SERVER, null);
@@ -120,7 +220,7 @@ export const searchSubtitles = async (media) => {
 
     if (res.status === 200) {
         const data = await res.json();
-        return new ServerResponse(true, null, data.subsId);
+        return new ServerResponse(true, null, data.res);
     } else if (res.status === 401) {
         return new ServerResponse(false, ErrorTypes.UNAUTHORIZED, null);
     } else {
@@ -145,7 +245,7 @@ export const getSubtitles = async (subsId) => {
 
     if (res.ok) {
         const data = await res.json();
-        return new ServerResponse(true, null, data.subs);
+        return new ServerResponse(true, null, data.res);
     } else {
         return new ServerResponse(false, ErrorTypes.SERVER, null);
     }

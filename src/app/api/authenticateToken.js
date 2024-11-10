@@ -9,6 +9,10 @@ import jwt from "jsonwebtoken";
 export default async function authenticateToken(token) {
     const secretKey = process.env.AUTH_SECRET
 
-    const decoded =  jwt.verify(token, secretKey);
-    return  decoded?.key;
+    try {
+        const res = jwt.verify(token, secretKey)
+        return res.key;
+    } catch (e) {
+        return null;
+    }
 }
