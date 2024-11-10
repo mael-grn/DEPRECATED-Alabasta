@@ -4,6 +4,7 @@ import authenticateToken from "@/app/api/authenticateToken";
 import ytsGetMagnetLink from "@/app/api/media/yts/ytsGetMagnetLink";
 import {getMediaDetails} from "@/app/controller/mediaController";
 import tmdbGetDetails from "@/app/api/media/tmdb/tmdbGetDetails";
+export const dynamic = 'force-dynamic';
 
 export async function GET(req, { params }) {
     try {

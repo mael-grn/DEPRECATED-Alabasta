@@ -2,6 +2,7 @@
 import authenticateToken from "@/app/api/authenticateToken";
 import tmdbGetNowPlaying from "@/app/api/media/tmdb/tmdbGetNowPlaying";
 import tmdbGetDetails from "@/app/api/media/tmdb/tmdbGetDetails";
+export const dynamic = 'force-dynamic';
 
 export async function GET(req, { params }) {
     try {

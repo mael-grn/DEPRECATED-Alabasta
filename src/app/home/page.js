@@ -13,8 +13,8 @@ import {
 import MediaCarroussel from "@/app/components/media/mediaCarroussel";
 import {useEffect, useRef, useState} from "react";
 import LordIcon from "@/app/components/ui/lordIcon";
-import {router} from "next/client";
 import {useRouter} from "next/navigation";
+import Image from "next/image";
 
 export default function Home() {
     const [loading, setLoading] = useState(true);
@@ -86,10 +86,18 @@ export default function Home() {
         });
     };
 
+    const openHeroMedia = () => {
+        router.push("/home/media/" + heroMedia.id);
+    }
+
+    const watchHeroMedia = () => {
+        router.push("/home/watch/" + heroMedia.id);
+    }
+
     return (
         <div className={styles.homeContainer}>
             {!heroMedia ? null :
-                <img className={`${styles.bgImage} ${isScrolled ? styles.bgImageHide : null}`} src={heroMedia.backdrop} alt={"backdrop"}/>}
+                <Image className={`${styles.bgImage} ${isScrolled ? styles.bgImageHide : null}`} src={heroMedia.backdrop} alt={"backdrop"} width={1280} height={496}/>}
             <div className={`${styles.home} ${isScrolled || !heroMedia ? null : styles.onTop}`}>
                 {
                     loading ?
@@ -99,7 +107,7 @@ export default function Home() {
                         (
                             heroMedia ?
                                 <div className={`${styles.heroMovie} ${isDarkText ? null : styles.dark}`}>
-                                    <img src={heroMedia.backdrop} alt={heroMedia.title}/>
+                                    <Image src={heroMedia.backdrop} alt={heroMedia.title} width={1280} height={496}/>
                                     <div className={styles.heroMovieInfo}>
                                         <h1>{heroMedia.title}</h1>
                                         <div className={styles.genreTag}>
@@ -115,14 +123,12 @@ export default function Home() {
                                         <div className={styles.btnDiv}>
                                             <button className={styles.btnWatch} onMouseEnter={() => {
                                                         if (watchBtnRef) watchBtnRef.current.triggerAnimation()
-                                                    }} onClick={() => {
-                                                        router.push("/home/watch/" + heroMedia.id)
-                                                    }}>
+                                                    }} onClick={watchHeroMedia}>
                                                 Regarder
                                                 <LordIcon ref={watchBtnRef} iconName={"play-white"}
                                                           animationType={"hover"}/>
                                             </button>
-                                            <button className={styles.btnInfo} onClick={() => router.push("/home/media/" + heroMedia.id)}>
+                                            <button className={styles.btnInfo} onClick={openHeroMedia}>
                                                 <LordIcon iconName={"info-white"} animationType={"hover"}/>
                                             </button>
                                         </div>

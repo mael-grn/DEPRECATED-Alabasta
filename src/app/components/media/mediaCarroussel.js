@@ -1,8 +1,9 @@
+"use client"
+
 import MediaTile from "@/app/components/media/mediaTile";
 import LordIcon from "@/app/components/ui/lordIcon";
 import {useEffect, useRef, useState} from "react";
 import styles from "@/app/components/media/mediaCarroussel.module.css";
-import {getPopularMovies} from "@/app/controller/mediaController";
 
 export default function MediaCarroussel({mediaListFctn, title}) {
 

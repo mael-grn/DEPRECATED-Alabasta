@@ -1,6 +1,7 @@
 
 import authenticateToken from "@/app/api/authenticateToken";
 import tmdbSearch from "@/app/api/media/tmdb/tmdbSearch";
+export const dynamic = 'force-dynamic';
 
 export async function GET(req, { params }) {
     try {

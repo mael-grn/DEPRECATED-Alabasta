@@ -2,6 +2,7 @@
 import authenticateToken from "@/app/api/authenticateToken";
 import tmdbGetPopular from "@/app/api/media/tmdb/tmdbGetPopular";
 import tmdbGetUpcoming from "@/app/api/media/tmdb/tmdbGetUpcoming";
+export const dynamic = 'force-dynamic';
 
 export async function GET(req, res) {
     try {

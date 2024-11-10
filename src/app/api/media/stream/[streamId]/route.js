@@ -1,5 +1,6 @@
 import peerflix from 'peerflix';
 import {sql} from "@vercel/postgres";
+export const dynamic = 'force-dynamic';
 
 // Fonction GET pour servir le flux vidéo avec support des Range
 export async function GET(req, { params }) {

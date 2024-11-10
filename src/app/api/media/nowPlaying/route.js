@@ -1,6 +1,7 @@
 
 import authenticateToken from "@/app/api/authenticateToken";
 import tmdbGetNowPlaying from "@/app/api/media/tmdb/tmdbGetNowPlaying";
+export const dynamic = 'force-dynamic';
 
 export async function GET(req, res) {
     try {

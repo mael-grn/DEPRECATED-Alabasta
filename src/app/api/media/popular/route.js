@@ -1,15 +1,16 @@
-
 import authenticateToken from "@/app/api/authenticateToken";
 import tmdbGetPopular from "@/app/api/media/tmdb/tmdbGetPopular";
 
-export async function GET(req, res) {
+export const dynamic = 'force-dynamic';
+
+export async function GET(req) {
     try {
         const token = req.headers.get('Authorization');
 
         if (!token) {
-            return new Response(JSON.stringify({error: "Missing or invalid Authorization header"}), {
+            return new Response(JSON.stringify({ error: "Missing or invalid Authorization header" }), {
                 status: 401,
-                headers: {'Content-Type': 'application/json'},
+                headers: { 'Content-Type': 'application/json' },
             });
         }
 
@@ -29,12 +30,11 @@ export async function GET(req, res) {
             headers: { 'Content-Type': 'application/json' },
         });
 
-
     } catch (error) {
-        console.log(error)
-        return new Response(JSON.stringify({message: 'server error : ' + error}), {
+        console.log(error);
+        return new Response(JSON.stringify({ message: 'server error : ' + error }), {
             status: 500,
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
         });
     }
 }

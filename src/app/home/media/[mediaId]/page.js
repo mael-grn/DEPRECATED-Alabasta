@@ -93,7 +93,7 @@ export default function media() {
     return (
         <div className={styles.mediaDetails}>
 
-            {loading ? null : <img className={`${styles.bgImage}`} src={media.poster} alt={"backdrop"}/>}
+            {loading ? null : <Image className={`${styles.bgImage}`} src={media.poster} alt={"backdrop"} width={500} height={750}/>}
             {loading ? <PageLoading phrase={loadingMessage}/> :
                 <div>
                     <div className={styles.mediaDetailsMain}>
@@ -144,7 +144,7 @@ export default function media() {
                         <p className={styles.overview}>{media.overview}</p>
                     </div>
                     <div className={styles.mediaDetailsSecondary}>
-                        <img src={media.poster} alt={"poster"}/>
+                        <Image src={media.poster} alt={"poster"} width={500} height={750}/>
                         <div className={styles.secondaryContent}>
                         <p>Durée : {media.runtime}</p>
                             <p>Pays : {media.country}</p>
