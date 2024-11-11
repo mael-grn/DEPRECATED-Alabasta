@@ -47,44 +47,11 @@ export default function Home() {
                 getMediaDetails(res.data[randomIndex].id).then((res) => {
                     setHeroMedia(res.data);
                     setLoading(false);
-                    checkImageBrightness(res.data.backdrop).then((isDark) => {
-                        setIsDarkText(isDark);
-
-                    });
+                    setIsDarkText(true);
                 });
             }
         });
     }, []);
-
-    const checkImageBrightness = (src) => {
-        return new Promise((resolve) => {
-            const img = new Image();
-            img.src = src;
-            img.crossOrigin = "Anonymous"; // Pour éviter les erreurs CORS
-            img.onload = () => {
-                const canvas = document.createElement("canvas");
-                canvas.width = img.width;
-                canvas.height = img.height;
-                const ctx = canvas.getContext("2d");
-                ctx.drawImage(img, 0, 0, img.width, img.height);
-
-                const imageData = ctx.getImageData(0, 0, img.width, img.height);
-                const pixels = imageData.data;
-                let brightnessSum = 0;
-
-                for (let i = 0; i < pixels.length; i += 4) {
-                    const r = pixels[i];
-                    const g = pixels[i + 1];
-                    const b = pixels[i + 2];
-                    const brightness = (r * 0.299 + g * 0.587 + b * 0.114);
-                    brightnessSum += brightness;
-                }
-
-                const avgBrightness = brightnessSum / (pixels.length / 4);
-                resolve(avgBrightness < 128); // Si luminosité < 128, l'image est sombre
-            };
-        });
-    };
 
     const openHeroMedia = () => {
         router.push("/home/media/" + heroMedia.id);

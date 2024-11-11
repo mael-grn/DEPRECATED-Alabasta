@@ -9,20 +9,27 @@ import Popup from "@/app/components/ui/popup";
 import {getMediaDetails, getSubtitles, searchSubtitles} from "@/app/controller/mediaController";
 
 export default function VideoPlayer({movieId, magnetLinks, src, changeLinkFctn}) {
+
     const router = useRouter();
+    const [loading, setLoading] = useState(true);
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupText, setPopupText] = useState("");
+
     const [playPauseAnimation, setPlayPauseAnimation] = useState(null);
     const [progress, setProgress] = useState(0);
     const [selectedQuality, setSelectedQuality] = useState(0);
-    const [loading, setLoading] = useState(true);
     const [showSettings, setShowSettings] = useState(false);
-    const [showPopup, setShowPopup] = useState(false);
-    const [popupText, setPopupText] = useState("");
+    const [settingsMenu, setSettingsMenu] = useState("quality");
+    const hideControlsTimeout = useRef(null);
+    const [subsSrc, setSubsSrc] = useState(null);
+    const [subsList, setSubsList] = useState([]);
+    const [subsIndex, setSubsIndex] = useState(0);
+    const [subsLoading, setSubsLoading] = useState(false);
+    const [showControls, setShowControls] = useState(true);
+
+    const sliderRef = useRef(null);
     const videoRef = useRef(null);
     const playerRef = useRef(null);
-    const [subsSrc, setSubsSrc] = useState(null);
-    const [showControls, setShowControls] = useState(true);
-    const hideControlsTimeout = useRef(null);
-    const sliderRef = useRef(null);
 
     // Fonction pour afficher les contrôles et réinitialiser le timer d'inactivité
     const showPlayerControls = useCallback(() => {
@@ -63,36 +70,39 @@ export default function VideoPlayer({movieId, magnetLinks, src, changeLinkFctn})
 
     const toggleSubs = () => {
         if (!subsSrc) {
-            setLoading(true);
-            videoRef.current.pause();
+            setSubsLoading(true);
             getMediaDetails(movieId).then((movieData) => {
                 if (!movieData.success) {
-                    setLoading(false);
+                    setSubsLoading(false);
                     setShowPopup(true);
                     setPopupText("Une erreur s'est produite lors du chargement des détails du film")
                     return;
                 }
-                console.log(movieData)
                 searchSubtitles(movieData.data.imdbId).then((response) => {
-                    getSubtitles(response.data).then((response) => {
-                        if (!response.success) {
-                            setLoading(false);
-                            setShowPopup(true);
-                            setPopupText("Une erreur s'est produite lors du chargement des sous-titres")
-                            return;
-                        }
-                        const vttText = response.data;
-                        const vttBlob = new Blob([vttText], { type: "text/vtt" });
-                        setSubsSrc(URL.createObjectURL(vttBlob))
-                        setLoading(false);
-                        videoRef.current.play();
-                    });
+                    setSubsSrc(response.data)
+                    changeSubsSrc(response.data[0]);
                 });
             });
-
         } else {
             setSubsSrc(null)
         }
+    }
+
+    const changeSubsSrc = (subsId) => {
+        setSubsLoading(true);
+        getSubtitles(subsId).then((response) => {
+            if (!response.success) {
+                setSubsLoading(false);
+                setShowPopup(true);
+                setPopupText("Une erreur s'est produite lors du chargement des sous-titres")
+                return;
+            }
+            setSubsIndex(subsList.indexOf(subsId));
+            const vttText = response.data;
+            const vttBlob = new Blob([vttText], {type: "text/vtt"});
+            setSubsSrc(URL.createObjectURL(vttBlob))
+            setSubsLoading(false);
+        });
     }
 
     const handleTimeUpdate = () => {
@@ -144,7 +154,7 @@ export default function VideoPlayer({movieId, magnetLinks, src, changeLinkFctn})
             ref={playerRef}
             onMouseMove={handleMouseMove}
         >
-            {showPopup ? <Popup title="Erreur" text={popupText} close={closePopup} /> : null}
+            {showPopup ? <Popup title="Erreur" text={popupText} close={closePopup}/> : null}
             <video
                 crossOrigin="anonymous"
                 ref={videoRef}
@@ -173,36 +183,51 @@ export default function VideoPlayer({movieId, magnetLinks, src, changeLinkFctn})
             </video>
 
 
-                <div className={`${styles.playerElements} ${showControls ? "" : styles.hide}`}>
-                    {/* Boutons et contrôles du lecteur */}
-                    <button className={`${styles.back} ${styles.playerButton}`} onClick={() => router.back()}>
-                        <LordIcon iconName="arrow-white" animationType="hover" />
-                    </button>
+            <div className={`${styles.playerElements} ${showControls ? "" : styles.hide}`}>
+                {/* Boutons et contrôles du lecteur */}
+                <button className={`${styles.back} ${styles.playerButton}`} onClick={() => router.back()}>
+                    <LordIcon iconName="arrow-white" animationType="hover"/>
+                </button>
 
-                    <button onClick={togglePlayPause} className={`${styles.playPause} ${loading ? styles.loading : ""} ${styles.playerButton}`}>
-                        {loading && <LordIcon iconName="loader-white" animationType="loop" />}
-                        {!videoRef.current?.paused && !loading && (
-                            <LordIcon iconName="pause-white" inAnimation={playPauseAnimation} animationType="hover" />
-                        )}
-                        {videoRef.current?.paused && !loading && (
-                            <LordIcon iconName="play-white" inAnimation={playPauseAnimation} animationType="hover" />
-                        )}
-                    </button>
+                <button onClick={togglePlayPause}
+                        className={`${styles.playPause} ${loading ? styles.loading : ""} ${styles.playerButton}`}>
+                    {loading && <LordIcon iconName="loader-white" animationType="loop"/>}
+                    {!videoRef.current?.paused && !loading && (
+                        <LordIcon iconName="pause-white" inAnimation={playPauseAnimation} animationType="hover"/>
+                    )}
+                    {videoRef.current?.paused && !loading && (
+                        <LordIcon iconName="play-white" inAnimation={playPauseAnimation} animationType="hover"/>
+                    )}
+                </button>
 
-                    <button className={`${styles.subs} ${subsSrc ? styles.activated : ""} ${styles.playerButton}`} onClick={toggleSubs}>
-                        <Image src="/icons/subtitles.png" alt="subs" width={50} height={50} />
-                    </button>
+                <button className={`${styles.fullscreen} ${styles.playerButton}`} onClick={toggleFullscreen}>
+                    <LordIcon iconName="ration-white" animationType="hover"/>
+                </button>
 
-                    <button className={`${styles.fullscreen} ${styles.playerButton}`} onClick={toggleFullscreen}>
-                        <LordIcon iconName="ration-white" animationType="hover" />
-                    </button>
+                <button className={`${styles.settingsBtn} ${styles.playerButton}`} onClick={() => {
+                    setShowSettings(true)
+                    videoRef.current.pause();
+                }}>
+                    <LordIcon iconName="settings-white" animationType="hover"/>
+                </button>
 
-                    <div className={`${styles.settings} ${showSettings ? styles.show : ""}`}>
-                        {showSettings ? (
-                            <div>
-                                {magnetLinks.map((quality, index) => (
+                <div className={`${styles.settings} ${showSettings ? styles.show : ""}`}>
+                    <button onClick={() => {
+                        setShowSettings(false);
+                        videoRef.current.play();
+                    }} className={styles.close}>
+                        <LordIcon iconName={"cross-white"} animationType={"hover"}/>
+                    </button>
+                    <div className={styles.menuSelect}>
+                        <button className={settingsMenu === "quality" ? styles.activated : null} onClick={() => setSettingsMenu("quality")}>Qualité</button>
+                        <button className={settingsMenu === "subs" ? styles.activated : null} onClick={() => setSettingsMenu("subs")}>Sous-titres</button>
+                    </div>
+                    <div className={styles.mainSettingsMenu}>
+                        {
+                            settingsMenu === "quality" ?
+                                magnetLinks.map((quality, index) => (
                                     <button
-                                        className={selectedQuality === index ? styles.selected : ""}
+                                        className={selectedQuality === index ? styles.activated : ""}
                                         key={index}
                                         onClick={() => {
                                             setSelectedQuality(index);
@@ -211,31 +236,51 @@ export default function VideoPlayer({movieId, magnetLinks, src, changeLinkFctn})
                                     >
                                         {quality.quality}
                                     </button>
-                                ))}
-                                <button onClick={() => setShowSettings(false)} className={styles.playerButton}>
-                                    <LordIcon iconName="cross-white" />
-                                </button>
-                            </div>
-                        ) : (
-                            <button onClick={() => setShowSettings(true)} className={`${styles.cross} ${styles.playerButton}`}>
-                                <LordIcon iconName="settings-white" />
-                            </button>
-                        )}
-                    </div>
-
-                    {/* Slider and time */}
-                    <div className={styles.positionSlider}>
-                        <input
-                            ref={sliderRef}
-                            type="range"
-                            min="0"
-                            max="100"
-                            value={progress || 0}
-                            onChange={handleSliderChange}
-                        />
-                        <p>{videoRef.current ? formatTime(videoRef.current.duration - videoRef.current.currentTime) : ""}</p>
+                                )) : null
+                        }
+                        {
+                            settingsMenu === "subs" ?
+                                <div>
+                                    {
+                                        subsLoading ?
+                                            <div></div> : null
+                                    }
+                                    {
+                                        subsSrc ?
+                                            <button onClick={toggleSubs} className={styles.mainButton}>Désactiver les sous-titres</button> :
+                                            <button onClick={toggleSubs} className={styles.mainButton}>Activer les sous-titres</button>
+                                    }
+                                    {
+                                        subsSrc ?
+                                            subsList.map((subsLink, index) => (
+                                                <button
+                                                    className={subsIndex === index ? styles.activated : ""}
+                                                    key={index}
+                                                    onClick={() => {
+                                                        changeSubsSrc(subsList[index])
+                                                    }}
+                                                >
+                                                    {"Français " + index}
+                                                </button>
+                                            )) : null
+                                    }
+                                </div> : null
+                        }
                     </div>
                 </div>
+
+                <div className={styles.positionSlider}>
+                    <input
+                        ref={sliderRef}
+                        type="range"
+                        min="0"
+                        max="100"
+                        value={progress || 0}
+                        onChange={handleSliderChange}
+                    />
+                    <p>{videoRef.current ? formatTime(videoRef.current.duration - videoRef.current.currentTime) : ""}</p>
+                </div>
+            </div>
 
         </div>
     );

@@ -6,15 +6,16 @@ export async function GET(req, { params }) {
 
         const {imdb} = params;
 
-        const subsId = await openSubtitleSearch(imdb)
-        if (!subsId) {
+        const subsLst = await openSubtitleSearch(imdb)
+
+        if (!subsLst) {
             return new Response(JSON.stringify({error: "impossible to get subtitles"}), {
                 status: 500,
                 headers: {'Content-Type': 'application/json'},
             });
         }
 
-        return new Response(JSON.stringify({res: subsId}), {
+        return new Response(JSON.stringify({res: subsLst}), {
             status: 200,
             headers: {'Content-Type': 'application/json'},
         });
