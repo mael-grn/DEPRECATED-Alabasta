@@ -234,6 +234,24 @@
     border-radius: 50px;
 }
 
+.playerElements .settings .mainSettingsMenu > div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+.playerElements .settings .mainSettingsMenu .buttonList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    overflow-y: auto;
+    max-height: calc(100vh - 280px);
+    border-radius: 10px;
+
+}
 
 .playerElements .positionSlider {
     position: absolute;

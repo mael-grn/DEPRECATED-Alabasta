@@ -79,7 +79,7 @@ export default function VideoPlayer({movieId, magnetLinks, src, changeLinkFctn})
                     return;
                 }
                 searchSubtitles(movieData.data.imdbId).then((response) => {
-                    setSubsSrc(response.data)
+                    setSubsList(response.data)
                     changeSubsSrc(response.data[0]);
                 });
             });
@@ -252,8 +252,9 @@ export default function VideoPlayer({movieId, magnetLinks, src, changeLinkFctn})
                                             <button onClick={toggleSubs} className={styles.mainButton}>Activer les sous-titres</button>
                                     }
                                     {
-                                        subsSrc ?
-                                            subsList.map((subsLink, index) => (
+                                        subsList && subsList.length > 0 ?
+                                            <div className={styles.buttonList}>
+                                                {subsList.map((subsLink, index) => (
                                                 <button
                                                     className={subsIndex === index ? styles.activated : ""}
                                                     key={index}
@@ -263,7 +264,7 @@ export default function VideoPlayer({movieId, magnetLinks, src, changeLinkFctn})
                                                 >
                                                     {"Français " + index}
                                                 </button>
-                                            )) : null
+                                            ))} </div> : null
                                     }
                                 </div> : null
                         }

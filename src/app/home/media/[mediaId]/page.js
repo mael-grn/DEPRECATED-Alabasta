@@ -115,7 +115,7 @@ export default function media() {
                                 disabled={!streamLinkLoading && (!streamLinks || streamLinks.length === 0)}
                                 onClick={() => router.push("/home/watch/" + media.id)}
                             >
-                                {streamLinkLoading ? <LordIcon iconName={"loader-black"} animationType={"loop"}/> : (
+                                {streamLinkLoading ? <LordIcon iconName={"loader-white"} animationType={"loop"}/> : (
                                     streamLinks.yts && streamLinks.yts.length > 0 ?
                                         <div>
                                             {streamLinks.yts ?
