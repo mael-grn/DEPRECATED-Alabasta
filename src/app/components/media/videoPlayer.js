@@ -243,9 +243,10 @@ export default function VideoPlayer({movieId, magnetLinks, src, changeLinkFctn})
                                 <div>
                                     {
                                         subsLoading ?
-                                            <div></div> : null
-                                    }
-                                    {
+                                            <button className={styles.mainButton}>
+                                                <LordIcon iconName={"loader-white"} animationType={"loop"}/>
+                                            </button>
+                                             :
                                         subsSrc ?
                                             <button onClick={toggleSubs} className={styles.mainButton}>Désactiver les sous-titres</button> :
                                             <button onClick={toggleSubs} className={styles.mainButton}>Activer les sous-titres</button>
