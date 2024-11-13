@@ -22,8 +22,6 @@ export default function media() {
     const [popupMessage, setPopupMessage] = useState('');
     const [inWatchList, setInWatchList] = useState(false);
     const [watchListLoading, setWatchListLoading] = useState(true);
-    const [streamLinkLoading, setStreamLinkLoading] = useState(true);
-    const [streamLinks, setStreamLinks] = useState([]);
     const [loadingMessage, setLoadingMessage] = useState("Récuperation des données du média...");
     const [media, setMedia] = useState([]);
     const params = useParams();
@@ -47,12 +45,6 @@ export default function media() {
                 setShowPopup(true);
                 setPopupTitle('Erreur');
                 setPopupMessage('Impossible de récuperer les données du film');
-            }
-        });
-        searchStreamingLinks(params.mediaId).then((response) => {
-            setStreamLinkLoading(false);
-            if (response.success) {
-                setStreamLinks(response.data);
             }
         });
     }, []);
@@ -112,22 +104,14 @@ export default function media() {
                         <div className={styles.buttonDiv}>
                             <button
                                 className={styles.watchBtn}
-                                disabled={!streamLinkLoading && (!streamLinks || streamLinks.length === 0)}
-                                onClick={() => router.push("/home/watch/" + media.id)}
+                                onClick={() => router.push("/home/watch/" + media.imdbId)}
                             >
-                                {streamLinkLoading ? <LordIcon iconName={"loader-white"} animationType={"loop"}/> : (
-                                    streamLinks.yts && streamLinks.yts.length > 0 ?
                                         <div>
-                                            {streamLinks.yts ?
-                                                <Image className={styles.providerLogo} src={"/icons/logo-YTS.svg"}
-                                                       alt={"yts icon"} width={100} height={100}/> : ""}
                                             <p>Regarder</p>
                                             <LordIcon ref={watchBtnRef} iconName={"play-white"}
                                                       animationType={"hover"}/>
                                         </div>
-                                        : "Aucun lien disponible pour le moment"
 
-                                )}
                             </button>
                             <button
                                 onClick={toggleWatchList}

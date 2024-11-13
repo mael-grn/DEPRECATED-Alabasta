@@ -192,7 +192,7 @@ export const initStreamMedia = async (torrentUrl) => {
         return new ServerResponse(false, ErrorTypes.NOUSER, null);
     }
 
-    const res = await fetch(`/api/media/initStream/`, {
+    const res = await fetch(`/api/media/initTorrentStream/`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -240,6 +240,28 @@ export const getSubtitles = async (subsId) => {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({subsId, token}),
+    });
+
+    if (res.ok) {
+        const data = await res.json();
+        return new ServerResponse(true, null, data.res);
+    } else {
+        return new ServerResponse(false, ErrorTypes.SERVER, null);
+    }
+}
+
+export const getClassicSrc = async (imdbId) => {
+    let token = await getItem('token');
+    if (!token) {
+        return new ServerResponse(false, ErrorTypes.NOUSER, null);
+    }
+
+    const res = await fetch(`/api/media/getClassicSrc/${imdbId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `${token}`
+        },
     });
 
     if (res.ok) {

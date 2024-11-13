@@ -58,7 +58,7 @@ export default function Home() {
     }
 
     const watchHeroMedia = () => {
-        router.push("/home/watch/" + heroMedia.id);
+        router.push("/home/watch/" + heroMedia.imdbId);
     }
 
     return (
