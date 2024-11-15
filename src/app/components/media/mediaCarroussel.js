@@ -49,6 +49,18 @@ export default function MediaCarroussel({mediaListFctn, title}) {
         )
     }
 
+    if (!loading && mediaList.length === 0) {
+        return (
+            <div className={styles.carroussel}>
+                <h1 className={styles.title}>{title}</h1>
+                <div className={styles.mediaList} ref={mediaListRef}>
+                    <p>Rien à afficher pour le moment...</p>
+                </div>
+
+            </div>
+        )
+    }
+
     return (
         <div className={styles.carroussel}>
             <h1 className={styles.title}>{title}</h1>

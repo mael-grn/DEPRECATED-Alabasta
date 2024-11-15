@@ -40,6 +40,5 @@ export async function middleware(req) {
  * @type {{matcher: string[]}}
  */
 export const config = {
-    matcher: ['/home/:path*',
-        ], // Match toutes les routes sauf /login
+    matcher: ['/home/:path*', '/watch/:path*', '/media/:path*', '/search/:path*'],
 };

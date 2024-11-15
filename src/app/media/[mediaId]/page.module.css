@@ -92,12 +92,8 @@
     cursor: pointer;
 }
 
-.mediaDetailsMain .buttonDiv > button:disabled {
-    cursor: default;
-    opacity: .7;
-}
 
-.mediaDetailsMain .buttonDiv > button:hover:not(:disabled) {
+.mediaDetailsMain .buttonDiv > button:hover {
     transform: scale(1.05);
 }
 
@@ -114,7 +110,14 @@
     font-family: inherit;
     background-color: var(--primary-color);
     color: var(--text-color);
-    padding: 0 10px;
+    padding: 0 10px 0 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mediaDetailsMain .buttonDiv > button.watchBtn p {
+    margin: 0;
 }
 
 .mediaDetailsMain .buttonDiv > button.inWatchList {

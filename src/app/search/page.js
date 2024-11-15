@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image";
-import styles from "@/app/home/search/page.module.css";
+import styles from "@/app/search/page.module.css";
 import Popup from "@/app/components/ui/popup";
 import LordIcon from "@/app/components/ui/lordIcon";
 import {useState} from "react";

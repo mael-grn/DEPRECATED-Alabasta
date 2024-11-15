@@ -9,7 +9,11 @@ export const localSaveUser = async (user) => {
 }
 
 export const localRecoverUser = async () => {
-    return getItem('user');
+    const text = await getItem('user');
+    if (!text) {
+        return null;
+    }
+    return JSON.parse(text);
 }
 
 /**
@@ -36,7 +40,7 @@ export const login = async (key) => {
 
     if (res.status === 200) {
         const data = await res.json();
-        let user = new User(data.res.user.name, data.res.user.surname);
+        let user = new User(data.res.user.id, data.res.user.name, data.res.user.surname);
         await localSaveUser(user);
         await setItem('token', data.res.token);
         return new ServerResponse(true, null, user);
@@ -70,7 +74,7 @@ export const loginToken = async () => {
     if (res.status === 200) {
 
         const data = await res.json();
-        let user = new User(data.res.user.name, data.res.user.surname);
+        let user = new User(data.res.user.id, data.res.user.name, data.res.user.surname);
         await localSaveUser(user);
         return new ServerResponse(true, null, user);
     } else if (res.status === 404) {

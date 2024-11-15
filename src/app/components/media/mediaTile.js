@@ -12,7 +12,7 @@ export default function MediaTile({ movie }) {
     const router = useRouter();
 
     const openMoviePage = async () => {
-        router.push("/home/media/" + movie.id)
+        router.push("/media/" + movie.id)
     };
 
 

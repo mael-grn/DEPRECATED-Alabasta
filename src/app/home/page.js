@@ -54,11 +54,11 @@ export default function Home() {
     }, []);
 
     const openHeroMedia = () => {
-        router.push("/home/media/" + heroMedia.id);
+        router.push("/media/" + heroMedia.id);
     }
 
     const watchHeroMedia = () => {
-        router.push("/home/watch/" + heroMedia.imdbId);
+        router.push("/watch/" + heroMedia.imdbId);
     }
 
     return (

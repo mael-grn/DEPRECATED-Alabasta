@@ -18,11 +18,12 @@ export default function Navbar() {
 
     const activeRoute = useMemo(() => {
         if (pathname === "/home") return "home";
-        if (pathname === "/home/search") return "search";
+        if (pathname === "/search") return "search";
+        if (pathname === "/user") return "user";
         return "";
     }, [pathname]);
 
-    if (pathname.startsWith("/home/watch")) {
+    if (pathname.startsWith("/watch") || pathname === "/") {
         return null;
     }
 
@@ -35,19 +36,29 @@ export default function Navbar() {
                  onMouseLeave={() => {
                      if (deploy) setDeploy(false)
                  }}>
-                <div onClick={() => router.push("/home")} className={`${styles.navElem} ${activeRoute === "home" ? styles.selected : ''}`}
+                <div onClick={() => router.push("/home")}
+                     className={`${styles.navElem} ${activeRoute === "home" ? styles.selected : ''}`}
                      onMouseEnter={() => {
                          if (homeIconRef) homeIconRef.current.triggerAnimation()
                      }}>
                     <p>Accueil</p>
                     <LordIcon ref={homeIconRef} iconName={"home-white"} animationType={"hover"}/>
                 </div>
-                <div onClick={() => router.push("/home/search")} className={`${styles.navElem} ${activeRoute === "search" ? styles.selected : ''}`}
+                <div onClick={() => router.push("/search")}
+                     className={`${styles.navElem} ${activeRoute === "search" ? styles.selected : ''}`}
                      onMouseEnter={() => {
                          if (searchIconRef) searchIconRef.current.triggerAnimation()
                      }}>
                     <p>Rechercher</p>
                     <LordIcon ref={searchIconRef} iconName={"search-white"} animationType={"hover"}/>
+                </div>
+                <div onClick={() => router.push("/user")}
+                     className={`${styles.navElem} ${activeRoute === "user" ? styles.selected : ''}`}
+                     onMouseEnter={() => {
+                         if (searchIconRef) searchIconRef.current.triggerAnimation()
+                     }}>
+                    <p>Profile</p>
+                    <LordIcon ref={searchIconRef} iconName={"account-white"} animationType={"hover"}/>
                 </div>
             </div>
 

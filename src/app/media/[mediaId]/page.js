@@ -9,7 +9,7 @@ import {
 } from "@/app/controller/mediaController";
 import Popup from "@/app/components/ui/popup";
 import LordIcon from "@/app/components/ui/lordIcon";
-import styles from "@/app/home/media/[mediaId]/page.module.css"
+import styles from "@/app/media/[mediaId]/page.module.css"
 import Image from "next/image";
 import {useParams, useRouter} from "next/navigation";
 import PageLoading from "@/app/components/ui/pageLoading";
@@ -104,7 +104,7 @@ export default function media() {
                         <div className={styles.buttonDiv}>
                             <button
                                 className={styles.watchBtn}
-                                onClick={() => router.push("/home/watch/" + media.imdbId)}
+                                onClick={() => router.push("/watch/" + media.imdbId)}
                             >
                                         <div>
                                             <p>Regarder</p>
