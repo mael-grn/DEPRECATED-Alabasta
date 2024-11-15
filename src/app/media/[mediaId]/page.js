@@ -14,6 +14,7 @@ import Image from "next/image";
 import {useParams, useRouter} from "next/navigation";
 import PageLoading from "@/app/components/ui/pageLoading";
 import {addToWatchList, checkIfInWatchList, removeFromWatchList} from "@/app/controller/watchListController";
+import {localRecoverUser} from "@/app/controller/userController";
 
 export default function media() {
     const [loading, setLoading] = useState(true);
@@ -23,6 +24,7 @@ export default function media() {
     const [inWatchList, setInWatchList] = useState(false);
     const [watchListLoading, setWatchListLoading] = useState(true);
     const [loadingMessage, setLoadingMessage] = useState("Récuperation des données du média...");
+    const [isDemoUser, setIsDemoUser] = useState(false);
     const [media, setMedia] = useState([]);
     const params = useParams();
     const watchBtnRef = useRef(null);
@@ -30,6 +32,11 @@ export default function media() {
     const router = useRouter()
 
     useEffect(() => {
+        localRecoverUser().then((user) => {
+            if (user && user.id === 3) {
+                setIsDemoUser(true);
+            }
+        });
         getMediaDetails(params.mediaId).then((media) => {
             if (media) {
                 setMedia(media.data);
@@ -102,17 +109,20 @@ export default function media() {
                             }
                         </div>
                         <div className={styles.buttonDiv}>
-                            <button
-                                className={styles.watchBtn}
-                                onClick={() => router.push("/watch/" + media.imdbId)}
-                            >
+                            {
+                                isDemoUser ? null :
+                                    <button
+                                        className={styles.watchBtn}
+                                        onClick={() => router.push("/watch/" + media.imdbId)}
+                                    >
                                         <div>
                                             <p>Regarder</p>
                                             <LordIcon ref={watchBtnRef} iconName={"play-white"}
                                                       animationType={"hover"}/>
                                         </div>
 
-                            </button>
+                                    </button>
+                            }
                             <button
                                 onClick={toggleWatchList}
                                 className={inWatchList && !watchListLoading ? styles.inWatchList : ""}

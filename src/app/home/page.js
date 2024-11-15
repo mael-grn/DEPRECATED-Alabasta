@@ -15,6 +15,7 @@ import {useEffect, useRef, useState} from "react";
 import LordIcon from "@/app/components/ui/lordIcon";
 import {useRouter} from "next/navigation";
 import Image from "next/image";
+import {localRecoverUser} from "@/app/controller/userController";
 
 export default function Home() {
     const [loading, setLoading] = useState(true);
@@ -22,6 +23,7 @@ export default function Home() {
     const [isScrolled, setIsScrolled] = useState(false);
     const watchBtnRef = useRef(null);
     const [isDarkText, setIsDarkText] = useState(false);
+    const [isDemoUser, setIsDemoUser] = useState(false);
 
     const router = useRouter();
 
@@ -41,6 +43,11 @@ export default function Home() {
     }, []);
 
     useEffect(() => {
+        localRecoverUser().then((user) => {
+            if (user && user.id === 3) {
+                setIsDemoUser(true);
+            }
+        });
         getPopularMovies().then((res) => {
             if (res.success) {
                 const randomIndex = Math.floor(Math.random() * res.data.length);
@@ -88,13 +95,17 @@ export default function Home() {
                                             ? heroMedia.overview.slice(0, 200) + '...'
                                             : heroMedia.overview}</p>
                                         <div className={styles.btnDiv}>
-                                            <button className={styles.btnWatch} onMouseEnter={() => {
+                                            {
+                                                isDemoUser ? null :
+                                                    <button className={styles.btnWatch} onMouseEnter={() => {
                                                         if (watchBtnRef) watchBtnRef.current.triggerAnimation()
                                                     }} onClick={watchHeroMedia}>
-                                                Regarder
-                                                <LordIcon ref={watchBtnRef} iconName={"play-white"}
-                                                          animationType={"hover"}/>
-                                            </button>
+                                                        Regarder
+                                                        <LordIcon ref={watchBtnRef} iconName={"play-white"}
+                                                                  animationType={"hover"}/>
+                                                    </button>
+                                            }
+
                                             <button className={styles.btnInfo} onClick={openHeroMedia}>
                                                 <LordIcon iconName={"info-white"} animationType={"hover"}/>
                                             </button>
