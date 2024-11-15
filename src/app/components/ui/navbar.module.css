@@ -129,7 +129,7 @@
 
     .nav .navElem.selected, .nav .navElem.selected:hover, .nav.deploy .navElem.selected {
         background-color: var(--secondary-color);
-        padding: 0 10px 0 0;
+        padding: 0 20px 0 10px;
     }
 
     .nav.deploy .navElem p {

@@ -17,6 +17,7 @@
     color: var(--text-color);
     background-color: var(--background-color);
      border-radius: 25px;
+    min-width: 100%;
 }
 
 .carroussel.error {
@@ -100,6 +101,10 @@
 @media only screen and (max-width: 600px) {
     .carroussel {
         height: 305px;
+    }
+
+    .carroussel h1 {
+        font-size: 20px;
     }
 
     .carroussel .rightButton {
