@@ -52,12 +52,12 @@
 
 .carroussel .mediaList {
     width: fit-content;
-    max-width: calc(100% - 50px);
+    max-width: calc(100%);
     border-radius: 25px;
     display: flex;
     overflow-x: auto;
     gap: 20px;
-    padding: 0 0 0 25px;
+    padding: 0;
 }
 
 .carroussel .mediaList p {
@@ -76,7 +76,7 @@
     backdrop-filter: blur(20px);
     border-radius: 50px;
     border: none;
-    transform: rotate(-90deg);
+    transform: rotate(-90deg) scale(1);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -92,10 +92,18 @@
     backdrop-filter: blur(20px);
     border-radius: 50px;
     border: none;
-    transform: rotate(90deg);
+    transform: rotate(90deg) scale(1);
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.carroussel .rightButton.hide {
+    transform: rotate(-90deg) scale(0);
+}
+
+.carroussel .leftButton.hide {
+    transform: rotate(90deg) scale(0);
 }
 
 @media only screen and (max-width: 600px) {
