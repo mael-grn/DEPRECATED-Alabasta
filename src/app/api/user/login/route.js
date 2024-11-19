@@ -38,7 +38,6 @@ export async function POST(req, res) {
                     try {
                         userFound = await bcrypt.compare(key, user.pswd);
                     } catch (e) {
-                        console.log(e)
                     }
 
                     i++;
@@ -69,8 +68,8 @@ export async function POST(req, res) {
 
 async function addUser() {
 
-    const hashedKey = await bcrypt.hash('269462', 10);
+    const hashedKey = await bcrypt.hash('noe26150', 10);
     await sql`
-            INSERT INTO USERS (pswd, name, surname) VALUES (${hashedKey}, 'John', 'Smith');
+            INSERT INTO USERS (pswd, name, surname) VALUES (${hashedKey}, 'Benedicte', 'Garnier');
         `;
 }

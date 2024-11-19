@@ -4,6 +4,7 @@ import MediaTile from "@/app/components/media/mediaTile";
 import LordIcon from "@/app/components/ui/lordIcon";
 import {useEffect, useRef, useState} from "react";
 import styles from "@/app/components/media/mediaCarroussel.module.css";
+import MediaDetails from "@/app/components/media/mediaDetails";
 
 export default function MediaCarroussel({mediaListFctn, title}) {
     const mediaListRef = useRef(null);
@@ -12,6 +13,7 @@ export default function MediaCarroussel({mediaListFctn, title}) {
     const [errorMsg, setErrorMsg] = useState(null);
     const [showLeftBtn, setShowLeftBtn] = useState(false);
     const [showRightBtn, setShowRightBtn] = useState(true);
+    const [showDetails, setShowDetails] = useState(null);
 
     useEffect(() => {
         mediaListFctn().then((response) => {
@@ -79,27 +81,33 @@ export default function MediaCarroussel({mediaListFctn, title}) {
     }
 
     return (
-        <div className={styles.carroussel}>
-            <h1 className={styles.title}>{title}</h1>
-            <div className={styles.mediaList} ref={mediaListRef}>
-                {mediaList.map((movie, index) => (
-                    <div key={index}>
-                        <MediaTile movie={movie} />
-                    </div>
-                ))}
+        <div>
+            {
+                showDetails ? <MediaDetails media={showDetails} closeAction={() => setShowDetails(null)}/> : null
+            }
+            <div className={styles.carroussel}>
+                <h1 className={styles.title}>{title}</h1>
+                <div className={styles.mediaList} ref={mediaListRef}>
+                    {mediaList.map((movie, index) => (
+                        <div key={index}>
+                            <MediaTile media={movie} onClickAction={() => setShowDetails(movie)}/>
+                        </div>
+                    ))}
+                </div>
+                <button
+                    onClick={() => scrollMovieList(220)}
+                    className={`${styles.rightButton} ${showRightBtn ? "" : styles.hide}`}
+                >
+                    <LordIcon iconName={"circleArrow-white"} animationType={"hover"}/>
+                </button>
+                <button
+                    onClick={() => scrollMovieList(-220)}
+                    className={`${styles.leftButton} ${showLeftBtn ? "" : styles.hide}`}
+                >
+                    <LordIcon iconName={"circleArrow-white"} animationType={"hover"}/>
+                </button>
             </div>
-            <button
-                onClick={() => scrollMovieList(220)}
-                className={`${styles.rightButton} ${showRightBtn ? "" : styles.hide}`}
-            >
-                <LordIcon iconName={"circleArrow-white"} animationType={"hover"} />
-            </button>
-            <button
-                onClick={() => scrollMovieList(-220)}
-                className={`${styles.leftButton} ${showLeftBtn ? "" : styles.hide}`}
-            >
-                <LordIcon iconName={"circleArrow-white"} animationType={"hover"} />
-            </button>
         </div>
+
     );
 }

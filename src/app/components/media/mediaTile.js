@@ -8,19 +8,15 @@ import {useState} from "react";
 import {localSaveMedia} from "@/app/controller/mediaController";
 import Popup from "@/app/components/ui/popup";
 import LordIcon from "@/app/components/ui/lordIcon";
-export default function MediaTile({ movie }) {
+import MediaDetails from "@/app/components/media/mediaDetails";
+export default function MediaTile({ media, onClickAction }) {
     const router = useRouter();
 
-    const openMoviePage = async () => {
-        router.push("/media/" + movie.id)
-    };
-
-
     return (
-        <div className={styles.movieResume} onClick={openMoviePage}>
-            <Image src={movie.poster} alt={movie.title} width={230} height={345} />
-            <p>{movie.title}</p>
-            <p>{movie.year}</p>
+        <div className={styles.movieResume} onClick={onClickAction}>
+            <Image src={media.poster} alt={media.title} width={230} height={345} />
+            <p>{media.title}</p>
+            <p>{media.year}</p>
         </div>
     );
 

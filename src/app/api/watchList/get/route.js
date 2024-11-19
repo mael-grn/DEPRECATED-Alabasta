@@ -2,7 +2,8 @@ import { sql } from '@vercel/postgres';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import authenticateToken from "@/app/api/authenticateToken";
-import tmdbGetDetails from "@/app/api/media/tmdb/tmdbGetDetails";
+import tmdbGetDetailsMovie from "@/app/api/media/tmdb/tmdbGetDetailsMovie";
+import tmdbGetDetailsTv from "@/app/api/media/tmdb/tmdbGetDetailsTv";
 
 export async function POST(req, res) {
     try {
@@ -30,7 +31,16 @@ export async function POST(req, res) {
         const list = [];
 
         for (const row of rows) {
-            const media = await tmdbGetDetails(row.imdbid)
+            let media;
+            switch (row.type) {
+                case 'movie':
+                    media = await tmdbGetDetailsMovie(row.tmdbid)
+                    break;
+                case 'tv':
+                    media = await tmdbGetDetailsTv(row.tmdbid)
+                default:
+                    break;
+            }
             list.push(media);
         }
         return new Response(JSON.stringify({ res: list}), {

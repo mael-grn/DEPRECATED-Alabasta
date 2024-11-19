@@ -12,7 +12,7 @@ export async function POST(req, res) {
                 headers: { 'Content-Type': 'application/json' },
             });
         }
-        const {token, id} = await req.json();
+        const {token, id, type} = await req.json();
 
         const userId = await authenticateToken(token);
 
@@ -24,7 +24,7 @@ export async function POST(req, res) {
         }
 
         const { rows } = await sql`
-            SELECT * FROM watch_list WHERE id = ${userId} AND imdbid = ${id};
+            SELECT * FROM watch_list WHERE id = ${userId} AND tmdbid = ${id} AND type = ${type};
             `;
 
         if (rows.length === 0) {
@@ -35,7 +35,7 @@ export async function POST(req, res) {
         }
 
         await sql`
-            DELETE FROM watch_list WHERE id = ${userId} AND imdbid = ${id}
+            DELETE FROM watch_list WHERE id = ${userId} AND tmdbid = ${id} AND type = ${type}
             `;
 
         return new Response(JSON.stringify({ message: 'deleted'}), {

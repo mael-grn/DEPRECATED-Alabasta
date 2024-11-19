@@ -20,6 +20,7 @@ export default async function tmdbGetNowPlaying() {
         media.year = item.release_date.split('-')[0];
         media.poster = "https://image.tmdb.org/t/p/w500" + item.poster_path;
         media.popularity = item.popularity;
+        media.type = "movie";
         mediaList.push(media);
     }
 

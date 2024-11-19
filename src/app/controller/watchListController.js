@@ -2,7 +2,7 @@ import {getItem} from "@/app/utils/cookieUtils";
 import ServerResponse, {ErrorTypes} from "@/app/model/serverResponse";
 import {localRecoverUser} from "@/app/controller/userController";
 
-export const checkIfInWatchList = async (id) => {
+export const checkIfInWatchList = async (id, type) => {
 
     let token = await getItem('token');
     if (!token) {
@@ -14,7 +14,7 @@ export const checkIfInWatchList = async (id) => {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({id, token}),
+        body: JSON.stringify({id, token, type}),
     });
 
     if (res.ok) {
@@ -25,7 +25,7 @@ export const checkIfInWatchList = async (id) => {
     }
 }
 
-export const removeFromWatchList = async (id) => {
+export const removeFromWatchList = async (id, type) => {
 
     let token = await getItem('token');
     if (!token) {
@@ -37,7 +37,7 @@ export const removeFromWatchList = async (id) => {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({id, token}),
+        body: JSON.stringify({id, token, type}),
     });
 
     if (res.ok) {
@@ -47,7 +47,7 @@ export const removeFromWatchList = async (id) => {
     }
 }
 
-export const addToWatchList = async (id) => {
+export const addToWatchList = async (id, type) => {
 
     let token = await getItem('token');
     if (!token) {
@@ -59,7 +59,7 @@ export const addToWatchList = async (id) => {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({id, token}),
+        body: JSON.stringify({id, token, type}),
     });
 
     if (res.ok) {

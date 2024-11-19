@@ -8,10 +8,6 @@ export default function LenisScroll() {
     useEffect(() => {
         const len = new Lenis();
 
-        len.on('scroll', (e) => {
-            console.log(e);
-        });
-
         function raf(time) {
             len.raf(time);
             requestAnimationFrame(raf);

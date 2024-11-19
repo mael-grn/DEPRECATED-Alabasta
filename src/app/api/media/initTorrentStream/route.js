@@ -21,7 +21,6 @@ export async function POST(req) {
         });
 
     } catch (error) {
-        console.log(error);
         return new Response(JSON.stringify({ message: 'Server error: ' + error }), {
             status: 500,
             headers: { 'Content-Type': 'application/json' },

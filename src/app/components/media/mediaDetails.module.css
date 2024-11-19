@@ -1,0 +1,411 @@
+@keyframes media-intro {
+    from {
+        transform: translateY(100%) scale(0);
+        opacity: 0;
+    } to {
+        transform: translateY(0) scale(1);
+    opacity: 1;
+    }
+}
+
+@keyframes media-intro-reverse {
+    from {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    } to {
+              transform: translateY(100%) scale(0);
+    opacity: 0;
+
+      }
+}
+
+@keyframes bg-intro {
+    from {
+        background-color: transparent;
+    } to {
+          background-color: var(--transparent-dark-background-color);
+      }
+}
+
+@keyframes bg-intro-reverse {
+    from {
+
+        background-color: var(--transparent-dark-background-color);
+    } to {
+              background-color: transparent;
+      }
+}
+
+
+@keyframes backdrop-intro {
+    from {
+        opacity: 0;
+        height: 100%;
+    } to {
+          opacity: 1;
+        height: 200px;
+      }
+}
+
+@keyframes media-details-intro {
+    0% {
+        transform: translateY(100%);
+    }
+    100% {
+          transform: translateY(0);
+    }
+}
+
+.mediaDetailsBg {
+    animation: bg-intro .8s ease;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--transparent-dark-background-color);
+    z-index: 10;
+}
+
+.mediaDetailsBg.closing {
+    animation: bg-intro-reverse .8s ease;
+}
+
+.mediaDetails {
+    animation: media-intro .8s ease;
+    z-index: 15;
+    position: fixed;
+    bottom: 0;
+    left: calc(15%);
+    width: 70%;
+    height: 70vh;
+    background-color: var(--dark-background-color);
+    border-radius: 25px 25px 0 0;
+    overflow: hidden;
+}
+
+.mediaDetails.closing {
+    animation: media-intro-reverse .8s ease;
+}
+
+.mediaDetails.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mediaDetails .closeBtn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+    border: 0;
+    background-color: var(--background-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+}
+
+.mediaDetails .closeBtn > p {
+    display: none;
+}
+
+.mediaDetails .closeBtn:hover {
+    background-color: var(--primary-color);
+}
+
+.mediaDetails .closeBtn:active {
+    transform: scale(.5);
+}
+
+.mediaDetails > div {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.mediaDetails .backdrop {
+    animation: backdrop-intro 1s ease;
+    object-fit: cover;
+    z-index: 14;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 200px;
+}
+
+.mediaDetails .mediaDetailsContent {
+    color: var(--text-color);
+    animation: media-details-intro 1s ease;
+    margin-top: 200px;
+    padding: 0 20px 20px 20px;
+    position: relative;
+    width: calc(100% - 40px);
+    min-height: calc(100% - 220px);
+    display: flex;
+    z-index: 16;
+    flex-direction: column;
+    background-color: var(--dark-background-color);
+    gap: 20px;
+}
+
+.mediaDetails .mediaDetailsContent::before {
+    content: '';
+    position: absolute;
+    top: -200px;
+    left: 0;
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, var(--dark-background-color) 100%);
+    border-radius: 25px 25px 0 0;
+    pointer-events: none;
+    z-index: 17;
+}
+
+.mediaDetails .mediaDetailsContent h1 {
+    font-size: 40px;
+    margin: 0;
+}
+
+.mediaDetails .mediaDetailsContent p {
+    font-size: 18px;
+    margin: 0;
+}
+
+.mediaDetails .genreTag {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.mediaDetails .genreTag > p {
+    margin: 0;
+    padding: 5px 10px;
+    background-color: var(--transparent-background-color);
+    backdrop-filter: blur(20px);
+    border-radius: 25px;
+    font-size: 20px;
+    color: var(--text-color);
+}
+
+.mediaDetails .buttonDiv {
+    display: flex;
+    gap: 20px;
+}
+
+.mediaDetails .buttonDiv > button {
+    border-radius: 25px;
+    height: 50px;
+    min-width: 50px;
+    width: fit-content;
+    flex-direction: row;
+    font-family: inherit;
+    border: none;
+    display: flex;
+    justify-content: center;
+    font-size: 20px;
+    align-items: center;
+    cursor: pointer;
+}
+
+
+.mediaDetails .buttonDiv > button:hover {
+    transform: scale(1.05);
+}
+
+.mediaDetails .buttonDiv > button > div {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+.mediaDetails .buttonDiv > button.watchBtn {
+    font-family: inherit;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    padding: 0 10px 0 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mediaDetails .buttonDiv > button.watchBtn p {
+    margin: 0;
+}
+
+.mediaDetails .buttonDiv > button.inWatchList {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+}
+
+.mediaDetails .buttonDiv > button > div .providerLogo {
+    height: 30px;
+    max-height: 30px;
+    max-width: 30px;
+    width: 30px;
+    padding: 5px;
+    background-color: var(--background-color);
+    border-radius: 25px;
+}
+
+.mediaDetails .seasonDiv {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 20px;
+    gap: 20px;
+    min-width: 100%;
+    min-height: 50px;
+}
+
+.mediaDetails .seasonDiv > p {
+    font-size: 16px;
+    margin: 0;
+}
+
+.mediaDetails .seasonDiv .epList {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    width: 100%;
+    height: fit-content;
+}
+
+.mediaDetails .seasonDiv .epList .episode {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-radius: 25px;
+    height: 150px;
+    padding: 10px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.mediaDetails .seasonDiv .epList .episode:hover {
+    background-color: var(--background-color);
+}
+
+.mediaDetails .seasonDiv .epList .episode > span {
+    width: 15px;
+    text-align: end;
+}
+
+.mediaDetails .seasonDiv .epList .episode img {
+    width: 200px;
+    height: 112px;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+.mediaDetails .seasonDiv .epList .episode > div {
+   flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow: hidden;
+    max-height: 90%;
+}
+
+.mediaDetails .seasonDiv .epList .episode > div h2 {
+    font-size: 20px;
+    margin: 0;
+}
+
+.mediaDetails .seasonDiv .epList .episode > div p {
+    font-size: 15px;
+    margin: 0;
+}
+
+@media only screen and (max-width: 600px) {
+    .mediaDetails {
+        width: 100%;
+        left: 0;
+        height: 80vh;
+    }
+
+    .mediaDetails .mediaDetailsContent h1 {
+        position: sticky;
+        top: -1px;
+        width: calc(100% - 40px);
+        background-color: var(--transparent-dark-background-color);
+        z-index: 18;
+        padding: 10px 20px;
+        border-radius: 0 0 25px 25px;
+        text-align: center;
+        backdrop-filter: blur(20px);
+    }
+
+    .mediaDetails .closeBtn {
+        bottom: 120px;
+        height: 50px;
+        right: 20px;
+        top: auto;
+        gap: 10px;
+        width: fit-content;
+        padding: 0 10px 0 20px;
+    }
+
+    .mediaDetails .closeBtn:hover {
+        background-color: var(--background-color);
+    }
+
+    .mediaDetails .closeBtn:active {
+        transform: scale(.5);
+    }
+
+    .mediaDetails .closeBtn > p {
+        color: var(--text-color);
+        font-family: inherit;
+        font-size: 20px;
+        display: block;
+    }
+    .mediaDetails .buttonDiv {
+        flex-direction: column;
+    }
+
+    .mediaDetails .seasonDiv .epList .episode {
+        height: 100px;
+    }
+
+    .mediaDetails .seasonDiv .epList .episode:hover {
+        background-color: transparent;
+    }
+
+    .mediaDetails .seasonDiv .epList .episode:active {
+        transform: scale(.5);
+    }
+
+    .mediaDetails .seasonDiv .epList .episode img {
+        width: 150px;
+        height: 84px;
+    }
+
+    .mediaDetails .seasonDiv .epList .episode > div h2 {
+        font-size: 17px;
+        font-weight: normal;
+        margin: 0;
+    }
+
+    .mediaDetails .seasonDiv .epList .episode > div p {
+        display: none;
+    }
+
+
+}

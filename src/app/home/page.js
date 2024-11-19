@@ -3,7 +3,7 @@
 import styles from '@/app/home/page.module.css';
 
 import {
-    getMediaDetails,
+    getMovieDetails,
     getNowPlayingMovies,
     getPopularMovies,
     getTopRatedMovies,
@@ -16,6 +16,7 @@ import LordIcon from "@/app/components/ui/lordIcon";
 import {useRouter} from "next/navigation";
 import Image from "next/image";
 import {localRecoverUser} from "@/app/controller/userController";
+import MediaDetails from "@/app/components/media/mediaDetails";
 
 export default function Home() {
     const [loading, setLoading] = useState(true);
@@ -24,6 +25,7 @@ export default function Home() {
     const watchBtnRef = useRef(null);
     const [isDarkText, setIsDarkText] = useState(false);
     const [isDemoUser, setIsDemoUser] = useState(false);
+    const [showDetails, setShowDetails] = useState(null);
 
     const router = useRouter();
 
@@ -51,7 +53,7 @@ export default function Home() {
         getPopularMovies().then((res) => {
             if (res.success) {
                 const randomIndex = Math.floor(Math.random() * res.data.length);
-                getMediaDetails(res.data[randomIndex].id).then((res) => {
+                getMovieDetails(res.data[randomIndex].id).then((res) => {
                     setHeroMedia(res.data);
                     setLoading(false);
                     setIsDarkText(true);
@@ -61,15 +63,27 @@ export default function Home() {
     }, []);
 
     const openHeroMedia = () => {
-        router.push("/media/" + heroMedia.id);
+        setShowDetails(heroMedia);
     }
 
     const watchHeroMedia = () => {
-        router.push("/watch/" + heroMedia.imdbId);
+        switch (heroMedia.type) {
+            case "movie":
+                router.push("/watch/" + heroMedia.id);
+                break;
+            case "tv":
+                router.push("/watch/" + heroMedia.id + "/1/1");
+                break;
+            default:
+                break;
+        }
     }
 
     return (
         <div className={styles.homeContainer}>
+            {
+                showDetails ? <MediaDetails media={showDetails} closeAction={() => setShowDetails(null)}/> : null
+            }
             {!heroMedia ? null :
                 <Image className={`${styles.bgImage} ${isScrolled ? styles.bgImageHide : null}`} src={heroMedia.backdrop} alt={"backdrop"} width={1280} height={496}/>}
             <div className={`${styles.home} ${isScrolled || !heroMedia ? null : styles.onTop}`}>

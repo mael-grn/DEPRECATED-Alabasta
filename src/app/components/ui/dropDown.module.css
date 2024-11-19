@@ -1,0 +1,81 @@
+.dropDown {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: fit-content;
+    margin: 0;
+    height: 40px;
+    font-size: 20px;
+    border-radius: 10px;
+    padding: 0 20px;
+    background-color: var(--text-color);
+    color: var(--dark-background-color);
+    cursor: pointer;
+}
+
+.dropDown > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.dropDown:hover {
+    transform: scale(1.05);
+}
+
+.dropDown.developped:hover {
+    transform: scale(1);
+}
+
+.dropDown.developped {
+    width: fit-content;
+    padding: 0;
+    height: fit-content;
+    background-color: transparent;
+}
+
+.dropDown.developped .elementsDiv {
+    background-color: var(--dark-background-color);
+    border: 2px solid var(--background-color);
+    color: var(--text-color);
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: fit-content;
+    max-height: 300px;
+    overflow: auto;
+    z-index: 100;
+    width: fit-content;
+    border-radius: 10px;
+    padding: 0;
+    gap: 0;
+}
+
+.dropDown.developped .element {
+    font-size: 20px;
+    white-space: nowrap;
+    height: 40px;
+    min-height: 40px;
+    max-height: 40px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+    border-radius: 10px;
+    background-color: transparent;
+    cursor: pointer;
+    text-overflow: ellipsis; /* Troncature si nécessaire */
+    box-sizing: border-box;
+}
+
+.dropDown.developped .element:hover {
+    background-color: var(--background-color);
+}

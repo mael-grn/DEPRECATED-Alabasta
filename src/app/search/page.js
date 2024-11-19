@@ -7,6 +7,7 @@ import LordIcon from "@/app/components/ui/lordIcon";
 import {useState} from "react";
 import MediaTile from "@/app/components/media/mediaTile";
 import {searchMedia} from "@/app/controller/mediaController";
+import MediaDetails from "@/app/components/media/mediaDetails";
 
 export default function Search() {
 
@@ -16,6 +17,7 @@ export default function Search() {
     const [popupTitle, setPopupTitle] = useState('');
     const [popupMessage, setPopupMessage] = useState('');
     const [searchResults, setSearchResults] = useState([]);
+    const [showDetails, setShowDetails] = useState(null);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -50,6 +52,9 @@ export default function Search() {
 
     return (
         <div className={`${styles.search} ${searchResults.length > 0 ? styles.showResults : ""}`}>
+            {
+                showDetails ? <MediaDetails media={showDetails} closeAction={() => setShowDetails(null)}/> : null
+            }
             <Image src={"/assets/search.svg"} alt={"search"} width={1920} height={1080}/>
             {showPopup ? <Popup title={popupTitle} text={popupMessage} close={closePopup}/> : null}
             <form onSubmit={handleSubmit}>
@@ -70,7 +75,7 @@ export default function Search() {
                     <div className={styles.results}>
                         {searchResults.map((movie) => {
                             return (
-                                <MediaTile movie={movie}/>
+                                <MediaTile media={movie} onClickAction={() => setShowDetails(movie)}/>
                             )
                         })}
                     </div>

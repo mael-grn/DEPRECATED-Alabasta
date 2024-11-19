@@ -136,14 +136,64 @@ export const searchMedia = async (searchValue) => {
     }
 }
 
-export const getMediaDetails = async (mediaId) => {
+export const getMovieDetails = async (mediaId) => {
 
     let token = await getItem('token');
     if (!token) {
         return new ServerResponse(false, ErrorTypes.NOUSER, null);
     }
 
-    const res = await fetch(`/api/media/details/${mediaId}`, {
+    const res = await fetch(`/api/media/details/movie/${mediaId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `${token}`
+        },
+    });
+
+    if (res.status === 200) {
+        const data = await res.json();
+        return new ServerResponse(true, null, data.res);
+    } else if (res.status === 401) {
+        return new ServerResponse(false, ErrorTypes.UNAUTHORIZED, null);
+    } else {
+        return new ServerResponse(false, ErrorTypes.SERVER, null);
+    }
+}
+
+export const getTvDetails = async (mediaId) => {
+
+    let token = await getItem('token');
+    if (!token) {
+        return new ServerResponse(false, ErrorTypes.NOUSER, null);
+    }
+
+    const res = await fetch(`/api/media/details/tv/${mediaId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `${token}`
+        },
+    });
+
+    if (res.status === 200) {
+        const data = await res.json();
+        return new ServerResponse(true, null, data.res);
+    } else if (res.status === 401) {
+        return new ServerResponse(false, ErrorTypes.UNAUTHORIZED, null);
+    } else {
+        return new ServerResponse(false, ErrorTypes.SERVER, null);
+    }
+}
+
+export const getSeasonDetails = async (mediaId, seasonNum) => {
+
+    let token = await getItem('token');
+    if (!token) {
+        return new ServerResponse(false, ErrorTypes.NOUSER, null);
+    }
+
+    const res = await fetch(`/api/media/details/tv/${mediaId}/season/${seasonNum}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

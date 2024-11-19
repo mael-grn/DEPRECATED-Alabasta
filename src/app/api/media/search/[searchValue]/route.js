@@ -1,6 +1,7 @@
 
 import authenticateToken from "@/app/api/authenticateToken";
-import tmdbSearch from "@/app/api/media/tmdb/tmdbSearch";
+import tmdbSearchMovie from "@/app/api/media/tmdb/tmdbSearchMovie";
+import tmdbSearchTv from "@/app/api/media/tmdb/tmdbSearchTv";
 export const dynamic = 'force-dynamic';
 
 export async function GET(req, { params }) {
@@ -24,7 +25,9 @@ export async function GET(req, { params }) {
             });
         }
 
-        const searchResult = await tmdbSearch(searchValue);
+        const movieSearchResult = await tmdbSearchMovie(searchValue);
+        const tvSearchResult = await tmdbSearchTv(searchValue);
+        const searchResult = movieSearchResult.concat(tvSearchResult);
 
         return new Response(JSON.stringify({ res: searchResult }), {
             status: 200,
