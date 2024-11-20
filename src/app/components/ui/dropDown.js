@@ -30,8 +30,12 @@ export default function DropDown({optionList, defaultOptionIndex = 0, onSelect})
 
             {showOptions ? (
                 <div className={styles.elementsDiv}>
+                    <div className={styles.element}
+                         onClick={() => setShowOptions(false)}>Fermer
+                    </div>
                     {optionList.map((option, index) => (
-                        <div className={styles.element} key={index} onClick={() => selectOption(option)}>{truncateString(option)}</div>
+                        <div className={styles.element} key={index}
+                             onClick={() => selectOption(option)}>{truncateString(option)}</div>
                     ))}
                 </div>
             ) : (<div onClick={toggleOptions} onMouseEnter={() => {

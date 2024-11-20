@@ -22,7 +22,7 @@ export default async function tmdbGetDetailsSeason(tvId, seasonId, lang="fr") {
         if (data.air_date) {
             media.year = data.air_date.split('-')[0];
         }
-        media.poster = "https://image.tmdb.org/t/p/w500" + data.poster_path;
+        media.poster = data.poster_path ? "https://image.tmdb.org/t/p/w500" + data.poster_path : "";
         media.backdrop = "https://image.tmdb.org/t/p/w1280" + data.backdrop_path;
         media.qualitiesLinks = [];
         media.overview = data.overview;

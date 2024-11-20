@@ -17,7 +17,7 @@ export default async function tmdbGetUpcoming() {
     for (const item of data.results) {
         const media = new Media(item.id, item.title);
         media.year = item.release_date.split('-')[0];
-        media.poster = "https://image.tmdb.org/t/p/w500" + item.poster_path;
+        media.poster = item.poster_path ? "https://image.tmdb.org/t/p/w500" + item.poster_path : "";
         media.popularity = item.popularity;
         media.type = "movie";
         mediaList.push(media);

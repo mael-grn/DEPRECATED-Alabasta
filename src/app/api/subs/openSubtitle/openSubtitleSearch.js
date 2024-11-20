@@ -19,5 +19,5 @@ export default async function openSubtitleSearch(imdbId) {
     // on retourne les file_id par ordre de téléchargement
     return data.data
         .sort((a, b) => b.attributes.download_count - a.attributes.download_count)
-        .map(item => item.attributes.files[0].file_id);
+        .map((item, index) => ({name: "francais " + (index+1), id: item.attributes.files[0].file_id}));
 }

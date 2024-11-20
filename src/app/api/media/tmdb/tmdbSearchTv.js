@@ -16,7 +16,7 @@ export default async function tmdbSearchTv(queryString) {
     for (const item of tvData.results) {
         const media = new Media(item.id, item.name);
         media.year = item.first_air_date.split('-')[0];
-        media.poster = "https://image.tmdb.org/t/p/w500" + item.poster_path;
+        media.poster = item.poster_path ? "https://image.tmdb.org/t/p/w500" + item.poster_path : "";
         media.popularity = item.popularity;
         media.type = "tv";
         mediaList.push(media);

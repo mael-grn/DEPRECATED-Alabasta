@@ -1,8 +1,5 @@
-import ytsSearch from "@/app/api/media/yts/ytsSearch";
-import tmdbSearchMovie from "@/app/api/media/tmdb/tmdbSearchMovie";
 import authenticateToken from "@/app/api/authenticateToken";
-import ytsGetMagnetLink from "@/app/api/media/yts/ytsGetMagnetLink";
-import tmdbGetDetailsMovie from "@/app/api/media/tmdb/tmdbGetDetailsMovie";
+import tasfSearchLinkMovie from "@/app/api/media/tasf/tasfSearchLinkMovie";
 export const dynamic = 'force-dynamic';
 
 export async function GET(req, { params }) {
@@ -28,11 +25,7 @@ export async function GET(req, { params }) {
             });
         }
 
-
-
-
-        let res = {};
-
+        const res = await tasfSearchLinkMovie(mediaId);
 
         return new Response(JSON.stringify({res: res}), {
             status: 200,

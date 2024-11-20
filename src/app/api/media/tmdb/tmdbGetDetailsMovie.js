@@ -19,7 +19,7 @@ export default async function tmdbGetDetailsMovie(id, lang="fr") {
         media.type = "movie";
         media.year = data.release_date.split('-')[0];
         media.date = data.release_date;
-        media.poster = "https://image.tmdb.org/t/p/w500" + data.poster_path;
+        media.poster = data.poster_path ? "https://image.tmdb.org/t/p/w500" + data.poster_path : "";
         media.backdrop = "https://image.tmdb.org/t/p/w1280" + data.backdrop_path;
         media.qualitiesLinks = [];
         media.genres = data.genres.map((genre) => genre.name);

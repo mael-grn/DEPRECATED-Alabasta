@@ -211,14 +211,25 @@ export const getSeasonDetails = async (mediaId, seasonNum) => {
     }
 }
 
-export const searchStreamingLinks = async (mediaId) => {
+export const searchStreamingLinks = async (mediaId, type, season = null, episode = null) => {
 
     let token = await getItem('token');
     if (!token) {
         return new ServerResponse(false, ErrorTypes.NOUSER, null);
     }
 
-    const res = await fetch(`/api/media/searchLink/${mediaId}`, {
+    let url;
+
+    switch (type) {
+        case 'movie':
+            url = `/api/media/searchLink/${mediaId}`;
+            break;
+        case 'tv':
+            url = `/api/media/searchLink/${mediaId}/${season}/${episode}`;
+            break;
+    }
+
+    const res = await fetch(url, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -228,32 +239,12 @@ export const searchStreamingLinks = async (mediaId) => {
 
     if (res.status === 200) {
         const data = await res.json();
+        if (data.res === null || data.res.length === 0) {
+            return new ServerResponse(false, ErrorTypes.NOLINKS, null);
+        }
         return new ServerResponse(true, null, data.res);
     } else if (res.status === 401) {
         return new ServerResponse(false, ErrorTypes.UNAUTHORIZED, null);
-    } else {
-        return new ServerResponse(false, ErrorTypes.SERVER, null);
-    }
-}
-
-export const initStreamMedia = async (torrentUrl) => {
-    let token = await getItem('token');
-    if (!token) {
-        return new ServerResponse(false, ErrorTypes.NOUSER, null);
-    }
-
-    const res = await fetch(`/api/media/initTorrentStream/`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({torrentUrl, token}),
-    });
-
-    if (res.ok) {
-        const data = await res.json();
-        const streamUrl = `/api/media/stream/${data.res}`;
-        return new ServerResponse(true, null, streamUrl);
     } else {
         return new ServerResponse(false, ErrorTypes.SERVER, null);
     }
