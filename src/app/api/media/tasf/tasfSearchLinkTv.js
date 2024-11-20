@@ -1,14 +1,17 @@
+
 export default async function tasfSearchLinkTv(tmdbId, season, episode) {
-    const url = `https://theyallsayflix.su/api/v1/search?type=show&tmdb_id=${tmdbId}&season${season}&episode=${episode}`;
+    const url = `https://theyallsayflix.su/api/v1/search?type=show&tmdb_id=${tmdbId}&season=${season}&episode=${episode}`;
+    console.log("url ", url)
     const options = {
         method: 'GET',
         headers: {
             accept: 'application/json',
         }
     };
-
     const res = await fetch(url, options)
     const data = await res.json();
+    console.log("data ", data)
+    if (data.streams === null || data.streams.length === 0) return null;
 
     const links = [];
 
