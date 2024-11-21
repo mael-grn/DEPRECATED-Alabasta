@@ -1,5 +1,9 @@
 export const dynamic = 'force-dynamic';
 
+export const config = {
+    runtime: 'edge',
+};
+
 export async function GET(req, {params}) {
     try {
         const {tasfUrl} = params;
@@ -25,6 +29,11 @@ export async function GET(req, {params}) {
         if (response.headers.get('Content-Range')) {
             responseHeaders.set('Content-Range', response.headers.get('Content-Range'));
         }
+
+        responseHeaders.set('Content-Encoding', 'identity');
+        responseHeaders.set('Access-Control-Allow-Origin', '*');
+        responseHeaders.set('Access-Control-Allow-Methods', 'GET, OPTIONS');
+        responseHeaders.set('Access-Control-Allow-Headers', 'Range');
 
         return new Response(body, {
             status: response.status,
