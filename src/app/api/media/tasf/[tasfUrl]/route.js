@@ -9,6 +9,9 @@ export async function GET(req, {params}) {
         const targetUrl = `http://theyallsayflix.su:8081/download/${tasfUrl}`;
 
         const headers = new Headers();
+        headers.set('User-Agent', 'Mozilla/5.0 (compatible; Vercel-Proxy)');
+        headers.set('Accept', '*/*');
+
         if (req.headers.get('range')) {
             headers.set('range', req.headers.get('range'));
         }
