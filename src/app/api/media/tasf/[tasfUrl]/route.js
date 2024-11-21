@@ -4,10 +4,11 @@ export const runtime = "edge"
 
 export async function GET(req, {params}) {
     try {
-        console.log('params', params);
         const {tasfUrl} = params;
 
         const targetUrl = `http://theyallsayflix.su:8081/download/${tasfUrl}`;
+
+        console.log("target url : " + targetUrl);
 
         const headers = new Headers();
         if (req.headers.get('range')) {
@@ -17,6 +18,8 @@ export async function GET(req, {params}) {
         const response = await fetch(targetUrl, {
             headers,
         });
+
+        console.log("status : " + response.status);
 
         const body = response.body;
 
