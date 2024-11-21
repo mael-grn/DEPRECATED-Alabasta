@@ -8,8 +8,6 @@ export async function GET(req, {params}) {
 
         const targetUrl = `http://theyallsayflix.su:8081/download/${tasfUrl}`;
 
-        console.log("target url : " + targetUrl);
-
         const headers = new Headers();
         if (req.headers.get('range')) {
             headers.set('range', req.headers.get('range'));
@@ -19,7 +17,7 @@ export async function GET(req, {params}) {
             headers,
         });
 
-        console.log("status : " + response.status);
+        console.log(response);
 
         const body = response.body;
 
