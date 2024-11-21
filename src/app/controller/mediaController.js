@@ -218,23 +218,13 @@ export const searchStreamingLinks = async (mediaId, type, season = null, episode
         return new ServerResponse(false, ErrorTypes.NOUSER, null);
     }
 
-    let url;
-
-    switch (type) {
-        case 'movie':
-            url = `/api/media/searchLink/${mediaId}`;
-            break;
-        case 'tv':
-            url = `/api/media/searchLink/${mediaId}/${season}/${episode}`;
-            break;
-    }
+    let url = `/api/media/searchLink`;
 
     const res = await fetch(url, {
-        method: 'GET',
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `${token}`
-        },
+        }, body: JSON.stringify({mediaId, season, episode, token}),
     });
 
     if (res.status === 200) {

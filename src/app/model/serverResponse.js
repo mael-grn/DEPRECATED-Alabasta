@@ -5,7 +5,7 @@ export const ErrorTypes = {
     ALREADYUSER: 'Cet utilisateur existe déjà, merci de vous connecter ou d\'utiliser un email différent.',
     WRONGTOKEN: 'Le token est incorrect, merci de vous reconnecter.',
     UNAUTHORIZED: 'Vous n\'êtes pas autorisé à effectuer cette action.',
-    NOLINKS: 'Ce contenu n\'est pas disponible pour le moment, réessayez dans 5min.',
+    NOLINKS: 'Ce contenu n\'est pas disponible pour le moment, réessayez dans 5min !',
 }
 
 export default class ServerResponse {

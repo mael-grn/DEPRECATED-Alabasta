@@ -35,7 +35,7 @@ export default function Watch() {
     return (
         <main>
             {
-                showPopup ? <Popup title={"Une erreur s'est produite"} text={popupText} close={closePopup}/> : null
+                showPopup ? <Popup title={"Hop hop hop !"} text={popupText} close={closePopup}/> : null
             }
             {
                 loading || !links ?
