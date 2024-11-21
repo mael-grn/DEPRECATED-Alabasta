@@ -7,8 +7,6 @@ export async function GET(req, {params}) {
         const targetUrl = `http://theyallsayflix.su:8081/download/${tasfUrl}`;
 
         const headers = new Headers();
-        headers.set('User-Agent', 'Mozilla/5.0 (compatible; Vercel-Proxy)');
-        headers.set('Accept', '*/*');
 
         if (req.headers.get('range')) {
             headers.set('range', req.headers.get('range'));
@@ -17,8 +15,6 @@ export async function GET(req, {params}) {
         const response = await fetch(targetUrl, {
             headers,
         });
-
-        console.log(response.url);
 
         const body = response.body;
 
@@ -30,11 +26,6 @@ export async function GET(req, {params}) {
         if (response.headers.get('Content-Range')) {
             responseHeaders.set('Content-Range', response.headers.get('Content-Range'));
         }
-
-        responseHeaders.set('Content-Encoding', 'identity');
-        responseHeaders.set('Access-Control-Allow-Origin', '*');
-        responseHeaders.set('Access-Control-Allow-Methods', 'GET, OPTIONS');
-        responseHeaders.set('Access-Control-Allow-Headers', 'Range');
 
         return new Response(body, {
             status: response.status,
