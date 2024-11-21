@@ -1,7 +1,5 @@
 export const dynamic = 'force-dynamic';
 
-export const runtime = "edge"
-
 export async function GET(req, {params}) {
     try {
         const {tasfUrl} = params;
