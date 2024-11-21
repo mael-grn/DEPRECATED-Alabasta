@@ -20,6 +20,7 @@ export const getPopularMovies = async () => {
 
     const res = await fetch(`/api/media/popular/`, {
         method: 'GET',
+        cache: 'no-store',
         headers: {
             'Content-Type': 'application/json',
             Authorization: `${token}`
@@ -45,6 +46,7 @@ export const getNowPlayingMovies = async () => {
 
     const res = await fetch(`/api/media/nowPlaying/`, {
         method: 'GET',
+        cache: 'no-store',
         headers: {
             'Content-Type': 'application/json',
             Authorization: `${token}`
@@ -70,6 +72,7 @@ export const getTopRatedMovies = async () => {
 
     const res = await fetch(`/api/media/topRated/`, {
         method: 'GET',
+        cache: 'no-store',
         headers: {
             'Content-Type': 'application/json',
             Authorization: `${token}`
@@ -95,6 +98,7 @@ export const getUpcomingMovies = async () => {
 
     const res = await fetch(`/api/media/upcoming/`, {
         method: 'GET',
+        cache: 'no-store',
         headers: {
             'Content-Type': 'application/json',
             Authorization: `${token}`
@@ -120,6 +124,7 @@ export const searchMedia = async (searchValue) => {
 
     const res = await fetch(`/api/media/search/${searchValue}`, {
         method: 'GET',
+        cache: 'no-store',
         headers: {
             'Content-Type': 'application/json',
             Authorization: `${token}`
@@ -145,6 +150,7 @@ export const getMovieDetails = async (mediaId) => {
 
     const res = await fetch(`/api/media/details/movie/${mediaId}`, {
         method: 'GET',
+        cache: 'no-store',
         headers: {
             'Content-Type': 'application/json',
             Authorization: `${token}`
@@ -170,6 +176,7 @@ export const getTvDetails = async (mediaId) => {
 
     const res = await fetch(`/api/media/details/tv/${mediaId}`, {
         method: 'GET',
+        cache: 'no-store',
         headers: {
             'Content-Type': 'application/json',
             Authorization: `${token}`
@@ -195,6 +202,7 @@ export const getSeasonDetails = async (mediaId, seasonNum) => {
 
     const res = await fetch(`/api/media/details/tv/${mediaId}/season/${seasonNum}`, {
         method: 'GET',
+        cache: 'no-store',
         headers: {
             'Content-Type': 'application/json',
             Authorization: `${token}`
@@ -222,6 +230,7 @@ export const searchStreamingLinks = async (mediaId, type, season = null, episode
 
     const res = await fetch(url, {
         method: 'POST',
+        cache: 'no-store',
         headers: {
             'Content-Type': 'application/json',
         }, body: JSON.stringify({mediaId, season, episode, token}),
@@ -243,6 +252,7 @@ export const searchStreamingLinks = async (mediaId, type, season = null, episode
 export const searchSubtitles = async (imdbId) => {
     const res = await fetch(`/api/subs/search/${imdbId}`, {
         method: 'GET',
+        cache: 'no-store',
         headers: {
             'Content-Type': 'application/json',
         },
@@ -267,6 +277,7 @@ export const getSubtitles = async (subsId) => {
 
     const res = await fetch(`/api/subs/download`, {
         method: 'POST',
+        cache: 'no-store',
         headers: {
             'Content-Type': 'application/json',
         },
