@@ -3,8 +3,8 @@ const nextConfig = {
     async rewrites() {
         return [
             {
-                source: 'https://theyallsayflix.su:8081/:path*',
-                destination: 'http://theyallsayflix.su:8081/:path*',
+                source: '/api/media/subs/download/get/:path*',
+                destination: 'https://www.opensubtitles.com/download/:path*',
             },
         ]
     },

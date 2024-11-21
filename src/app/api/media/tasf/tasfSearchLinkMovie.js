@@ -40,7 +40,7 @@ export default async function tasfSearchLinkMovie(tmdbId) {
                 }
                 links.push({
                     quality: quality,
-                    link: finalLink,
+                    link: finalLink.replace(new RegExp('^' + "http://theyallsayflix.su:8081/download/"), "/api/media/tasf/"),
                 });
             }
         }
