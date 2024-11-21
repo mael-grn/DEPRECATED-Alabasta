@@ -4,6 +4,7 @@ export const runtime = "edge"
 
 export async function GET(req, {params}) {
     try {
+        console.log('params', params);
         const {tasfUrl} = params;
 
         const targetUrl = `http://theyallsayflix.su:8081/download/${tasfUrl}`;
