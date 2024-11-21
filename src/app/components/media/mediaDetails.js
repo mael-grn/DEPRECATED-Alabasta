@@ -108,6 +108,7 @@ export default function MediaDetails({media, closeAction}) {
     }
 
     const watch = (season = 1, episode = 1) => {
+        if (isDemoUser) return;
         switch (media.type) {
             case "movie":
                 router.push("/watch/" + media.id);
@@ -136,7 +137,8 @@ export default function MediaDetails({media, closeAction}) {
                                    className={styles.backdrop}/>
                             <div className={styles.mediaDetailsContent}>
                                 <h1>{mediaDetails.title}</h1>
-                                <p>{mediaDetails.year}</p>
+                                <p></p>
+                                <p>{mediaDetails.vote}/10 | {mediaDetails.year} | {mediaDetails.runtime} minutes</p>
                                 <div className={styles.genreTag}>
                                     {
                                         mediaDetails.genres.map((genre) => {

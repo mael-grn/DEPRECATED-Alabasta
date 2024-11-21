@@ -78,7 +78,7 @@
     bottom: 0;
     left: calc(15%);
     width: 70%;
-    height: 70vh;
+    height: 80vh;
     background-color: var(--dark-background-color);
     border-radius: 25px 25px 0 0;
     overflow: hidden;
