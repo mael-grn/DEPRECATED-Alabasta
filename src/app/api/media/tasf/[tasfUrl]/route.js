@@ -17,7 +17,7 @@ export async function GET(req, {params}) {
             headers,
         });
 
-        console.log(response);
+        console.log(response.url);
 
         const body = response.body;
 
