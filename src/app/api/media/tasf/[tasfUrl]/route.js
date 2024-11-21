@@ -1,8 +1,6 @@
 export const dynamic = 'force-dynamic';
 
-export const config = {
-    runtime: 'edge',
-};
+export const runtime = "edge"
 
 export async function GET(req, {params}) {
     try {
