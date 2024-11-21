@@ -1,8 +1,8 @@
 import getFinalUrl from "@/app/api/getFinalUrl";
+import tmdbGetDetailsSeason from "@/app/api/media/tmdb/tmdbGetDetailsSeason";
 
 export default async function tasfSearchLinkTv(tmdbId, season, episode) {
     const url = `https://theyallsayflix.su/api/v1/search?type=show&tmdb_id=${tmdbId}&season=${season}&episode=${episode}`;
-    console.log("url ", url)
     const options = {
         method: 'GET',
         headers: {
@@ -11,8 +11,6 @@ export default async function tasfSearchLinkTv(tmdbId, season, episode) {
     };
     const res = await fetch(url, options)
     const data = await res.json();
-    console.log("data ", data)
-    if (data.streams === null || data.streams.length === 0) return null;
 
     const links = [];
 
@@ -47,5 +45,23 @@ export default async function tasfSearchLinkTv(tmdbId, season, episode) {
         }
     }
 
+    if (links.length === 0) await fetchAllSeasons(tmdbId, season);
+
     return links;
+}
+
+export const fetchAllSeasons = async (tmdbId, seasonId) => {
+    const seasonData = await tmdbGetDetailsSeason(tmdbId, seasonId);
+    let i = 1;
+    for (const item of seasonData.children) {
+        const url = `https://theyallsayflix.su/api/v1/search?type=show&tmdb_id=${tmdbId}&season=${seasonId}&episode=${i}`;
+        const options = {
+            method: 'GET',
+            headers: {
+                accept: 'application/json',
+            }
+        };
+        await fetch(url, options);
+        i++;
+    }
 }

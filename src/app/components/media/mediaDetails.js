@@ -63,7 +63,6 @@ export default function MediaDetails({media, closeAction}) {
             case "tv":
                 getTvDetails(media.id).then((res) => {
                     if (res.success) {
-                        console.log(res.data)
                         setMediaDetails(res.data)
                         setLoading(false)
                     }
@@ -107,14 +106,14 @@ export default function MediaDetails({media, closeAction}) {
         }
     }
 
-    const watch = (season = 1, episode = 1) => {
+    const watch = (seasonNum = 1, episodeNum = 1) => {
         if (isDemoUser) return;
         switch (media.type) {
             case "movie":
                 router.push("/watch/" + media.id);
                 break;
             case "tv":
-                router.push("/watch/" + media.id + `/${season}/${episode}`);
+                router.push("/watch/" + media.id + `/${seasonNum}/${episodeNum}`);
                 break;
             default:
                 break;
@@ -151,7 +150,7 @@ export default function MediaDetails({media, closeAction}) {
                                         isDemoUser ? null :
                                             <button
                                                 className={styles.watchBtn}
-                                                onClick={watch}
+                                                onClick={() => watch() }
                                                 onMouseEnter={() => {
                                                     if (watchBtnRef) watchBtnRef.current.triggerAnimation()
                                                 }}>
