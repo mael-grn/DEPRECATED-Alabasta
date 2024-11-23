@@ -2,7 +2,7 @@
 
 import styles from "@/app/page.module.css";
 import LordIcon from "@/app/components/ui/lordIcon";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import Popup from "@/app/components/ui/popup";
 import {useRouter} from "next/navigation";
 import { login, shouldBeConnected} from "@/app/controller/userController";
@@ -17,11 +17,14 @@ export default function Page() {
     const [popupTitle, setPopupTitle] = useState('');
     const [popupMessage, setPopupMessage] = useState('');
 
-    shouldBeConnected().then((res) => {
-        if (res) {
-            router.push("/home");
-        }
-    });
+    useEffect(() => {
+        shouldBeConnected().then((res) => {
+            if (res) {
+                router.push("/home");
+            }
+        });
+    }, []);
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
