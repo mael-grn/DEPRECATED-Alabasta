@@ -2,11 +2,10 @@
 
 import styles from "@/app/page.module.css";
 import LordIcon from "@/app/components/ui/lordIcon";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import Popup from "@/app/components/ui/popup";
 import {useRouter} from "next/navigation";
-import Image from "next/image";
-import {localRecoverUser, login} from "@/app/controller/userController";
+import { login, shouldBeConnected} from "@/app/controller/userController";
 import {ErrorTypes} from "@/app/model/serverResponse";
 
 export default function Page() {
@@ -18,13 +17,9 @@ export default function Page() {
     const [popupTitle, setPopupTitle] = useState('');
     const [popupMessage, setPopupMessage] = useState('');
 
-    useEffect(() => {
-        localRecoverUser().then(user => {
-            if (user) {
-                router.push("/home")
-            }
-        })
-    });
+    if (shouldBeConnected()) {
+        router.push("/home");
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();

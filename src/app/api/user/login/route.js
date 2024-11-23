@@ -68,8 +68,8 @@ export async function POST(req, res) {
 
 async function addUser() {
 
-    const hashedKey = await bcrypt.hash('noe26150', 10);
+    const hashedKey = await bcrypt.hash('0276', 10);
     await sql`
-            INSERT INTO USERS (pswd, name, surname) VALUES (${hashedKey}, 'Benedicte', 'Garnier');
+            INSERT INTO USERS (pswd, name, surname) VALUES (${hashedKey}, 'Vincent', 'Thome');
         `;
 }

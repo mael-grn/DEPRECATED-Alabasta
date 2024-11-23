@@ -3,8 +3,12 @@ import ServerResponse, {ErrorTypes} from "@/app/model/serverResponse";
 import User from "@/app/model/user";
 import {deleteItem, getItem, setItem} from "@/app/utils/cookieUtils";
 
+export const shouldBeConnected = () => {
+    return localStorage.getItem("token") !== null;
+}
 
 export const localSaveUser = async (user) => {
+    localStorage.setItem("token", "1");
     await setItem('user', JSON.stringify(user));
 }
 
@@ -21,6 +25,7 @@ export const localRecoverUser = async () => {
  * @returns {Promise<void>}
  */
 export const logout = async () => {
+    localStorage.removeItem("token");
     await deleteItem('user');
     await deleteItem('token');
 }
