@@ -24,7 +24,6 @@ export const localRecoverUser = async () => {
  * @returns {Promise<void>}
  */
 export const logout = async () => {
-    localStorage.removeItem("token");
     await deleteItem('user');
     await deleteItem('token');
 }
