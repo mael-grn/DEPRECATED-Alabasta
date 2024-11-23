@@ -17,9 +17,11 @@ export default function Page() {
     const [popupTitle, setPopupTitle] = useState('');
     const [popupMessage, setPopupMessage] = useState('');
 
-    if (shouldBeConnected()) {
-        router.push("/home");
-    }
+    shouldBeConnected().then((res) => {
+        if (res) {
+            router.push("/home");
+        }
+    });
 
     const handleSubmit = async (e) => {
         e.preventDefault();

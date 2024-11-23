@@ -1,14 +1,13 @@
 
 import ServerResponse, {ErrorTypes} from "@/app/model/serverResponse";
 import User from "@/app/model/user";
-import {deleteItem, getItem, setItem} from "@/app/utils/cookieUtils";
+import {checkItem, deleteItem, getItem, setItem} from "@/app/utils/cookieUtils";
 
 export const shouldBeConnected = () => {
-    return localStorage.getItem("token") !== null;
+    return checkItem('token');
 }
 
 export const localSaveUser = async (user) => {
-    localStorage.setItem("token", "1");
     await setItem('user', JSON.stringify(user));
 }
 
