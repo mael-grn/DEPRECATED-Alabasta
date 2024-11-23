@@ -132,7 +132,7 @@ export default function MediaDetails({media, closeAction}) {
                 {
                     loading ? <LordIcon iconName={"loader-white"} animationType={"loop"}/> :
                         <div>
-                            <Image src={mediaDetails.backdrop} alt={mediaDetails.title} width={1920} height={1080}
+                            <img src={mediaDetails.backdrop} alt={mediaDetails.title}
                                    className={styles.backdrop}/>
                             <div className={styles.mediaDetailsContent}>
                                 <h1>{mediaDetails.title}</h1>
@@ -193,7 +193,7 @@ export default function MediaDetails({media, closeAction}) {
                                                                 season.children.map((episode, key) => {
                                                                     return <div className={styles.episode} onClick={() => watch(season.number, episode.number)}>
                                                                         <span>{episode.number}</span>
-                                                                        <Image src={episode.poster} alt={episode.title} width={500} height={280}/>
+                                                                        <img src={episode.poster} alt={episode.title}/>
                                                                         <div>
                                                                             <h2>{episode.title}</h2>
                                                                             <p>{truncateString(episode.overview)}</p>

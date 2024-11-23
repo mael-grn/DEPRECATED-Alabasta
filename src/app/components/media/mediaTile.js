@@ -14,7 +14,7 @@ export default function MediaTile({ media, onClickAction }) {
 
     return (
         <div className={styles.movieResume} onClick={onClickAction}>
-            <Image src={media.poster && media.poster !== "" ? media.poster : "/assets/poster-placeholder.png"} alt={media.title} width={230} height={345} />
+            <img src={media.poster && media.poster !== "" ? media.poster : "/assets/poster-placeholder.png"} alt={media.title} />
             <p>{media.title}</p>
             <p>{media.year}</p>
         </div>

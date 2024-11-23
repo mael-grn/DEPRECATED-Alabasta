@@ -62,7 +62,7 @@ export default function Page() {
 
     return (
         <main className={styles.main}>
-            <Image alt="desert" height={1920} width={1080} src="/assets/desert.svg"/>
+            <img alt="desert" src="/assets/desert.svg"/>
             {showPopup ? <Popup title={popupTitle} text={popupMessage} close={closePopup}/> : null}
             <form onSubmit={handleSubmit}>
                 <h1>Bienvenue sur Alabasta !</h1>

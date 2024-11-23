@@ -55,7 +55,7 @@ export default function Search() {
             {
                 showDetails ? <MediaDetails media={showDetails} closeAction={() => setShowDetails(null)}/> : null
             }
-            <Image src={"/assets/search.svg"} alt={"search"} width={1920} height={1080}/>
+            <img src={"/assets/search.svg"} alt={"search"}/>
             {showPopup ? <Popup title={popupTitle} text={popupMessage} close={closePopup}/> : null}
             <form onSubmit={handleSubmit}>
                 <div>

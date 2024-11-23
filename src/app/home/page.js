@@ -85,7 +85,7 @@ export default function Home() {
                 showDetails ? <MediaDetails media={showDetails} closeAction={() => setShowDetails(null)}/> : null
             }
             {!heroMedia ? null :
-                <Image className={`${styles.bgImage} ${isScrolled ? styles.bgImageHide : null}`} src={heroMedia.backdrop} alt={"backdrop"} width={1280} height={496}/>}
+                <img className={`${styles.bgImage} ${isScrolled ? styles.bgImageHide : null}`} src={heroMedia.backdrop} alt={"backdrop"}/>}
             <div className={`${styles.home} ${isScrolled || !heroMedia ? null : styles.onTop}`}>
                 {
                     loading ?
@@ -95,7 +95,7 @@ export default function Home() {
                         (
                             heroMedia ?
                                 <div className={`${styles.heroMovie} ${isDarkText ? null : styles.dark}`}>
-                                    <Image src={heroMedia.backdrop} alt={heroMedia.title} width={1280} height={496}/>
+                                    <img src={heroMedia.backdrop} alt={heroMedia.title}/>
                                     <div className={styles.heroMovieInfo}>
                                         <h1>{heroMedia.title}</h1>
                                         <div className={styles.genreTag}>
