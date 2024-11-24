@@ -1,6 +1,5 @@
 
 import authenticateToken from "@/app/api/authenticateToken";
-import {deleteOSToken} from "@/app/api/subs/openSubtitle/OSToken";
 import {sql} from "@vercel/postgres";
 
 export async function POST(req, res) {
@@ -56,7 +55,6 @@ export async function POST(req, res) {
         });
 
     } catch (error) {
-        await deleteOSToken();
         return new Response(JSON.stringify({message: 'server error : ' + error}), {
             status: 500,
             headers: {'Content-Type': 'application/json'},
