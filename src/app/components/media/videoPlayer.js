@@ -139,7 +139,6 @@ export default function VideoPlayer({movieId, links, season = null, episode = nu
     }
 
     const toggleSettings = () => {
-        videoRef.current.pause();
         setShowSettings(!showSettings);
     }
 
