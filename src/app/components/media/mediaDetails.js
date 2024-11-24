@@ -150,12 +150,18 @@ export default function MediaDetails({media, closeAction}) {
                                         isDemoUser ? null :
                                             <button
                                                 className={styles.watchBtn}
-                                                onClick={() => watch() }
+                                                onClick={() => watch(mediaDetails.seasonProgress, mediaDetails.episodeProgress) }
                                                 onMouseEnter={() => {
                                                     if (watchBtnRef) watchBtnRef.current.triggerAnimation()
                                                 }}>
                                                 <div>
-                                                    <p>Regarder</p>
+                                                    <p>
+                                                        {
+                                                            mediaDetails.progress > 0 ?
+                                                                "Reprendre" :
+                                                                "Regarder"
+                                                        }
+                                                    </p>
                                                     <LordIcon ref={watchBtnRef} iconName={"play-white"}
                                                               animationType={"hover"}/>
                                                 </div>
@@ -177,6 +183,14 @@ export default function MediaDetails({media, closeAction}) {
                                         {inWatchList && !watchListLoading ? "Dans la liste de lecture" : null}
                                     </button>
                                 </div>
+                                <p>
+                                    {
+                                        mediaDetails.progress > 0 ?
+                                            mediaDetails.type === "tv" ?
+                                                "Saison " + mediaDetails.seasonProgress + " Episode " + mediaDetails.episodeProgress :
+                                                Math.round((mediaDetails.progress * mediaDetails.runtime / 100))  + "min vues sur " + mediaDetails.runtime + "min" : null
+                                    }
+                                </p>
                                 <p style={mediaDetails.type === "movie" ? {paddingBottom: 170} : null}>{mediaDetails.overview}</p>
                                 {
                                     mediaDetails.type === "tv" ?

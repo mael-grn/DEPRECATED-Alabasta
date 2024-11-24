@@ -141,20 +141,19 @@ export const searchMedia = async (searchValue) => {
     }
 }
 
-export const getMovieDetails = async (mediaId) => {
+export const getMovieDetails = async (movieId) => {
 
     let token = await getItem('token');
     if (!token) {
         return new ServerResponse(false, ErrorTypes.NOUSER, null);
     }
 
-    const res = await fetch(`/api/media/details/movie/${mediaId}`, {
-        method: 'GET',
+    const res = await fetch(`/api/media/details/movie/`, {
+        method: 'POST',
         cache: 'no-store',
         headers: {
-            'Content-Type': 'application/json',
-            Authorization: `${token}`
-        },
+            'Content-Type': 'application/json'
+        }, body: JSON.stringify({movieId, token}),
     });
 
     if (res.status === 200) {
@@ -167,20 +166,19 @@ export const getMovieDetails = async (mediaId) => {
     }
 }
 
-export const getTvDetails = async (mediaId) => {
+export const getTvDetails = async (tvId) => {
 
     let token = await getItem('token');
     if (!token) {
         return new ServerResponse(false, ErrorTypes.NOUSER, null);
     }
 
-    const res = await fetch(`/api/media/details/tv/${mediaId}`, {
-        method: 'GET',
+    const res = await fetch(`/api/media/details/tv/`, {
+        method: 'POST',
         cache: 'no-store',
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `${token}`
-        },
+        }, body: JSON.stringify({tvId, token}),
     });
 
     if (res.status === 200) {
@@ -193,20 +191,19 @@ export const getTvDetails = async (mediaId) => {
     }
 }
 
-export const getSeasonDetails = async (mediaId, seasonNum) => {
+export const getSeasonDetails = async (tvId, season) => {
 
     let token = await getItem('token');
     if (!token) {
         return new ServerResponse(false, ErrorTypes.NOUSER, null);
     }
 
-    const res = await fetch(`/api/media/details/tv/${mediaId}/season/${seasonNum}`, {
-        method: 'GET',
+    const res = await fetch(`/api/media/details/tv/season`, {
+        method: 'POST',
         cache: 'no-store',
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `${token}`
-        },
+        }, body: JSON.stringify({tvId, season, token}),
     });
 
     if (res.status === 200) {
@@ -292,7 +289,7 @@ export const getSubtitles = async (subsId) => {
     }
 }
 
-export const setMediaProgress = async (mediaId, progressPercent) => {
+export const setMediaProgress = async (mediaId, progressPercent, season = null, episode = null) => {
 
     let token = await getItem('token');
     if (!token) {
@@ -305,7 +302,7 @@ export const setMediaProgress = async (mediaId, progressPercent) => {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({mediaId, progressPercent, token}),
+        body: JSON.stringify({mediaId, progressPercent, season, episode, token}),
     });
 
     if (res.ok) {
@@ -315,20 +312,46 @@ export const setMediaProgress = async (mediaId, progressPercent) => {
     }
 }
 
-export const getMediaProgress = async (mediaId) => {
+export const getMediaProgress = async (mediaId, season = null, episode = null) => {
 
     let token = await getItem('token');
     if (!token) {
         return new ServerResponse(false, ErrorTypes.NOUSER, null);
     }
 
-    const res = await fetch(`/api/media/progress/get/${mediaId}`, {
+    const url = season && episode ? `/api/media/progress/get/${mediaId}/${season}/${episode}` : `/api/media/progress/get/${mediaId}`;
+
+    const res = await fetch(url, {
         method: 'GET',
         cache: 'no-store',
         headers: {
             'Content-Type': 'application/json',
             Authorization: `${token}`
         },
+    });
+
+    if (res.ok) {
+        const data = await res.json();
+        return new ServerResponse(true, null, data.res);
+    } else {
+        return new ServerResponse(false, ErrorTypes.SERVER, null);
+    }
+}
+
+export const getContinueWatching = async () => {
+
+    let token = await getItem('token');
+    if (!token) {
+        return new ServerResponse(false, ErrorTypes.NOUSER, null);
+    }
+
+    const res = await fetch(`/api/media/continueWatching/`, {
+        method: 'POST',
+        cache: 'no-store',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({token}),
     });
 
     if (res.ok) {

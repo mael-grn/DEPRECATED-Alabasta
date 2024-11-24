@@ -40,7 +40,7 @@ export default function Watch() {
             {
                 loading || !links ?
                     <PageLoading phrase={"Chargement du contenu"}/> :
-                    <VideoPlayer links={links} movieId={mediaId}/>
+                    <VideoPlayer episode={episode} season={season} links={links} movieId={mediaId}/>
             }
         </main>
 

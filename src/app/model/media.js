@@ -3,7 +3,6 @@ export default class Media {
     constructor(id, title) {
         this.id = id
         this.title = title;
-        this.currentProgress = 0;
         this.year = "";
         this.date = "";
         this.poster = "";
@@ -23,7 +22,9 @@ export default class Media {
         this.children = [];
         this.parentId = null;
         this.number = null; // le numero de saison ou d'episode
-        this.currentNumber = null; // le numero de l'episode actuel
+        this.seasonProgress = 1;
+        this.episodeProgress = 1;
+        this.progress = 0;
         this.lastAirDate = null;
     }
 }

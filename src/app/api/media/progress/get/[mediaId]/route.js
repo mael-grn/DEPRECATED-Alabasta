@@ -3,11 +3,12 @@ import authenticateToken from "@/app/api/authenticateToken";
 import tmdbSearchMovie from "@/app/api/media/tmdb/tmdbSearchMovie";
 import tmdbSearchTv from "@/app/api/media/tmdb/tmdbSearchTv";
 import {sql} from "@vercel/postgres";
+import * as sea from "node:sea";
 export const dynamic = 'force-dynamic';
 
 export async function GET(req, { params }) {
     try {
-        const {mediaId} = params;
+        const {mediaId, season, episode} = params;
         const token = req.headers.get('Authorization');
 
         if (!token) {
@@ -26,9 +27,20 @@ export async function GET(req, { params }) {
             });
         }
 
-        const {rows} = await sql`
+        if (season && episode && (isNaN(season) || isNaN(episode))) {
+            return new Response(JSON.stringify({message: 'season and episode must be numbers'}), {
+                status: 400,
+                headers: {'Content-Type': 'application/json'},
+            });
+        }
+
+        const {rows} = (season && episode) ?
+            await sql`
+            SELECT * FROM user_progress WHERE user_id = ${userId} AND movie_id = ${mediaId} AND season = ${parseInt(season)} AND episode = ${parseInt(episode)};
+        ` :
+            await sql`
             SELECT * FROM user_progress WHERE user_id = ${userId} AND movie_id = ${mediaId};
-        `;
+        `
 
         if (!rows || rows.length === 0) {
             return new Response(JSON.stringify({res: 0}), {

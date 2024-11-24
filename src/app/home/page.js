@@ -3,6 +3,7 @@
 import styles from '@/app/home/page.module.css';
 
 import {
+    getContinueWatching,
     getMovieDetails,
     getNowPlayingMovies,
     getPopularMovies,
@@ -129,10 +130,13 @@ export default function Home() {
                                 </div> : null
                         )
                 }
+                {
+                    isDemoUser ? null :
+                        <MediaCarroussel mediaListFctn={getContinueWatching} title={"Continuer la lecture"}/>
+                }
                 <MediaCarroussel mediaListFctn={getPopularMovies} title={"Films populaires"}/>
                 <MediaCarroussel mediaListFctn={getNowPlayingMovies} title={"En ce moment au cinéma"}/>
                 <MediaCarroussel mediaListFctn={getTopRatedMovies} title={"Films les mieux notés"}/>
-                <MediaCarroussel mediaListFctn={getUpcomingMovies} title={"Films bientôt disponibles"}/>
             </div>
 
         </div>

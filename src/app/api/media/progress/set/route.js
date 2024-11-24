@@ -12,8 +12,7 @@ export async function POST(req, res) {
             });
         }
 
-        const { mediaId, progressPercent, token } = await req.json();
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+        const { mediaId, progressPercent, season, episode, token } = await req.json();
 
         const userId = await authenticateToken(token);
 
@@ -24,27 +23,31 @@ export async function POST(req, res) {
             });
         }
 
-        console.log(`
-            SELECT * FROM user_progress WHERE user_id = ${userId} AND movie_id = ${mediaId};
-        `)
-        console.log(`
-            UPDATE user_progress SET progress = ${progressPercent} WHERE user_id = ${userId} AND movie_id = ${mediaId};
-        `)
-        console.log(`
-            INSERT INTO user_progress(user_id, movie_id, progress) VALUES (${userId}, ${mediaId}, ${progressPercent});
-        `)
         const {rows} = await sql`
             SELECT * FROM user_progress WHERE user_id = ${userId} AND movie_id = ${mediaId};
         `;
 
         if (rows && rows.length > 0) {
-            await sql`
+            if (season && episode) {
+                await sql`
+                UPDATE user_progress SET progress = ${progressPercent}, season = ${season}, episode = ${episode} WHERE user_id = ${userId} AND movie_id = ${mediaId};
+            `;
+            } else {
+                await sql`
                 UPDATE user_progress SET progress = ${progressPercent} WHERE user_id = ${userId} AND movie_id = ${mediaId};
             `;
+            }
+
         } else {
-            await sql`
+            if (season && episode) {
+                await sql`
+                    INSERT INTO user_progress(user_id, movie_id, progress, season, episode) VALUES (${userId}, ${mediaId}, ${progressPercent}, ${season}, ${episode});
+            `;
+            } else {
+                await sql`
                 INSERT INTO user_progress(user_id, movie_id, progress) VALUES (${userId}, ${mediaId}, ${progressPercent});
             `;
+            }
         }
 
         return new Response(JSON.stringify({ res: true }), {

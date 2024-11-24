@@ -3,21 +3,22 @@ import authenticateToken from "@/app/api/authenticateToken";
 import tmdbGetNowPlaying from "@/app/api/media/tmdb/tmdbGetNowPlaying";
 import tmdbGetDetailsMovie from "@/app/api/media/tmdb/tmdbGetDetailsMovie";
 import tmdbGetDetailsTv from "@/app/api/media/tmdb/tmdbGetDetailsTv";
+import {sql} from "@vercel/postgres";
+import tmdbGetDetailsSeason from "@/app/api/media/tmdb/tmdbGetDetailsSeason";
 export const dynamic = 'force-dynamic';
 
-export async function GET(req, { params }) {
+export async function POST(req, { params }) {
     try {
-        const token = req.headers.get('Authorization');
-        const {tvId} = params;
-
-        if (!token) {
-            return new Response(JSON.stringify({error: "Missing or invalid Authorization header"}), {
-                status: 401,
-                headers: {'Content-Type': 'application/json'},
+        if (!req.body) {
+            return new Response(JSON.stringify({ message: 'wrong data in the query' }), {
+                status: 400,
+                headers: { 'Content-Type': 'application/json' },
             });
         }
 
-        const userId = authenticateToken(token);
+        const { tvId, season, token } = await req.json();
+
+        const userId = await authenticateToken(token);
 
         if (!userId) {
             return new Response(JSON.stringify({ message: 'wrong token' }), {
@@ -26,9 +27,9 @@ export async function GET(req, { params }) {
             });
         }
 
-        const detailedTv = await tmdbGetDetailsTv(tvId);
+        const detailedSeason = await tmdbGetDetailsSeason(tvId, season);
 
-        return new Response(JSON.stringify({ res: detailedTv }), {
+        return new Response(JSON.stringify({ res: detailedSeason }), {
             status: 200,
             headers: { 'Content-Type': 'application/json' },
         });

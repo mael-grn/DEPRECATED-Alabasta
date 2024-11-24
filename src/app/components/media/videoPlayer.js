@@ -15,15 +15,15 @@ import {
 } from "@/app/controller/mediaController";
 import DropDown from "@/app/components/ui/dropDown";
 
-export default function VideoPlayer({movieId, links}) {
+export default function VideoPlayer({movieId, links, season = null, episode = null}) {
 
     const router = useRouter();
     const [loading, setLoading] = useState(true);
     const [showPopup, setShowPopup] = useState(false);
     const [popupText, setPopupText] = useState("");
 
+    const [startSavingProgress, setStartSavingProgress] = useState(false);
     const [playPauseAnimation, setPlayPauseAnimation] = useState(null);
-    const [progress, setProgress] = useState(0);
     const [remainingTime, setRemainingTime] = useState(null);
     const [selectedQuality, setSelectedQuality] = useState(0);
     const [showSettings, setShowSettings] = useState(false);
@@ -46,17 +46,18 @@ export default function VideoPlayer({movieId, links}) {
     const saveProgress = useCallback(async () => {
         if (videoRef.current && videoRef.current.duration && !videoRef.current.paused) {
             const progressPercentage = (videoRef.current.currentTime * 100 / videoRef.current.duration);
-            await setMediaProgress(movieId, progressPercentage);
+            await setMediaProgress(movieId, progressPercentage, season, episode);
         }
     }, [movieId]);
 
     useEffect(() => {
         const intervalId = setInterval(() => {
-            saveProgress();
+            console.log(startSavingProgress);
+            if (startSavingProgress) saveProgress();
         }, 5000); // Sauvegarde toutes les 5 secondes
 
         return () => clearInterval(intervalId);
-    }, [saveProgress]);
+    }, [saveProgress, startSavingProgress]);
 
     useEffect(() => {
         if (!videoRef.current) return;
@@ -188,8 +189,10 @@ export default function VideoPlayer({movieId, links}) {
                 autoPlay
                 onLoadStart={() => setLoading(true)}
                 onLoadedData={() => {
-                    getMediaProgress(movieId).then((progress) => {
+                    getMediaProgress(movieId, season, episode).then((progress) => {
+                        setStartSavingProgress(true);
                         if (progress.success) {
+                            console.log(progress.data);
                             videoRef.current.currentTime = (progress.data / 100) * videoRef.current.duration;
                             setLoading(false);
                         }

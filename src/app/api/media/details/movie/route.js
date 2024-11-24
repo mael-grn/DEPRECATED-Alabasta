@@ -2,22 +2,21 @@
 import authenticateToken from "@/app/api/authenticateToken";
 import tmdbGetNowPlaying from "@/app/api/media/tmdb/tmdbGetNowPlaying";
 import tmdbGetDetailsMovie from "@/app/api/media/tmdb/tmdbGetDetailsMovie";
-import tmdbGetDetailsSeason from "@/app/api/media/tmdb/tmdbGetDetailsSeason";
+import {sql} from "@vercel/postgres";
 export const dynamic = 'force-dynamic';
 
-export async function GET(req, { params }) {
+export async function POST(req, { params }) {
     try {
-        const token = req.headers.get('Authorization');
-        const {tvId, seasonId} = params;
-
-        if (!token) {
-            return new Response(JSON.stringify({error: "Missing or invalid Authorization header"}), {
-                status: 401,
-                headers: {'Content-Type': 'application/json'},
+        if (!req.body) {
+            return new Response(JSON.stringify({ message: 'wrong data in the query' }), {
+                status: 400,
+                headers: { 'Content-Type': 'application/json' },
             });
         }
 
-        const userId = authenticateToken(token);
+        const { movieId, token } = await req.json();
+
+        const userId = await authenticateToken(token);
 
         if (!userId) {
             return new Response(JSON.stringify({ message: 'wrong token' }), {
@@ -25,7 +24,16 @@ export async function GET(req, { params }) {
                 headers: { 'Content-Type': 'application/json' },
             });
         }
-        const detailedMovie = await tmdbGetDetailsSeason(tvId, seasonId);
+
+        const detailedMovie = await tmdbGetDetailsMovie(movieId);
+
+        const {rows} = await sql`
+            SELECT * FROM user_progress WHERE user_id = ${userId} AND movie_id = ${movieId};
+        `;
+
+        if (rows && rows.length > 0) {
+            detailedMovie.progress = rows[0].progress;
+        }
 
         return new Response(JSON.stringify({ res: detailedMovie }), {
             status: 200,
