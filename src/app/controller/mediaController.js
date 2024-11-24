@@ -291,3 +291,50 @@ export const getSubtitles = async (subsId) => {
         return new ServerResponse(false, ErrorTypes.SERVER, null);
     }
 }
+
+export const setMediaProgress = async (mediaId, progressPercent) => {
+
+    let token = await getItem('token');
+    if (!token) {
+        return new ServerResponse(false, ErrorTypes.NOUSER, null);
+    }
+
+    const res = await fetch(`/api/media/progress/set`, {
+        method: 'POST',
+        cache: 'no-store',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({mediaId, progressPercent, token}),
+    });
+
+    if (res.ok) {
+        return new ServerResponse(true, null, true);
+    } else {
+        return new ServerResponse(false, ErrorTypes.SERVER, null);
+    }
+}
+
+export const getMediaProgress = async (mediaId) => {
+
+    let token = await getItem('token');
+    if (!token) {
+        return new ServerResponse(false, ErrorTypes.NOUSER, null);
+    }
+
+    const res = await fetch(`/api/media/progress/get/${mediaId}`, {
+        method: 'GET',
+        cache: 'no-store',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `${token}`
+        },
+    });
+
+    if (res.ok) {
+        const data = await res.json();
+        return new ServerResponse(true, null, data.res);
+    } else {
+        return new ServerResponse(false, ErrorTypes.SERVER, null);
+    }
+}

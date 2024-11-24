@@ -205,23 +205,27 @@
 }
 
 .playerElements .positionSlider input {
-    cursor: pointer;
-    width: 100%;
-    height: 5px;
     -webkit-appearance: none;
+    -moz-appearance: none;
     appearance: none;
-    border-radius: 20px;
-    outline: none;
+    width: 100%;
+    height: 10px;
+    background: var(--dark-background-color);
+    overflow: hidden;
+    border-radius: 50px;
+    cursor: inherit;
+}
+
+.playerElements .positionSlider input:hover {
+    height: 20px;
 }
 
 .playerElements .positionSlider input::-webkit-slider-thumb {
     -webkit-appearance: none;
-    appearance: none;
-    width: 3px;
-    height: 20px;
-    background-color: var(--text-color);
-    border-radius: 20px;
-    transition: all .3s ease;
+    width: 0;
+    height: 0;
+    -webkit-box-shadow: -100vw 0 0 100vw var(--text-color);
+    box-shadow: -100vw 0 0 100vw var(--text-color);
 }
 
 .playerElements .positionSlider input::-webkit-slider-thumb:hover {

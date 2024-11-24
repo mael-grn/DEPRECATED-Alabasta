@@ -6,7 +6,13 @@ import Image from "next/image";
 import {useCallback, useEffect, useRef, useState} from "react";
 import {useRouter} from "next/navigation";
 import Popup from "@/app/components/ui/popup";
-import {getMediaDetails, getMovieDetails, getSubtitles, searchSubtitles} from "@/app/controller/mediaController";
+import {
+     getMediaProgress,
+    getMovieDetails,
+    getSubtitles,
+    searchSubtitles,
+    setMediaProgress
+} from "@/app/controller/mediaController";
 import DropDown from "@/app/components/ui/dropDown";
 
 export default function VideoPlayer({movieId, links}) {
@@ -18,6 +24,7 @@ export default function VideoPlayer({movieId, links}) {
 
     const [playPauseAnimation, setPlayPauseAnimation] = useState(null);
     const [progress, setProgress] = useState(0);
+    const [remainingTime, setRemainingTime] = useState(null);
     const [selectedQuality, setSelectedQuality] = useState(0);
     const [showSettings, setShowSettings] = useState(false);
     const hideControlsTimeout = useRef(null);
@@ -25,7 +32,6 @@ export default function VideoPlayer({movieId, links}) {
     const [subsList, setSubsList] = useState([]);
     const [subsLoading, setSubsLoading] = useState(false);
     const [showControls, setShowControls] = useState(true);
-
     const sliderRef = useRef(null);
     const videoRef = useRef(null);
     const playerRef = useRef(null);
@@ -35,6 +41,34 @@ export default function VideoPlayer({movieId, links}) {
         setShowControls(true);
         clearTimeout(hideControlsTimeout.current);
         hideControlsTimeout.current = setTimeout(() => setShowControls(false), 3000); // Masque après 3s d'inactivité
+    }, []);
+
+    const saveProgress = useCallback(async () => {
+        if (videoRef.current && videoRef.current.duration && !videoRef.current.paused) {
+            const progressPercentage = (videoRef.current.currentTime * 100 / videoRef.current.duration);
+            await setMediaProgress(movieId, progressPercentage);
+        }
+    }, [movieId]);
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            saveProgress();
+        }, 5000); // Sauvegarde toutes les 5 secondes
+
+        return () => clearInterval(intervalId);
+    }, [saveProgress]);
+
+    useEffect(() => {
+        if (!videoRef.current) return;
+
+        const intervalId = setInterval(() => {
+            if (videoRef.current && videoRef.current.duration) {
+                const timeLeft = videoRef.current.duration - videoRef.current.currentTime;
+                setRemainingTime(formatTime(timeLeft));
+            }
+        }, 1000); // Mise à jour toutes les secondes
+
+        return () => clearInterval(intervalId); // Nettoie l'intervalle lorsque le composant est démonté
     }, []);
 
     // Réinitialise le timer d'inactivité lorsqu'il y a interaction avec la souris
@@ -108,19 +142,8 @@ export default function VideoPlayer({movieId, links}) {
         setShowSettings(!showSettings);
     }
 
-    const handleTimeUpdate = () => {
-        if (videoRef.current.duration) {
-            setProgress((videoRef.current.currentTime / videoRef.current.duration) * 100);
-        }
-
-        const progressPercentage = (sliderRef.current.value / 100) * 100; // pourcentage
-        sliderRef.current.style.background = `linear-gradient(to right, white ${progressPercentage}%, black ${progressPercentage}%)`;
-    };
-
     const handleSliderChange = (event) => {
-        const newTime = (event.target.value / 100) * videoRef.current.duration;
-        videoRef.current.currentTime = newTime;
-        setProgress(event.target.value);
+        videoRef.current.currentTime = (event.target.value / 100) * videoRef.current.duration;
     };
 
     const handleMouseMove = () => {
@@ -164,10 +187,17 @@ export default function VideoPlayer({movieId, links}) {
                 src={links[selectedQuality].link}
                 autoPlay
                 onLoadStart={() => setLoading(true)}
-                onLoadedData={() => setLoading(false)}
+                onLoadedData={() => {
+                    getMediaProgress(movieId).then((progress) => {
+                        if (progress.success) {
+                            videoRef.current.currentTime = (progress.data / 100) * videoRef.current.duration;
+                            setLoading(false);
+                        }
+                    });
+                }
+                }
                 onWaiting={() => setLoading(true)}
                 onPlaying={() => setLoading(false)}
-                onTimeUpdate={handleTimeUpdate}
                 onError={() => {
                     setShowPopup(true);
                     setPopupText("Une erreur s'est produite lors du chargement de la vidéo");
@@ -238,10 +268,10 @@ export default function VideoPlayer({movieId, links}) {
                         type="range"
                         min="0"
                         max="100"
-                        value={progress || 0}
+                        value={videoRef.current && videoRef.current.duration && videoRef.current.currentTime ? (videoRef.current.currentTime * 100 / videoRef.current.duration) : 0}
                         onChange={handleSliderChange}
                     />
-                    <p>{videoRef.current ? formatTime(videoRef.current.duration - videoRef.current.currentTime) : ""}</p>
+                    <p>{remainingTime ? remainingTime : ""}</p>
                 </div>
             </div>
 
