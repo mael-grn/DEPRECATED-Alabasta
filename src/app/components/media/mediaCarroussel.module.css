@@ -108,7 +108,7 @@
 
 @media only screen and (max-width: 600px) {
     .carroussel {
-        height: 305px;
+        height: 256px;
     }
 
     .carroussel h1 {
@@ -116,10 +116,10 @@
     }
 
     .carroussel .rightButton {
-        bottom: 100px;
+        bottom: 75px;
     }
 
     .carroussel .leftButton {
-        bottom: 100px;
+        bottom: 75px;
     }
 }

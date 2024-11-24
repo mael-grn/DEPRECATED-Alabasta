@@ -90,3 +90,46 @@ export const loginToken = async () => {
     }
 }
 
+export const getHistory = async () => {
+
+    let token = await getItem('token');
+    if (!token) {
+        return new ServerResponse(false, ErrorTypes.NOUSER, null);
+    }
+
+    const res = await fetch('/api/user/searchHistory/get', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({token}),
+    });
+    if (res.status === 200) {
+        const data = await res.json();
+        return new ServerResponse(true, null, data.res);
+    } else {
+        return new ServerResponse(false, ErrorTypes.SERVER, null);
+    }
+}
+
+export const addToHistory = async (query) => {
+
+    let token = await getItem('token');
+    if (!token) {
+        return new ServerResponse(false, ErrorTypes.NOUSER, null);
+    }
+
+    const res = await fetch('/api/user/searchHistory/insert', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({query, token}),
+    });
+    if (res.status === 200) {
+        const data = await res.json();
+        return new ServerResponse(true, null, data.res);
+    } else {
+        return new ServerResponse(false, ErrorTypes.SERVER, null);
+    }
+}

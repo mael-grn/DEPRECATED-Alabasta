@@ -4,10 +4,11 @@ import Image from "next/image";
 import styles from "@/app/search/page.module.css";
 import Popup from "@/app/components/ui/popup";
 import LordIcon from "@/app/components/ui/lordIcon";
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import MediaTile from "@/app/components/media/mediaTile";
 import {searchMedia} from "@/app/controller/mediaController";
 import MediaDetails from "@/app/components/media/mediaDetails";
+import {addToHistory, getHistory} from "@/app/controller/userController";
 
 export default function Search() {
 
@@ -18,20 +19,32 @@ export default function Search() {
     const [popupMessage, setPopupMessage] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [showDetails, setShowDetails] = useState(null);
+    const [history, setHistory] = useState([]);
+    const inputRef = useRef(null);
+
+    useEffect(() => {
+        getHistory().then((res) => {
+            if (res.success) {
+                if (res.data.length > 0) setHistory(res.data);
+            }
+        });
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setFormLoading(true);
-
         if (!searchValue) {
-            setFormLoading(false);
             setShowPopup(true)
             setPopupTitle('Erreur');
             setPopupMessage('Veuillez entrer un titre de film');
             return;
         }
+        await addToHistory(searchValue);
+        await search(searchValue);
+    };
 
-        searchMedia(searchValue).then((res) => {
+    const search = async (query) => {
+        setFormLoading(true);
+        searchMedia(query).then((res) => {
             setFormLoading(false);
             if (res.success) {
                 setSearchResults(res.data);
@@ -41,8 +54,7 @@ export default function Search() {
                 setPopupMessage(res.errorType);
             }
         });
-
-    };
+    }
 
     const closePopup = () => {
         setShowPopup(false);
@@ -59,7 +71,7 @@ export default function Search() {
             {showPopup ? <Popup title={popupTitle} text={popupMessage} close={closePopup}/> : null}
             <form onSubmit={handleSubmit}>
                 <div>
-                    <input autoComplete={"off"} type={"search"} id={"search"} name={"search"} required
+                    <input ref={inputRef} autoComplete={"off"} type={"search"} id={"search"} name={"search"} required
                            placeholder={"Recherche"}
                            onChange={(e) => setSearchValue(e.target.value)}></input>
                     <button type="submit" className={"button " + (formLoading ? styles.loading : "")}>
@@ -69,6 +81,19 @@ export default function Search() {
                 </div>
 
             </form>
+
+            <div className={`${styles.history} ${history.length > 0 ? styles.historyDeploy : ""} ${searchResults.length > 0 ? styles.hideHistory : null}`}>
+                    {history.map((query) => {
+                        return (
+                            <div onClick={() => {
+                                inputRef.current.value = query;
+                                search(query)}
+                            }>
+                                <p>{query}</p>
+                            </div>
+                        )
+                    })}
+            </div>
 
             {
                 searchResults.length > 0 ?

@@ -7,22 +7,19 @@ import {
     getMovieDetails,
     getNowPlayingMovies,
     getPopularMovies,
-    getTopRatedMovies,
-    getUpcomingMovies
+    getTopRatedMovies
 } from "@/app/controller/mediaController";
 
 import MediaCarroussel from "@/app/components/media/mediaCarroussel";
 import {useEffect, useRef, useState} from "react";
 import LordIcon from "@/app/components/ui/lordIcon";
 import {useRouter} from "next/navigation";
-import Image from "next/image";
 import {localRecoverUser} from "@/app/controller/userController";
 import MediaDetails from "@/app/components/media/mediaDetails";
 
 export default function Home() {
     const [loading, setLoading] = useState(true);
     const [heroMedia, setHeroMedia] = useState(null);
-    const [isScrolled, setIsScrolled] = useState(false);
     const watchBtnRef = useRef(null);
     const [isDarkText, setIsDarkText] = useState(false);
     const [isDemoUser, setIsDemoUser] = useState(false);
@@ -30,20 +27,6 @@ export default function Home() {
 
     const router = useRouter();
 
-    useEffect(() => {
-        const handleScroll = () => {
-            if (window.scrollY > 130) {
-                setIsScrolled(true);
-            } else {
-                setIsScrolled(false);
-            }
-        };
-
-        window.addEventListener("scroll", handleScroll);
-        return () => {
-            window.removeEventListener("scroll", handleScroll);
-        };
-    }, []);
 
     useEffect(() => {
         localRecoverUser().then((user) => {
@@ -85,9 +68,7 @@ export default function Home() {
             {
                 showDetails ? <MediaDetails media={showDetails} closeAction={() => setShowDetails(null)}/> : null
             }
-            {!heroMedia ? null :
-                <img className={`${styles.bgImage} ${isScrolled ? styles.bgImageHide : null}`} src={heroMedia.backdrop} alt={"backdrop"}/>}
-            <div className={`${styles.home} ${isScrolled || !heroMedia ? null : styles.onTop}`}>
+            <div className={`${styles.home}`}>
                 {
                     loading ?
                         <div className={styles.heroMovieLoading}>
@@ -99,16 +80,7 @@ export default function Home() {
                                     <img src={heroMedia.backdrop} alt={heroMedia.title}/>
                                     <div className={styles.heroMovieInfo}>
                                         <h1>{heroMedia.title}</h1>
-                                        <div className={styles.genreTag}>
-                                            {
-                                                heroMedia.genres.map((genre) => {
-                                                    return <p>{genre}</p>
-                                                })
-                                            }
-                                        </div>
-                                        <p className={styles.overview}>{heroMedia.overview.length > 100
-                                            ? heroMedia.overview.slice(0, 200) + '...'
-                                            : heroMedia.overview}</p>
+
                                         <div className={styles.btnDiv}>
                                             {
                                                 isDemoUser ? null :

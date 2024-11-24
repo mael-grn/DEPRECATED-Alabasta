@@ -105,15 +105,15 @@
         justify-content: start;
         align-items: start;
         flex-direction: column;
-        width: 165px;
-        height: 250px;
+        width: 140px;
+        height: 210px;
         border-radius: 25px;
         cursor: pointer;
     }
 
     .movieResume > img {
-        width: 165px;
-        height: 250px ;
+        width: 140px;
+        height: 210px ;
         border-radius: 25px;
         object-fit: cover ;
     }

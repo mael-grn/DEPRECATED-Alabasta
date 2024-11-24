@@ -1,5 +1,4 @@
 import { sql } from '@vercel/postgres';
-import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import authenticateToken from "@/app/api/authenticateToken";
 

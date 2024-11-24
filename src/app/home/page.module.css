@@ -35,19 +35,6 @@
 }
 
 
-.bgImage {
-    animation: bg-intro 1s ease;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    filter: blur(20px) opacity(0.5);
-}
-
-.bgImageHide {
-    opacity: 0;
-}
 .home .heroMovieLoading {
     width: 100%;
     height: 50vh;
@@ -63,13 +50,13 @@
 .home .heroMovie {
     position: relative;
     display: flex;
-    align-items: flex-end;
     width: 100%;
     height: 50vh;
-    border-radius: 25px;
 
-    overflow: hidden;
     color: var(--text-color);
+
+    justify-content: center;
+    align-items: flex-end;
 }
 
 .home .heroMovie.dark {
@@ -83,15 +70,19 @@
     height: 100%;
     width: 100%;
     object-fit: cover;
-    border-radius: 25px;
+    border-radius: 25px 25px 0 0;
 }
 
 .home .heroMovie .heroMovieInfo {
     z-index: 1;
-    display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 20px;
     padding: 20px;
+
+    display: flex;
+    width: 100%;
+    align-items: center;
+    background: linear-gradient(0deg, var(--dark-background-color) 0%, rgba(0, 0, 0, 0) 100%);
 }
 
 .home .heroMovie .heroMovieInfo h1 {
@@ -179,21 +170,30 @@
     .home .heroMovie {
         width: 100%;
         height: 30vh;
-        justify-content: flex-start;
-        align-items: flex-start;
+        justify-content: center;
+        align-items: flex-end;
     }
 
     .home .heroMovie .heroMovieInfo {
         display: flex;
         flex-direction: column;
+        width: calc(100% + 10px);
+        margin-left: -5px;
+        margin-bottom: -5px;
+        align-items: center;
         gap: 20px;
         padding: 20px;
+        background: linear-gradient(0deg, var(--dark-background-color) 30%, rgba(0, 0, 0, 0) 100%);
+
+    }
+
+    .home .heroMovie .heroMovieInfo h1 {
+        text-align: center;
     }
 
 
     .home .heroMovie .heroMovieInfo .genreTag {
-        display: flex;
-        gap: 10px;
+        display: none;
     }
 
     .home .heroMovie .heroMovieInfo .overview {
