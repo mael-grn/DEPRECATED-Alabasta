@@ -12,6 +12,10 @@
     --color-hover: #202020;
 }
 
+::-webkit-scrollbar {
+    display: none;
+}
+
 @media (hover: none) and (pointer: coarse) {
     *:focus {
         outline: none;
