@@ -44,7 +44,11 @@ export async function GET(req, { params }) {
             await sql`
             SELECT * FROM user_progress WHERE user_id = ${userId} AND movie_id = ${mediaId};
         `
-
+        console.log("season and episode  : ", season, episode);
+        console.log("query : ", `
+            SELECT * FROM user_progress WHERE user_id = ${userId} AND movie_id = ${mediaId};
+        `);
+        console.log("rows : ", rows);
         if (!rows || rows.length === 0) {
             return new Response(JSON.stringify({res: 0}), {
                 status: 200,
