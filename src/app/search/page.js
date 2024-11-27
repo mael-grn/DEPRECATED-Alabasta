@@ -25,7 +25,7 @@ export default function Search() {
     useEffect(() => {
         getHistory().then((res) => {
             if (res.success) {
-                if (res.data.length > 0) setHistory(res.data);
+                if (res.data.length > 0) setHistory(res.data.reverse());
             }
         });
     }, []);
