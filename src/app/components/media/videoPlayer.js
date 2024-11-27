@@ -35,6 +35,7 @@ export default function VideoPlayer({movieId, links, season = null, episode = nu
     const sliderRef = useRef(null);
     const videoRef = useRef(null);
     const playerRef = useRef(null);
+    const [shouldClosePopupRedirect, setShouldClosePopupRedirect] = useState(false);
 
     // Fonction pour afficher les contrôles et réinitialiser le timer d'inactivité
     const showPlayerControls = useCallback(() => {
@@ -107,6 +108,7 @@ export default function VideoPlayer({movieId, links, season = null, episode = nu
             setSubsLoading(true);
             getMovieDetails(movieId).then((movieData) => {
                 if (!movieData.success) {
+                    setShouldClosePopupRedirect(false);
                     setSubsLoading(false);
                     setShowPopup(true);
                     setPopupText("Une erreur s'est produite lors du chargement des détails du film")
@@ -126,6 +128,7 @@ export default function VideoPlayer({movieId, links, season = null, episode = nu
         setSubsLoading(true);
         getSubtitles(id).then((response) => {
             if (!response.success) {
+                setShouldClosePopupRedirect(false);
                 setSubsLoading(false);
                 setShowPopup(true);
                 setPopupText("Une erreur s'est produite lors du chargement des sous-titres")
@@ -153,6 +156,9 @@ export default function VideoPlayer({movieId, links, season = null, episode = nu
 
     const closePopup = () => {
         setShowPopup(false);
+        if (shouldClosePopupRedirect) {
+            router.back();
+        }
     }
 
     function formatTime(seconds) {
@@ -201,6 +207,7 @@ export default function VideoPlayer({movieId, links, season = null, episode = nu
                 onWaiting={() => setLoading(true)}
                 onPlaying={() => setLoading(false)}
                 onError={() => {
+                    setShouldClosePopupRedirect(true);
                     setShowPopup(true);
                     setPopupText("Une erreur s'est produite lors du chargement de la vidéo");
                 }}
