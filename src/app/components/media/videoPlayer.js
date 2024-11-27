@@ -33,6 +33,7 @@ export default function VideoPlayer({movieId, links, season = null, episode = nu
     const sliderRef = useRef(null);
     const videoRef = useRef(null);
     const playerRef = useRef(null);
+    const timecodeRef = useRef(null);
     const [shouldClosePopupRedirect, setShouldClosePopupRedirect] = useState(false);
     const [media, setMedia] = useState(null);
 
@@ -47,7 +48,7 @@ export default function VideoPlayer({movieId, links, season = null, episode = nu
 
     const saveProgress = useCallback(async () => {
         if (videoRef.current && videoRef.current.duration && !videoRef.current.paused) {
-            const progressPercentage = (videoRef.current.currentTime * 100 / videoRef.current.duration);
+            const progressPercentage = videoRef.current.currentTime;
             await setMediaProgress(movieId, progressPercentage, season, episode);
         }
     }, [movieId]);
@@ -154,13 +155,37 @@ export default function VideoPlayer({movieId, links, season = null, episode = nu
     }
 
     const handleSliderChange = (event) => {
-        videoRef.current.currentTime = (event.target.value / 100) * videoRef.current.duration;
+        videoRef.current.currentTime = event.target.value;
     };
 
     const handleMouseMove = () => {
         showPlayerControls();
     };
 
+    const handleMouseMoveOnSlider = (event) => {
+        if (!videoRef.current || !videoRef.current.duration) return;
+
+        const slider = sliderRef.current;
+        const rect = slider.getBoundingClientRect();
+        const offsetX = event.clientX - rect.left; // Position de la souris relative à la barre
+        const percent = offsetX / rect.width; // Pourcentage du slider
+        const time = percent * videoRef.current.duration; // Temps correspondant
+
+        // Mettre à jour le contenu et la position du timecode
+        const timecodeElement = timecodeRef.current;
+        if (timecodeElement) {
+            timecodeElement.textContent = formatTime(time);
+            timecodeElement.style.left = `${offsetX+70}px`;
+            timecodeElement.style.display = "block";
+        }
+    };
+
+    const handleMouseLeaveSlider = () => {
+        // Cacher le timecode lorsque la souris quitte le slider
+        if (timecodeRef.current) {
+            timecodeRef.current.style.display = "none";
+        }
+    };
 
     const closePopup = () => {
         setShowPopup(false);
@@ -209,7 +234,7 @@ export default function VideoPlayer({movieId, links, season = null, episode = nu
                         setStartSavingProgress(true);
                         setLoading(false); // Lecture possible après le préchargement
                         if (progress.success) {
-                            videoRef.current.currentTime = (progress.data / 100) * videoRef.current.duration;
+                            videoRef.current.currentTime = progress.data;
                         }
                     });
                 }}
@@ -292,14 +317,18 @@ export default function VideoPlayer({movieId, links, season = null, episode = nu
 
                 <div className={styles.positionSlider}>
                     <p>{videoRef.current?.currentTime ? formatTime(videoRef.current.currentTime) : ""}</p>
+                    <div className={styles.timecodePreview} ref={timecodeRef}></div>
                     <input
                         ref={sliderRef}
                         type="range"
                         min="0"
-                        max="100"
-                        value={videoRef.current && videoRef.current.duration && videoRef.current.currentTime ? (videoRef.current.currentTime * 100 / videoRef.current.duration) : 0}
+                        max={videoRef.current && videoRef.current.duration && videoRef.current.currentTime ? videoRef.current.duration : 100}
+                        value={videoRef.current && videoRef.current.duration && videoRef.current.currentTime ? videoRef.current.currentTime : 0}
                         onChange={handleSliderChange}
+                        onMouseMove={handleMouseMoveOnSlider}
+                        onMouseLeave={handleMouseLeaveSlider}
                     />
+
                     <p>{videoRef.current?.currentTime ? formatTime(videoRef.current.duration - videoRef.current.currentTime) : ""}</p>
                 </div>
             </div>
