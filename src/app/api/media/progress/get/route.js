@@ -3,17 +3,23 @@ import authenticateToken from "@/app/api/authenticateToken";
 import {sql} from "@vercel/postgres";
 export const dynamic = 'force-dynamic';
 
-export async function GET(req, { params }) {
+/**
+ * get progress of a movie
+ * @param req
+ * @param params
+ * @returns {Promise<Response>}
+ * @constructor
+ */
+export async function POST(req) {
     try {
-        const {mediaId, season, episode} = params;
-        const token = req.headers.get('Authorization');
-
-        if (!token) {
-            return new Response(JSON.stringify({error: "Missing or invalid Authorization header"}), {
-                status: 401,
-                headers: {'Content-Type': 'application/json'},
+        if (!req.body) {
+            return new Response(JSON.stringify({ message: 'wrong data in the query' }), {
+                status: 400,
+                headers: { 'Content-Type': 'application/json' },
             });
         }
+
+        const { mediaId, season, episode, token } = await req.json();
 
         const userId = await authenticateToken(token);
 
@@ -24,16 +30,22 @@ export async function GET(req, { params }) {
             });
         }
 
-        if (isNaN(season) || isNaN(episode)) {
+        // check if season and episode are numbers
+        if (season && episode && (isNaN(season) || isNaN(episode))) {
             return new Response(JSON.stringify({message: 'season and episode must be numbers'}), {
                 status: 400,
                 headers: {'Content-Type': 'application/json'},
             });
         }
 
-        const {rows} = await sql`
+        // get progress, if season and episode are provided, get progress of that episode, otherwise get progress of the movie
+        const {rows} = (season && episode) ?
+            await sql`
             SELECT * FROM user_progress WHERE user_id = ${userId} AND movie_id = ${mediaId} AND season = ${parseInt(season)} AND episode = ${parseInt(episode)};
-        `;
+        ` :
+            await sql`
+            SELECT * FROM user_progress WHERE user_id = ${userId} AND movie_id = ${mediaId};
+        `
 
         if (!rows || rows.length === 0) {
             return new Response(JSON.stringify({res: 0}), {
@@ -46,7 +58,6 @@ export async function GET(req, { params }) {
                 headers: {'Content-Type': 'application/json'},
             });
         }
-
     } catch (error) {
         return new Response(JSON.stringify({message: 'server error : ' + error}), {
             status: 500,

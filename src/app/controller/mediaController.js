@@ -319,15 +319,12 @@ export const getMediaProgress = async (mediaId, season = null, episode = null) =
         return new ServerResponse(false, ErrorTypes.NOUSER, null);
     }
 
-    const url = season && episode ? `/api/media/progress/get/${mediaId}/${season}/${episode}` : `/api/media/progress/get/${mediaId}`;
-
-    const res = await fetch(url, {
-        method: 'GET',
+    const res = await fetch(`/api/media/progress/get/`, {
+        method: 'POST',
         cache: 'no-store',
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `${token}`
-        },
+        },        body: JSON.stringify({mediaId, season, episode, token}),
     });
 
     if (res.ok) {

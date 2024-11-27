@@ -10,7 +10,6 @@ export const dynamic = 'force-dynamic';
  * @constructor
  */
 export async function POST(req) {
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     try {
         if (!req.body) {
             return new Response(JSON.stringify({ message: 'wrong data in the query' }), {
