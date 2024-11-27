@@ -36,6 +36,8 @@ export default function VideoPlayer({movieId, links, season = null, episode = nu
     const [shouldClosePopupRedirect, setShouldClosePopupRedirect] = useState(false);
     const [media, setMedia] = useState(null);
 
+
+
     // Fonction pour afficher les contrôles et réinitialiser le timer d'inactivité
     const showPlayerControls = useCallback(() => {
         setShowControls(true);
@@ -64,7 +66,6 @@ export default function VideoPlayer({movieId, links, season = null, episode = nu
 
     useEffect(() => {
         const intervalId = setInterval(() => {
-            console.log(startSavingProgress);
             if (startSavingProgress) saveProgress();
         }, 5000); // Sauvegarde toutes les 5 secondes
 
@@ -80,15 +81,24 @@ export default function VideoPlayer({movieId, links, season = null, episode = nu
     }, [showControls]);
 
     const togglePlayPause = () => {
-        if (videoRef.current.paused) {
-            setPlayPauseAnimation('morph-play-pause')
+        if (!videoRef.current || loading) return;
 
-            videoRef.current.play();
+        if (videoRef.current.paused) {
+            setLoading(true)
+            videoRef.current.play()
+                .then(() => {
+                    setLoading(false)
+                    setPlayPauseAnimation('morph-play-pause');
+                })
+                .catch((error) => {
+                    setLoading(false)
+                    setShowPopup(true);
+                });
         } else {
-            setPlayPauseAnimation('morph-pause-play')
             videoRef.current.pause();
+            setPlayPauseAnimation('morph-pause-play');
         }
-    }
+    };
 
     const toggleFullscreen = () => {
         if (!document.fullscreenElement) {
@@ -191,23 +201,29 @@ export default function VideoPlayer({movieId, links, season = null, episode = nu
                 src={links[selectedQuality].link}
                 autoPlay
                 onLoadStart={() => setLoading(true)}
+                onPlaying={() => setLoading(false)} // Lecture commencée
+                onWaiting={() => setLoading(true)} // Chargement supplémentaire requis
+                onPlay={() => setLoading(true)} // Déclenché lors de la tentative de lecture
                 onLoadedData={() => {
                     getMediaProgress(movieId, season, episode).then((progress) => {
                         setStartSavingProgress(true);
-                        setLoading(false);
+                        setLoading(false); // Lecture possible après le préchargement
                         if (progress.success) {
-                            console.log(progress.data);
                             videoRef.current.currentTime = (progress.data / 100) * videoRef.current.duration;
                         }
                     });
-                }
-                }
-                onWaiting={() => setLoading(true)}
-                onPlaying={() => setLoading(false)}
+                }}
                 onError={() => {
-                    setShouldClosePopupRedirect(true);
-                    setShowPopup(true);
-                    setPopupText("Une erreur s'est produite lors du chargement de la vidéo");
+                    if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+                        setShowPopup(true);
+                        setPopupText("Firefox n'est pas compatible avec le format vidéo. Utilise un autre navigateur looser.")
+                        setShouldClosePopupRedirect(true);
+                    } else {
+                        setShouldClosePopupRedirect(true);
+                        setShowPopup(true);
+                        setPopupText("Une erreur s'est produite lors du chargement de la vidéo");
+                    }
+
                 }}
             >
                 {subsSrc && (

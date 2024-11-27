@@ -1,6 +1,7 @@
 import tasfSearchLinkMovie from "@/app/api/media/tasf/tasfSearchLinkMovie";
 import authenticateToken from "@/app/api/authenticateToken";
 import tasfSearchLinkTv from "@/app/api/media/tasf/tasfSearchLinkTv";
+export const dynamic = 'force-dynamic';
 
 /**
  * search link for media streaming
@@ -9,6 +10,7 @@ import tasfSearchLinkTv from "@/app/api/media/tasf/tasfSearchLinkTv";
  * @constructor
  */
 export async function POST(req) {
+    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     try {
         if (!req.body) {
             return new Response(JSON.stringify({ message: 'wrong data in the query' }), {
