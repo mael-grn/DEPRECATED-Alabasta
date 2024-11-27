@@ -1,10 +1,15 @@
 
 import authenticateToken from "@/app/api/authenticateToken";
-import tmdbGetPopular from "@/app/api/media/tmdb/tmdbGetPopular";
 import tmdbGetTopRated from "@/app/api/media/tmdb/tmdbGetTopRated";
 export const dynamic = 'force-dynamic';
 
-export async function GET(req, res) {
+/**
+ * Get top rated movies
+ * @param req
+ * @returns {Promise<Response>}
+ * @constructor
+ */
+export async function GET(req) {
     try {
         const token = req.headers.get('Authorization');
 

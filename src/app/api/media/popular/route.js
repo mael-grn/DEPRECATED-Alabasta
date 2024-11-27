@@ -3,6 +3,12 @@ import tmdbGetPopular from "@/app/api/media/tmdb/tmdbGetPopular";
 
 export const dynamic = 'force-dynamic';
 
+/**
+ * get popular movies from tmdb
+ * @param req
+ * @returns {Promise<Response>}
+ * @constructor
+ */
 export async function GET(req) {
     try {
         const token = req.headers.get('Authorization');

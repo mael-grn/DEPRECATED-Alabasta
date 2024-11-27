@@ -1,11 +1,14 @@
-import { sql } from '@vercel/postgres';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import tasfSearchLinkMovie from "@/app/api/media/tasf/tasfSearchLinkMovie";
 import authenticateToken from "@/app/api/authenticateToken";
 import tasfSearchLinkTv from "@/app/api/media/tasf/tasfSearchLinkTv";
 
-export async function POST(req, res) {
+/**
+ * search link for media streaming
+ * @param req
+ * @returns {Promise<Response>}
+ * @constructor
+ */
+export async function POST(req) {
     try {
         if (!req.body) {
             return new Response(JSON.stringify({ message: 'wrong data in the query' }), {
@@ -25,6 +28,7 @@ export async function POST(req, res) {
             });
         }
 
+        // if season and episode are provided, search for tv show, else search for movie
         let res
         if (season && episode) {
             res = await tasfSearchLinkTv(mediaId, season, episode);

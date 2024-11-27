@@ -1,5 +1,9 @@
 import Media from "@/app/model/media";
 
+/**
+ * Get the list of now playing movies from TMDB
+ * @returns {Promise<*[]>}
+ */
 export default async function tmdbGetNowPlaying() {
 
     const url = 'https://api.themoviedb.org/3/movie/now_playing?language=fr&page=1';

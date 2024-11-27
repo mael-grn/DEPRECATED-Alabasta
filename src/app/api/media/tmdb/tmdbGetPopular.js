@@ -1,5 +1,9 @@
 import Media from "@/app/model/media";
 
+/**
+ * Get the list of popular movies from TMDB
+ * @returns {Promise<*[]>}
+ */
 export default async function tmdbGetPopular() {
     const url = 'https://api.themoviedb.org/3/movie/popular?language=fr&page=1';
     const options = {

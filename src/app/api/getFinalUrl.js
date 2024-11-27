@@ -1,3 +1,8 @@
+/**
+ * Get the final URL after redirections
+ * @param initialUrl
+ * @returns {Promise<string|null>}
+ */
 export default async function getFinalUrl(initialUrl) {
     try {
         const response = await fetch(initialUrl, { redirect: "manual" });

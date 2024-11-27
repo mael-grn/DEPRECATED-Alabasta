@@ -4,6 +4,13 @@ import tmdbSearchMovie from "@/app/api/media/tmdb/tmdbSearchMovie";
 import tmdbSearchTv from "@/app/api/media/tmdb/tmdbSearchTv";
 export const dynamic = 'force-dynamic';
 
+/**
+ * Search for movies and tv shows
+ * @param req
+ * @param params
+ * @returns {Promise<Response>}
+ * @constructor
+ */
 export async function GET(req, { params }) {
     try {
         const {searchValue} = params;
@@ -25,6 +32,7 @@ export async function GET(req, { params }) {
             });
         }
 
+        // Search for movies and tv shows with tmdb api
         const movieSearchResult = await tmdbSearchMovie(searchValue);
         const tvSearchResult = await tmdbSearchTv(searchValue);
         const searchResult = movieSearchResult.concat(tvSearchResult);

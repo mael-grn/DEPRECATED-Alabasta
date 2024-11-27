@@ -2,7 +2,13 @@
 import authenticateToken from "@/app/api/authenticateToken";
 import {sql} from "@vercel/postgres";
 
-export async function POST(req, res) {
+/**
+ * Set the progress of a user on a media
+ * @param req
+ * @returns {Promise<Response>}
+ * @constructor
+ */
+export async function POST(req) {
     try {
         if (!req.body) {
             return new Response(JSON.stringify({ message: 'wrong data in the query' }), {
@@ -22,11 +28,14 @@ export async function POST(req, res) {
             });
         }
 
+        // Check if the media exists in the user_progress table
         const {rows} = await sql`
             SELECT * FROM user_progress WHERE user_id = ${userId} AND movie_id = ${mediaId};
         `;
 
+        // If the media exists, update the progress
         if (rows && rows.length > 0) {
+            //if season and episode are provided, update them
             if (season && episode) {
                 await sql`
                 UPDATE user_progress SET progress = ${progressPercent}, season = ${season}, episode = ${episode} WHERE user_id = ${userId} AND movie_id = ${mediaId};

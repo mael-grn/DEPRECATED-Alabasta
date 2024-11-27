@@ -1,5 +1,12 @@
 import Media from "@/app/model/media";
 
+/**
+ * Get details of a season from TMDB
+ * @param tvId
+ * @param seasonId
+ * @param lang
+ * @returns {Promise<Media|null>}
+ */
 export default async function tmdbGetDetailsSeason(tvId, seasonId, lang="fr") {
 
     const url = `https://api.themoviedb.org/3/tv/${tvId}/season/${seasonId}?language=${lang}`
@@ -13,7 +20,7 @@ export default async function tmdbGetDetailsSeason(tvId, seasonId, lang="fr") {
 
     const res = await fetch(url, options)
     const data = await res.json();
-
+    // Check if the season exists and parse it
     try {
         const media = new Media(data.id, data.name);
         media.type = "season";

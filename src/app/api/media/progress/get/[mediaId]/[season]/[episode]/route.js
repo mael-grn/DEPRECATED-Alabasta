@@ -47,11 +47,6 @@ export async function GET(req, { params }) {
             });
         }
 
-        return new Response(JSON.stringify({ res: searchResult }), {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' },
-        });
-
     } catch (error) {
         return new Response(JSON.stringify({message: 'server error : ' + error}), {
             status: 500,

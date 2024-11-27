@@ -1,7 +1,13 @@
 import {fetch} from "next/dist/compiled/@edge-runtime/primitives";
 import getFinalUrl from "@/app/api/getFinalUrl";
 
+/**
+ * Search for links of a movie on TheyAllSayFlix
+ * @param tmdbId
+ * @returns {Promise<*[]>}
+ */
 export default async function tasfSearchLinkMovie(tmdbId) {
+    // Fetch the data
     const url = `https://theyallsayflix.su/api/v1/search?type=movie&tmdb_id=${tmdbId}`;
     const options = {
         method: 'GET',
@@ -9,16 +15,18 @@ export default async function tasfSearchLinkMovie(tmdbId) {
             accept: 'application/json',
         }
     };
-
     const res = await fetch(url, options)
     const data = await res.json();
 
     const links = [];
 
+    //for each stream links provided by TheyAllSayFlix
     for (const stream of data.streams) {
+        //if the quality is not already in the list and the link is not a 3D link
         if (!links.some(item => item.quality === stream.quality) && !stream.play_url.toString().endsWith("3D")) {
             const finalLink = await getFinalUrl(stream.play_url);
             if (finalLink) {
+                //add the link to the list and set the quality with good naming
                 let quality;
                 switch (stream.quality) {
                     case "2160p":
@@ -38,6 +46,7 @@ export default async function tasfSearchLinkMovie(tmdbId) {
                         break;
 
                 }
+                //add the link to the list, replace the download link by the API proxy link to avoid cors errors
                 links.push({
                     quality: quality,
                     link: finalLink.replace(new RegExp('^' + "http://theyallsayflix.su:8081/download/"), "/api/media/tasf/"),

@@ -1,5 +1,11 @@
 import Media from "@/app/model/media";
 
+/**
+ * Get details of a movie from TMDB
+ * @param id
+ * @param lang
+ * @returns {Promise<Media|null>}
+ */
 export default async function tmdbGetDetailsMovie(id, lang="fr") {
     if (!id) return null;
     const url = `https://api.themoviedb.org/3/movie/${id}?language=${lang}`;
@@ -14,6 +20,7 @@ export default async function tmdbGetDetailsMovie(id, lang="fr") {
     const res = await fetch(url, options)
     const data = await res.json();
 
+    // Check if the movie exists and parse it
     try {
         const media = new Media(id, data.title);
         media.type = "movie";

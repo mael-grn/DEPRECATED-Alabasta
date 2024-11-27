@@ -8,7 +8,6 @@ import jwt from "jsonwebtoken";
  */
 export default async function authenticateToken(token) {
     const secretKey = process.env.AUTH_SECRET
-
     try {
         const res = jwt.verify(token, secretKey)
         return res.key;
@@ -16,3 +15,4 @@ export default async function authenticateToken(token) {
         return null;
     }
 }
+

@@ -2,7 +2,14 @@ import { sql } from '@vercel/postgres';
 import jwt from 'jsonwebtoken';
 import authenticateToken from "@/app/api/authenticateToken";
 
-export async function POST(req, res) {
+/**
+ * Route to get the search history of a user
+ * @param req
+ * @param res
+ * @returns {Promise<Response>}
+ * @constructor
+ */
+export async function POST(req) {
     try {
         // extraction des données de la requête
         if (!req.body) {

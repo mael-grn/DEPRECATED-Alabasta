@@ -1,5 +1,12 @@
 export const dynamic = 'force-dynamic';
 
+/**
+ * Proxy for TheyAllSayFlix download links to avoid CORS errors
+ * @param req
+ * @param params
+ * @returns {Promise<Response>}
+ * @constructor
+ */
 export async function GET(req, {params}) {
     try {
         const {tasfUrl} = params;

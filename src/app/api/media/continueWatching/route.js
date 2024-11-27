@@ -1,13 +1,18 @@
 
 import authenticateToken from "@/app/api/authenticateToken";
-import tmdbGetNowPlaying from "@/app/api/media/tmdb/tmdbGetNowPlaying";
 import {sql} from "@vercel/postgres";
-import tmdbGetDetailsSeason from "@/app/api/media/tmdb/tmdbGetDetailsSeason";
 import tmdbGetDetailsTv from "@/app/api/media/tmdb/tmdbGetDetailsTv";
 import tmdbGetDetailsMovie from "@/app/api/media/tmdb/tmdbGetDetailsMovie";
+import postInitialVerifications from "@/app/api/postInitialVerifications";
 export const dynamic = 'force-dynamic';
 
-export async function POST(req, res) {
+/**
+ * Get the list of media that the user has started but not finished
+ * @param req
+ * @returns {Promise<Response>}
+ * @constructor
+ */
+export async function POST(req) {
     try {
         if (!req.body) {
             return new Response(JSON.stringify({ message: 'wrong data in the query' }), {
@@ -15,11 +20,8 @@ export async function POST(req, res) {
                 headers: { 'Content-Type': 'application/json' },
             });
         }
-
         const { token } = await req.json();
-
         const userId = await authenticateToken(token);
-
         if (!userId) {
             return new Response(JSON.stringify({ message: 'wrong token' }), {
                 status: 401,
@@ -27,14 +29,15 @@ export async function POST(req, res) {
             });
         }
 
+        // Get the list of tmdbId that the user has started but not finished
         const {rows} = await sql`
             SELECT * FROM started_not_finished WHERE user_id = ${userId};
         `;
 
-        console.log(rows)
-
         const mediaLst = []
+        // Get the details of each medias from imdbId
         for (const element of rows) {
+            // If the media is a tv show, get the details of the tv show
             if (element.season && element.episode) {
                 const media = await tmdbGetDetailsTv(element.movie_id)
                 mediaLst.push(media)
@@ -48,7 +51,6 @@ export async function POST(req, res) {
             status: 200,
             headers: { 'Content-Type': 'application/json' },
         });
-
 
     } catch (error) {
         return new Response(JSON.stringify({message: 'server error : ' + error}), {

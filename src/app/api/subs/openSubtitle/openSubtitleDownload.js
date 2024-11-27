@@ -1,6 +1,13 @@
 import {deleteOSToken, getOSToken} from "@/app/api/subs/openSubtitle/OSToken";
 
+/**
+ * Download subtitles from opensubtitle. Subs are converted to webvtt format
+ * @param subsId {string} - subtitle id
+ * @returns {Promise<string|null>}
+ */
 export default async function openSubtitleDownload(subsId) {
+
+    //recover the token for the opensubtitle api
     const osToken = await getOSToken();
     if (!osToken) {
         console.error("impossible to get open subtitle token")
@@ -25,6 +32,7 @@ export default async function openSubtitleDownload(subsId) {
         return null;
     }
 
+    //get the link to download the subtitles
     const linkData = await linkResponse.json();
 
     const subsResponse = await fetch(linkData.link, {
@@ -40,10 +48,17 @@ export default async function openSubtitleDownload(subsId) {
         return null;
     }
 
+    //convert the subtitles to webvtt format
     const subsData = await subsResponse.text();
     return srt2webvtt(subsData);
 }
 
+/**
+ * Convert srt subtitles to webvtt format
+ * Copied from another person on the internet, don't ask me how it works
+ * @param data
+ * @returns {string}
+ */
 function srt2webvtt(data) {
     // remove dos newlines
     var srt = data.replace(/\r+/g, '');
@@ -60,6 +75,13 @@ function srt2webvtt(data) {
     }
     return result;
 }
+
+/**
+ * Convert individual srt subtitle to webvtt format
+ * Copied from another person on the internet, don't ask me how it works
+ * @param caption
+ * @returns {string}
+ */
 function convertSrtCue(caption) {
     // remove all html tags for security reasons
     //srt = srt.replace(/<[a-zA-Z\/][^>]*>/g, '');

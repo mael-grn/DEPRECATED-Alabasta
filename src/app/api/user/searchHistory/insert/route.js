@@ -1,7 +1,13 @@
 import { sql } from '@vercel/postgres';
 import authenticateToken from "@/app/api/authenticateToken";
 
-export async function POST(req, res) {
+/**
+ * Route to insert a search query in the user's history
+ * @param req
+ * @returns {Promise<Response>}
+ * @constructor
+ */
+export async function POST(req) {
     try {
         // extraction des données de la requête
         if (!req.body) {

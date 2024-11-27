@@ -1,10 +1,15 @@
 
-import jwt from 'jsonwebtoken';
 import authenticateToken from "@/app/api/authenticateToken";
-import {deleteOSToken, getOSToken} from "@/app/api/subs/openSubtitle/OSToken";
+import {deleteOSToken} from "@/app/api/subs/openSubtitle/OSToken";
 import openSubtitleDownload from "@/app/api/subs/openSubtitle/openSubtitleDownload";
 
-export async function POST(req, res) {
+/**
+ * Download subtitles from opensubtitle
+ * @param req
+ * @returns {Promise<Response>}
+ * @constructor
+ */
+export async function POST(req) {
     try {
         if (!req.body) {
             return new Response(JSON.stringify({ message: 'wrong data in the query' }), {

@@ -1,6 +1,13 @@
 import getFinalUrl from "@/app/api/getFinalUrl";
 import tmdbGetDetailsSeason from "@/app/api/media/tmdb/tmdbGetDetailsSeason";
 
+/**
+ * Search for links of a tv show on TheyAllSayFlix
+ * @param tmdbId
+ * @param season
+ * @param episode
+ * @returns {Promise<*[]>}
+ */
 export default async function tasfSearchLinkTv(tmdbId, season, episode) {
     const url = `https://theyallsayflix.su/api/v1/search?type=show&tmdb_id=${tmdbId}&season=${season}&episode=${episode}`;
     const options = {
@@ -15,6 +22,7 @@ export default async function tasfSearchLinkTv(tmdbId, season, episode) {
     const links = [];
 
     for (const stream of data.streams) {
+        //if the quality is not already in the list and the link is not a 3D link
         if (!links.some(item => item.quality === stream.quality) && !stream.play_url.toString().endsWith("3D")) {
             const finalLink = await getFinalUrl(stream.play_url);
             if (finalLink) {
@@ -37,6 +45,7 @@ export default async function tasfSearchLinkTv(tmdbId, season, episode) {
                         break;
 
                 }
+                //add the link to the list, replace the download link by the API proxy link to avoid cors errors
                 links.push({
                     quality: quality,
                     link: finalLink.replace(new RegExp('^' + "http://theyallsayflix.su:8081/download/"), "/api/media/tasf/"),

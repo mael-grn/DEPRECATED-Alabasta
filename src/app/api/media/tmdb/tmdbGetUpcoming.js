@@ -1,5 +1,9 @@
 import Media from "@/app/model/media";
 
+/**
+ * Get the list of upcoming movies from TMDB
+ * @returns {Promise<*[]>}
+ */
 export default async function tmdbGetUpcoming() {
     const url = 'https://api.themoviedb.org/3/movie/upcoming?language=fr&page=1';
     const options = {

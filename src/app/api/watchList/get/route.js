@@ -1,11 +1,15 @@
 import { sql } from '@vercel/postgres';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import authenticateToken from "@/app/api/authenticateToken";
 import tmdbGetDetailsMovie from "@/app/api/media/tmdb/tmdbGetDetailsMovie";
 import tmdbGetDetailsTv from "@/app/api/media/tmdb/tmdbGetDetailsTv";
 
-export async function POST(req, res) {
+/**
+ * Route to get the user's watch list
+ * @param req
+ * @returns {Promise<Response>}
+ * @constructor
+ */
+export async function POST(req) {
     try {
         // extraction des données de la requête
         if (!req.body) {

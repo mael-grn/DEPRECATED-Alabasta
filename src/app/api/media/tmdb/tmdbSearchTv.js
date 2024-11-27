@@ -1,5 +1,10 @@
 import Media from "@/app/model/media";
 
+/**
+ * Search for TV shows on TMDB
+ * @param queryString
+ * @returns {Promise<*[]>}
+ */
 export default async function tmdbSearchTv(queryString) {
     let url = `https://api.themoviedb.org/3/search/tv?query=${queryString}&include_adult=false&language=fr`
 

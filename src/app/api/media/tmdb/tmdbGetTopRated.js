@@ -1,5 +1,9 @@
 import Media from "@/app/model/media";
 
+/**
+ * Get the list of top rated movies from TMDB
+ * @returns {Promise<*[]>}
+ */
 export default async function tmdbGetTopRated() {
     const url = 'https://api.themoviedb.org/3/movie/top_rated?language=fr&page=1';
     const options = {

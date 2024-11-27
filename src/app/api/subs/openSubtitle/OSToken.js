@@ -1,5 +1,9 @@
 import {sql} from "@vercel/postgres";
 
+/**
+ * Get OpenSubtitles token from database or fetch a new one
+ * @returns {Promise<*|null>}
+ */
 export const getOSToken = async () => {
     const { rows } = await sql`
                 SELECT * FROM opensubs_token;
@@ -36,6 +40,10 @@ export const getOSToken = async () => {
     }
 }
 
+/**
+ * Delete OpenSubtitles token from database
+ * @returns {Promise<void>}
+ */
 export const deleteOSToken = async () => {
     await sql`
                     DELETE FROM opensubs_token;

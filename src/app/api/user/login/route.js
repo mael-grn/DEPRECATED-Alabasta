@@ -2,6 +2,13 @@ import { sql } from '@vercel/postgres';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
+/**
+ * Route to log a user in
+ * @param req
+ * @param res
+ * @returns {Promise<Response|*>}
+ * @constructor
+ */
 export async function POST(req, res) {
         try {
             //await addUser();

@@ -1,9 +1,13 @@
 import { sql } from '@vercel/postgres';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import authenticateToken from "@/app/api/authenticateToken";
 
-export async function POST(req, res) {
+/**
+ * Route to delete a movie or show from the user's watch list
+ * @param req
+ * @returns {Promise<Response>}
+ * @constructor
+ */
+export async function POST(req) {
     try {
         // extraction des données de la requête
         if (!req.body) {

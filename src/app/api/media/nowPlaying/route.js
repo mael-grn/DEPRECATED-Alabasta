@@ -3,10 +3,15 @@ import authenticateToken from "@/app/api/authenticateToken";
 import tmdbGetNowPlaying from "@/app/api/media/tmdb/tmdbGetNowPlaying";
 export const dynamic = 'force-dynamic';
 
-export async function GET(req, res) {
+/**
+ * Get now playing movies from TMDB
+ * @param req
+ * @returns {Promise<Response>}
+ * @constructor
+ */
+export async function GET(req) {
     try {
         const token = req.headers.get('Authorization');
-
         if (!token) {
             return new Response(JSON.stringify({error: "Missing or invalid Authorization header"}), {
                 status: 401,

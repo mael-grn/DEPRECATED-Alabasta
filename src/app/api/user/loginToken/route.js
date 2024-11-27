@@ -2,7 +2,13 @@ import { sql } from '@vercel/postgres';
 import jwt from 'jsonwebtoken';
 import authenticateToken from "@/app/api/authenticateToken";
 
-export async function POST(req, res) {
+/**
+ * log a user in only using a token
+ * @param req
+ * @returns {Promise<Response>}
+ * @constructor
+ */
+export async function POST(req) {
     try {
         // extraction des données de la requête
         if (!req.body) {

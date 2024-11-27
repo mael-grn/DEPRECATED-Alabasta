@@ -1,3 +1,9 @@
+/**
+ * Search for subtitles on opensubtitles
+ * filtered by french language
+ * @param imdbId
+ * @returns {Promise<*|null>}
+ */
 export default async function openSubtitleSearch(imdbId) {
 
     const res = await fetch(`https://api.opensubtitles.com/api/v1/subtitles?imdb_id=${imdbId}&languages=fr`, {
@@ -16,7 +22,7 @@ export default async function openSubtitleSearch(imdbId) {
     const data = await res.json();
 
 
-    // on retourne les file_id par ordre de téléchargement
+    // on retourne les file_id par ordre de téléchargement fitrés par la langue française
     return data.data
         .sort((a, b) => b.attributes.download_count - a.attributes.download_count)
         .map((item, index) => ({name: "francais " + (index+1), id: item.attributes.files[0].file_id}));

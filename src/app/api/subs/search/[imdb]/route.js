@@ -1,6 +1,13 @@
 
 import openSubtitleSearch from "@/app/api/subs/openSubtitle/openSubtitleSearch";
 
+/**
+ * Search for subtitles on opensubtitles
+ * @param req
+ * @param params
+ * @returns {Promise<Response>}
+ * @constructor
+ */
 export async function GET(req, { params }) {
     try {
 
