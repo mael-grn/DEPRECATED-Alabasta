@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useLayoutEffect, useRef, useState} from "react";
 import {localRecoverUser} from "@/app/controller/userController";
 import {getMovieDetails, getSeasonDetails, getTvDetails} from "@/app/controller/mediaController";
 import styles from "@/app/components/media/mediaDetails.module.css"
@@ -7,6 +7,7 @@ import Image from "next/image";
 import {addToWatchList, checkIfInWatchList, removeFromWatchList} from "@/app/controller/watchListController";
 import DropDown from "@/app/components/ui/dropDown";
 import {useRouter} from "next/navigation";
+import {load} from "cheerio";
 
 export default function MediaDetails({media, closeAction}) {
     const router = useRouter()
@@ -21,6 +22,7 @@ export default function MediaDetails({media, closeAction}) {
     const [watchListLoading, setWatchListLoading] = useState(true);
     const [season, setSeason] = useState(null);
     const [seasonLoading, setSeasonLoading] = useState(false);
+    const scrollableRef = useRef(null);
 
     const close = () => {
         bgRef.current.classList.add(styles.closing);
@@ -38,6 +40,28 @@ export default function MediaDetails({media, closeAction}) {
     }
 
     useEffect(() => {
+        const element = scrollableRef.current;
+        const handleWheel = (e) => {
+            if (!element) return;
+            const { scrollTop, scrollHeight, clientHeight } = element;
+            e.stopPropagation();
+            const atTop = scrollTop === 0;
+            const atBottom = scrollTop + clientHeight + 1 >= scrollHeight;
+            if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
+                e.preventDefault();
+            }
+        };
+        if (element) {
+            element.addEventListener('wheel', handleWheel, { passive: false });
+        }
+        return () => {
+            if (element) {
+                element.removeEventListener('wheel', handleWheel);
+            }
+        };
+    }, [loading]);
+
+    useLayoutEffect(() => {
         localRecoverUser().then((user) => {
             if (user && user.id === 3) {
                 setIsDemoUser(true);
@@ -84,6 +108,8 @@ export default function MediaDetails({media, closeAction}) {
     }
 
     const preventScrollPropagation = (e) => {
+        e.preventDefault();
+        console.log("prevent");
         e.stopPropagation();
     };
 
@@ -121,7 +147,7 @@ export default function MediaDetails({media, closeAction}) {
     }
 
     return (
-        <div onWheel={preventScrollPropagation}>
+        <div>
             <div className={styles.mediaDetailsBg} onClick={close} ref={bgRef}/>
             <div className={`${styles.mediaDetails} ${loading ? styles.loading : null}`} ref={mediaDetailsRef}>
 
@@ -131,7 +157,7 @@ export default function MediaDetails({media, closeAction}) {
                 </button>
                 {
                     loading ? <LordIcon iconName={"loader-white"} animationType={"loop"}/> :
-                        <div>
+                        <div ref={scrollableRef}>
                             <img src={mediaDetails.backdrop} alt={mediaDetails.title}
                                    className={styles.backdrop}/>
                             <div className={styles.mediaDetailsContent}>

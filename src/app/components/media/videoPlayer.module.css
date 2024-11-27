@@ -30,7 +30,28 @@
     height: 100%;
 }
 
+.playerElements .title {
+    position: absolute;
+    top: 20px;
+    left: 90px;
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    height: 50px;
+}
 
+.playerElements .title h1 {
+    margin: 0;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.playerElements .title p {
+    margin: 0;
+    font-size: 16px;
+}
 
 .playerElements .playerButton {
     border: none;
@@ -43,6 +64,11 @@
     border-radius: 50px;
     width: 50px;
     height: 50px;
+}
+
+.playerElements.hide .title {
+    transform: translateX(-100%);
+    opacity: 0;
 }
 
 .playerElements .playerButton:hover {
@@ -118,19 +144,25 @@
     opacity: 0;
 }
 
+.playerElements.hide .settings {
+    transform: translateX(100%) scale(0) !important;
+    opacity: 0 !important;
+}
+
 .settings {
     z-index: 20;
-    transform: translateX(200%);
+    transform: translateX(100%) scale(0);
     position: fixed;
     top: 90px;
-    right: 0;
+    right: 20px;
     padding: 20px;
     max-width: calc(50% - 40px);
     width: fit-content;
+    min-width: 300px;
     height: calc(100vh - 220px);
     max-height: calc(100vh - 220px);
     overflow-y: auto;
-    border-radius: 25px 0 0 25px;
+    border-radius: 25px 25px 25px 25px;
     display: flex;
     background-color: var(--transparent-background-color);
     backdrop-filter: blur(20px);
@@ -176,7 +208,7 @@
 }
 
 .playerElements .settings.show {
-    transform: translateX(0);
+    transform: translateX(0) scale(1);
     opacity: 1;
 }
 

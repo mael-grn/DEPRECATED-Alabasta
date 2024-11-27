@@ -16,6 +16,7 @@
     display: none;
 }
 
+
 @media (hover: none) and (pointer: coarse) {
     *:focus {
         outline: none;
@@ -23,6 +24,7 @@
 }
 
 * {
+    scrollbar-width: none;
     transition: all .3s ease;
     user-select: none;
 }

@@ -7,9 +7,9 @@ import {useCallback, useEffect, useRef, useState} from "react";
 import {useRouter} from "next/navigation";
 import Popup from "@/app/components/ui/popup";
 import {
-     getMediaProgress,
+    getMediaProgress,
     getMovieDetails,
-    getSubtitles,
+    getSubtitles, getTvDetails,
     searchSubtitles,
     setMediaProgress
 } from "@/app/controller/mediaController";
@@ -21,10 +21,8 @@ export default function VideoPlayer({movieId, links, season = null, episode = nu
     const [loading, setLoading] = useState(true);
     const [showPopup, setShowPopup] = useState(false);
     const [popupText, setPopupText] = useState("");
-
     const [startSavingProgress, setStartSavingProgress] = useState(false);
     const [playPauseAnimation, setPlayPauseAnimation] = useState(null);
-    const [remainingTime, setRemainingTime] = useState(null);
     const [selectedQuality, setSelectedQuality] = useState(0);
     const [showSettings, setShowSettings] = useState(false);
     const hideControlsTimeout = useRef(null);
@@ -36,6 +34,7 @@ export default function VideoPlayer({movieId, links, season = null, episode = nu
     const videoRef = useRef(null);
     const playerRef = useRef(null);
     const [shouldClosePopupRedirect, setShouldClosePopupRedirect] = useState(false);
+    const [media, setMedia] = useState(null);
 
     // Fonction pour afficher les contrôles et réinitialiser le timer d'inactivité
     const showPlayerControls = useCallback(() => {
@@ -52,6 +51,18 @@ export default function VideoPlayer({movieId, links, season = null, episode = nu
     }, [movieId]);
 
     useEffect(() => {
+        season && episode ? getTvDetails(movieId).then((response) => {
+            if (response.success) {
+                setMedia(response.data);
+            }
+        }) : getMovieDetails(movieId).then((response) => {
+            if (response.success) {
+                setMedia(response.data);
+            }
+        });
+    }, []);
+
+    useEffect(() => {
         const intervalId = setInterval(() => {
             console.log(startSavingProgress);
             if (startSavingProgress) saveProgress();
@@ -59,19 +70,6 @@ export default function VideoPlayer({movieId, links, season = null, episode = nu
 
         return () => clearInterval(intervalId);
     }, [saveProgress, startSavingProgress]);
-
-    useEffect(() => {
-        if (!videoRef.current) return;
-
-        const intervalId = setInterval(() => {
-            if (videoRef.current && videoRef.current.duration) {
-                const timeLeft = videoRef.current.duration - videoRef.current.currentTime;
-                setRemainingTime(formatTime(timeLeft));
-            }
-        }, 1000); // Mise à jour toutes les secondes
-
-        return () => clearInterval(intervalId); // Nettoie l'intervalle lorsque le composant est démonté
-    }, []);
 
     // Réinitialise le timer d'inactivité lorsqu'il y a interaction avec la souris
     useEffect(() => {
@@ -230,6 +228,11 @@ export default function VideoPlayer({movieId, links, season = null, episode = nu
                     <LordIcon iconName="arrow-white" animationType="hover"/>
                 </button>
 
+                <div className={styles.title}>
+                    <h1>{media?.title}</h1>
+                    <p>{season && episode ? `Saison ${season} - Episode ${episode}` : ""}</p>
+                </div>
+
                 <button onClick={togglePlayPause}
                         className={`${styles.playPause} ${loading ? styles.loading : ""} ${styles.playerButton}`}>
                     {loading && <LordIcon iconName="loader-white" animationType="loop"/>}
@@ -272,6 +275,7 @@ export default function VideoPlayer({movieId, links, season = null, episode = nu
                 </div>
 
                 <div className={styles.positionSlider}>
+                    <p>{videoRef.current?.currentTime ? formatTime(videoRef.current.currentTime) : ""}</p>
                     <input
                         ref={sliderRef}
                         type="range"
@@ -280,7 +284,7 @@ export default function VideoPlayer({movieId, links, season = null, episode = nu
                         value={videoRef.current && videoRef.current.duration && videoRef.current.currentTime ? (videoRef.current.currentTime * 100 / videoRef.current.duration) : 0}
                         onChange={handleSliderChange}
                     />
-                    <p>{remainingTime ? remainingTime : ""}</p>
+                    <p>{videoRef.current?.currentTime ? formatTime(videoRef.current.duration - videoRef.current.currentTime) : ""}</p>
                 </div>
             </div>
 
