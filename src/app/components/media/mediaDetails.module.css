@@ -22,18 +22,25 @@
 @keyframes bg-intro {
     from {
         background-color: transparent;
+        backdrop-filter: blur(0);
+
     } to {
           background-color: var(--transparent-dark-background-color);
-      }
+              backdrop-filter: blur(5px);
+
+          }
 }
 
 @keyframes bg-intro-reverse {
     from {
+        backdrop-filter: blur(5px);
 
         background-color: var(--transparent-dark-background-color);
     } to {
               background-color: transparent;
-      }
+              backdrop-filter: blur(0);
+
+          }
 }
 
 
@@ -64,6 +71,7 @@
     width: 100%;
     height: 100%;
     background-color: var(--transparent-dark-background-color);
+    backdrop-filter: blur(5px);
     z-index: 10;
 }
 
@@ -337,7 +345,7 @@
     .mediaDetails {
         width: 100%;
         left: 0;
-        height: 80vh;
+        height: 90vh;
     }
 
     .mediaDetails .mediaDetailsContent h1 {

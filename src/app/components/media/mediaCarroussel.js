@@ -37,8 +37,7 @@ export default function MediaCarroussel({mediaListFctn, title}) {
 
     const handleScroll = () => {
         const scrollLeft = mediaListRef.current.scrollLeft;
-        const maxScrollLeft = mediaListRef.current.scrollWidth - mediaListRef.current.clientWidth;
-
+        const maxScrollLeft = mediaListRef.current.scrollWidth - mediaListRef.current.clientWidth -5;
         setShowLeftBtn(scrollLeft > 0);
         setShowRightBtn(scrollLeft < maxScrollLeft);
     };
@@ -95,13 +94,13 @@ export default function MediaCarroussel({mediaListFctn, title}) {
                     ))}
                 </div>
                 <button
-                    onClick={() => scrollMovieList(220)}
+                    onClick={() => scrollMovieList(400)}
                     className={`${styles.rightButton} ${showRightBtn ? "" : styles.hide}`}
                 >
                     <LordIcon iconName={"circleArrow-white"} animationType={"hover"}/>
                 </button>
                 <button
-                    onClick={() => scrollMovieList(-220)}
+                    onClick={() => scrollMovieList(-400)}
                     className={`${styles.leftButton} ${showLeftBtn ? "" : styles.hide}`}
                 >
                     <LordIcon iconName={"circleArrow-white"} animationType={"hover"}/>

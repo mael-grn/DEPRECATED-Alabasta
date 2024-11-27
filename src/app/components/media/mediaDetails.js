@@ -41,25 +41,59 @@ export default function MediaDetails({media, closeAction}) {
 
     useEffect(() => {
         const element = scrollableRef.current;
+
         const handleWheel = (e) => {
             if (!element) return;
+
             const { scrollTop, scrollHeight, clientHeight } = element;
             e.stopPropagation();
             const atTop = scrollTop === 0;
-            const atBottom = scrollTop + clientHeight + 1 >= scrollHeight;
+            const atBottom = scrollTop + clientHeight >= scrollHeight;
+
             if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
                 e.preventDefault();
             }
         };
+
+        const handleTouchMove = (e) => {
+            if (!element) return;
+
+            const { scrollTop, scrollHeight, clientHeight } = element;
+            const atTop = scrollTop === 0;
+            const atBottom = scrollTop + clientHeight >= scrollHeight;
+
+            const touch = e.touches[0];
+            const deltaY = lastTouchY - touch.clientY;
+
+            if ((atTop && deltaY < 0) || (atBottom && deltaY > 0)) {
+                e.preventDefault();
+            }
+
+            lastTouchY = touch.clientY;
+        };
+
+        let lastTouchY = 0;
+        const handleTouchStart = (e) => {
+            if (e.touches.length === 1) {
+                lastTouchY = e.touches[0].clientY;
+            }
+        };
+
         if (element) {
-            element.addEventListener('wheel', handleWheel, { passive: false });
+            element.addEventListener("wheel", handleWheel, { passive: false });
+            element.addEventListener("touchstart", handleTouchStart, { passive: false });
+            element.addEventListener("touchmove", handleTouchMove, { passive: false });
         }
+
         return () => {
             if (element) {
-                element.removeEventListener('wheel', handleWheel);
+                element.removeEventListener("wheel", handleWheel);
+                element.removeEventListener("touchstart", handleTouchStart);
+                element.removeEventListener("touchmove", handleTouchMove);
             }
         };
     }, [loading]);
+
 
     useLayoutEffect(() => {
         localRecoverUser().then((user) => {
