@@ -30,7 +30,7 @@ export async function POST(req) {
 
         // Get the list of tmdbId that the user has started but not finished
         const {rows} = await sql`
-            SELECT * FROM started_not_finished WHERE user_id = ${userId};
+            SELECT * FROM user_progress WHERE user_id = ${userId} AND progress < (media_max_length - 300) ORDER BY last_watched DESC;
         `;
 
         const mediaLst = []

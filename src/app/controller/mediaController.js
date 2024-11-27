@@ -289,7 +289,7 @@ export const getSubtitles = async (subsId) => {
     }
 }
 
-export const setMediaProgress = async (mediaId, progressPercent, season = null, episode = null) => {
+export const setMediaProgress = async (mediaId, progress, media_length, season = null, episode = null) => {
 
     let token = await getItem('token');
     if (!token) {
@@ -302,7 +302,7 @@ export const setMediaProgress = async (mediaId, progressPercent, season = null, 
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({mediaId, progressPercent, season, episode, token}),
+        body: JSON.stringify({mediaId, media_length, progress, season, episode, token}),
     });
 
     if (res.ok) {

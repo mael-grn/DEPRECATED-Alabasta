@@ -248,7 +248,7 @@ export default function MediaDetails({media, closeAction}) {
                                         mediaDetails.progress > 0 ?
                                             mediaDetails.type === "tv" ?
                                                 "Saison " + mediaDetails.seasonProgress + " Episode " + mediaDetails.episodeProgress :
-                                                Math.round((mediaDetails.progress * mediaDetails.runtime / 100))  + "min vues sur " + mediaDetails.runtime + "min" : null
+                                                Math.round(mediaDetails.progress/60)  + "min vues sur " + mediaDetails.runtime + "min" : null
                                     }
                                 </p>
                                 <p style={mediaDetails.type === "movie" ? {paddingBottom: 170} : null}>{mediaDetails.overview}</p>

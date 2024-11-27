@@ -17,7 +17,7 @@ export async function POST(req) {
             });
         }
 
-        const { mediaId, progressPercent, season, episode, token } = await req.json();
+        const { mediaId, progress, media_length, season, episode, token } = await req.json();
 
         const userId = await authenticateToken(token);
 
@@ -38,22 +38,22 @@ export async function POST(req) {
             //if season and episode are provided, update them
             if (season && episode) {
                 await sql`
-                UPDATE user_progress SET progress = ${progressPercent}, season = ${season}, episode = ${episode} WHERE user_id = ${userId} AND movie_id = ${mediaId};
+                UPDATE user_progress SET progress = ${progress}, season = ${season}, episode = ${episode}, media_max_length = ${media_length} WHERE user_id = ${userId} AND movie_id = ${mediaId};
             `;
             } else {
                 await sql`
-                UPDATE user_progress SET progress = ${progressPercent} WHERE user_id = ${userId} AND movie_id = ${mediaId};
+                UPDATE user_progress SET progress = ${progress}, media_max_length = ${media_length} WHERE user_id = ${userId} AND movie_id = ${mediaId};
             `;
             }
 
         } else {
             if (season && episode) {
                 await sql`
-                    INSERT INTO user_progress(user_id, movie_id, progress, season, episode) VALUES (${userId}, ${mediaId}, ${progressPercent}, ${season}, ${episode});
+                    INSERT INTO user_progress(user_id, movie_id, progress, season, episode, media_max_length) VALUES (${userId}, ${mediaId}, ${progress}, ${season}, ${episode}, ${media_length});
             `;
             } else {
                 await sql`
-                INSERT INTO user_progress(user_id, movie_id, progress) VALUES (${userId}, ${mediaId}, ${progressPercent});
+                INSERT INTO user_progress(user_id, movie_id, progress, media_max_length) VALUES (${userId}, ${mediaId}, ${progress}, ${media_length});
             `;
             }
         }

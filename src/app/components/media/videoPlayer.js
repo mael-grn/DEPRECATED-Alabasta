@@ -48,8 +48,7 @@ export default function VideoPlayer({movieId, links, season = null, episode = nu
 
     const saveProgress = useCallback(async () => {
         if (videoRef.current && videoRef.current.duration && !videoRef.current.paused) {
-            const progressPercentage = videoRef.current.currentTime;
-            await setMediaProgress(movieId, progressPercentage, season, episode);
+            await setMediaProgress(movieId, videoRef.current.currentTime, videoRef.current.duration, season, episode);
         }
     }, [movieId]);
 
