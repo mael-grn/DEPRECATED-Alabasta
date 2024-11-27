@@ -1,9 +1,6 @@
 
 import authenticateToken from "@/app/api/authenticateToken";
-import tmdbSearchMovie from "@/app/api/media/tmdb/tmdbSearchMovie";
-import tmdbSearchTv from "@/app/api/media/tmdb/tmdbSearchTv";
 import {sql} from "@vercel/postgres";
-import * as sea from "node:sea";
 export const dynamic = 'force-dynamic';
 
 export async function GET(req, { params }) {

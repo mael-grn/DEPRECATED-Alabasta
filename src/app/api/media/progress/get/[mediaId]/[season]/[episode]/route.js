@@ -1,7 +1,5 @@
 
 import authenticateToken from "@/app/api/authenticateToken";
-import tmdbSearchMovie from "@/app/api/media/tmdb/tmdbSearchMovie";
-import tmdbSearchTv from "@/app/api/media/tmdb/tmdbSearchTv";
 import {sql} from "@vercel/postgres";
 export const dynamic = 'force-dynamic';
 

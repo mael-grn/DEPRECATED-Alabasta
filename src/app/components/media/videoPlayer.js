@@ -190,10 +190,10 @@ export default function VideoPlayer({movieId, links, season = null, episode = nu
                 onLoadedData={() => {
                     getMediaProgress(movieId, season, episode).then((progress) => {
                         setStartSavingProgress(true);
+                        setLoading(false);
                         if (progress.success) {
                             console.log(progress.data);
                             videoRef.current.currentTime = (progress.data / 100) * videoRef.current.duration;
-                            setLoading(false);
                         }
                     });
                 }
