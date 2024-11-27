@@ -3,7 +3,6 @@ import authenticateToken from "@/app/api/authenticateToken";
 import {sql} from "@vercel/postgres";
 import tmdbGetDetailsTv from "@/app/api/media/tmdb/tmdbGetDetailsTv";
 import tmdbGetDetailsMovie from "@/app/api/media/tmdb/tmdbGetDetailsMovie";
-import postInitialVerifications from "@/app/api/postInitialVerifications";
 export const dynamic = 'force-dynamic';
 
 /**
