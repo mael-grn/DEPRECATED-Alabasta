@@ -13,8 +13,6 @@ export default async function openSubtitleSearch(tmdb, season = null, episode = 
 
     if (season && episode) {
         const seasonDetails = await tmdbGetDetailsSeason(tmdb, season);
-        console.log(seasonDetails.children)
-        console.log(seasonDetails.children.find(media => media.number === parseInt(episode)))
         const episodeId = seasonDetails.children.find(media => media.number === parseInt(episode)).id;
         url = `https://api.opensubtitles.com/api/v1/subtitles?tmdb_id=${episodeId}&parent_tmdb_id=${tmdb}&languages=fr`;
     }
