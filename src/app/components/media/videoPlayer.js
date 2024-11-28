@@ -114,18 +114,9 @@ export default function VideoPlayer({movieId, links, season = null, episode = nu
     const toggleSubs = () => {
         if (!subsSrc) {
             setSubsLoading(true);
-            getMovieDetails(movieId).then((movieData) => {
-                if (!movieData.success) {
-                    setShouldClosePopupRedirect(false);
-                    setSubsLoading(false);
-                    setShowPopup(true);
-                    setPopupText("Une erreur s'est produite lors du chargement des détails du film")
-                    return;
-                }
-                searchSubtitles(movieData.data.imdbId).then((response) => {
-                    setSubsList(response.data)
-                    changeSubsSrc(response.data[0].id);
-                });
+            searchSubtitles(movieId, season, episode).then((response) => {
+                setSubsList(response.data)
+                changeSubsSrc(response.data[0]?.id);
             });
         } else {
             setSubsSrc(null)

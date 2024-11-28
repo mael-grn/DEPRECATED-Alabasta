@@ -11,9 +11,9 @@ import openSubtitleSearch from "@/app/api/subs/openSubtitle/openSubtitleSearch";
 export async function GET(req, { params }) {
     try {
 
-        const {imdb} = params;
+        const {tmdb} = params;
 
-        const subsLst = await openSubtitleSearch(imdb)
+        const subsLst = await openSubtitleSearch(tmdb)
 
         if (!subsLst) {
             return new Response(JSON.stringify({error: "impossible to get subtitles"}), {

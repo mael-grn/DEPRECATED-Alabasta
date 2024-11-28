@@ -246,8 +246,8 @@ export const searchStreamingLinks = async (mediaId, type, season = null, episode
     }
 }
 
-export const searchSubtitles = async (imdbId) => {
-    const res = await fetch(`/api/subs/search/${imdbId}`, {
+export const searchSubtitles = async (tmdb, season = null, episode = null) => {
+    const res = await fetch(season && episode ? `/api/subs/search/${tmdb}/${season}/${episode}` : `/api/subs/search/${tmdb}`, {
         method: 'GET',
         cache: 'no-store',
         headers: {
