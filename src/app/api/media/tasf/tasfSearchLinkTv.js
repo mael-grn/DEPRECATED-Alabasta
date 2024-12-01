@@ -54,7 +54,7 @@ export default async function tasfSearchLinkTv(tmdbId, season, episode) {
         }
     }
 
-    if (links.length === 0) fetchAllSeasons(tmdbId, season);
+    if (links.length === 0) await fetchAllSeasons(tmdbId, season);
 
     return links;
 }
