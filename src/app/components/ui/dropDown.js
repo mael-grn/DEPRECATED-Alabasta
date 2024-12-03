@@ -13,9 +13,9 @@ export default function DropDown({optionList, defaultOptionIndex = 0, onSelect})
     }
 
     const selectOption = (option) => {
-        setSelectedOption(option);
         setShowOptions(false);
         onSelect(optionList.indexOf(option));
+        setSelectedOption(option);
     }
 
     function truncateString(str, maxLength = 30) {

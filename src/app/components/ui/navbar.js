@@ -14,12 +14,13 @@ export default function Navbar() {
     const homeIconRef = useRef(null);
     const searchIconRef = useRef(null);
     const settingsIconRef = useRef(null);
-    const logoutIconRef = useRef(null);
+    const userIconRef = useRef(null);
 
     const activeRoute = useMemo(() => {
         if (pathname === "/home") return "home";
         if (pathname === "/search") return "search";
         if (pathname === "/user") return "user";
+        if (pathname === "/settings") return "settings";
         return "";
     }, [pathname]);
 
@@ -55,10 +56,18 @@ export default function Navbar() {
                 <div onClick={() => router.push("/user")}
                      className={`${styles.navElem} ${activeRoute === "user" ? styles.selected : ''}`}
                      onMouseEnter={() => {
-                         if (searchIconRef) searchIconRef.current.triggerAnimation()
+                         if (userIconRef) userIconRef.current.triggerAnimation()
                      }}>
                     <p>Profile</p>
-                    <LordIcon ref={searchIconRef} iconName={"account-white"} animationType={"hover"}/>
+                    <LordIcon ref={userIconRef} iconName={"account-white"} animationType={"hover"}/>
+                </div>
+                <div onClick={() => router.push("/settings")}
+                     className={`${styles.navElem} ${activeRoute === "settings" ? styles.selected : ''}`}
+                     onMouseEnter={() => {
+                         if (settingsIconRef) settingsIconRef.current.triggerAnimation()
+                     }}>
+                    <p>Paramètres</p>
+                    <LordIcon ref={settingsIconRef} iconName={"settings-white"} animationType={"hover"}/>
                 </div>
             </div>
 

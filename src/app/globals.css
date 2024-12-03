@@ -10,6 +10,7 @@
     --invalid: #dd2b1a;
     --text-color: #EEEEEE;
     --color-hover: #202020;
+    --warning-color: #dfa946;
 }
 
 ::-webkit-scrollbar {

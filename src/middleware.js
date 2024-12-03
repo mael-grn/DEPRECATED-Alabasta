@@ -40,5 +40,5 @@ export async function middleware(req) {
  * @type {{matcher: string[]}}
  */
 export const config = {
-    matcher: ['/home/:path*', '/watch/:path*', '/media/:path*', '/search/:path*'],
+    matcher: ['/home/:path*', '/watch/:path*', '/media/:path*', '/search/:path*', '/settings/:path*'],
 };
