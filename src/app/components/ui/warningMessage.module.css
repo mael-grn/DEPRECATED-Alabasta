@@ -25,3 +25,13 @@
     color: var(--dark-background-color);
     margin: 0;
 }
+
+@media only screen and (max-width: 600px) {
+    .warningMessage {
+        flex-direction: column;
+    }
+
+    .warningMessage p {
+        text-align: center;
+    }
+}

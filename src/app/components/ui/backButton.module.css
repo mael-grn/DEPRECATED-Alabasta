@@ -17,12 +17,21 @@
     transform: rotate(180deg);
 }
 
-@media only screen and (min-width: 800px) {
-    .backButton:hover {
-        transform: scale(1.1);
-    }
+.backButton:hover {
+    transform: scale(1.1);
+    background-color: var(--primary-color);
 }
 
-.backButton:active {
-    transform: scale(0.8);
+@media only screen and (max-width: 600px) {
+    .backButton:hover {
+        transform: scale(1);
+        background-color: var(--transparent-background-color);
+    }
+    .backButton:active {
+        transform: scale(0.5);
+    }
+
+    .backButton {
+        left: 20px;
+    }
 }

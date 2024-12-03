@@ -61,3 +61,21 @@
     background: var(--primary-color);
     transform: scale(1.05);
 }
+
+@media only screen and (max-width: 600px) {
+
+
+    .settings ul a:hover {
+        background: var(--background-color);
+        transform: scale(1);
+    }
+
+    .settings ul a:active {
+        transform: scale(.5);
+    }
+
+    .settings {
+        padding: 20px 20px 130px 20px;
+        height: calc(100vh - 150px);
+    }
+}

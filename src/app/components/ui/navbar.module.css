@@ -112,7 +112,8 @@
     }
 
     .nav .navElem, .nav .navElem:hover, .nav.deploy .navElem {
-        width: fit-content;
+        width: 55px;
+        max-width: 55px;
         flex: 1;
         padding: 0;
         border-radius: 30px;
@@ -129,19 +130,11 @@
 
     .nav .navElem.selected, .nav .navElem.selected:hover, .nav.deploy .navElem.selected {
         background-color: var(--primary-color);
-        padding: 0 20px 0 10px;
+        padding: 0;
     }
 
-    .nav.deploy .navElem p {
-        font-size: 0;
-    }
-
-    .nav.deploy .navElem.selected p {
-        font-size: 20px;
-    }
-
-    .nav .navElem.selected p {
-        font-size: 20px;
+    .nav.deploy .navElem p, .nav.deploy .navElem.selected p, .nav .navElem.selected p {
+        display: none;
     }
 
 
