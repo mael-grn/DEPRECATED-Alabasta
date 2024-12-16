@@ -10,7 +10,7 @@ import LordIcon from "@/app/components/ui/lordIcon";
 
 export default function Player() {
 
-    const [usedPlayerOptions, setUsedPlayerOptions] = useState(["TheyAllSayFlix", "VidLinks"])
+    const [usedPlayerOptions, setUsedPlayerOptions] = useState(["TheyAllSayFlix", "VidLinks", "111movies"])
     const [usedPlayerIndex, setUsedPlayerIndex] = useState(0)
     const [usedPlayerLoading, setUsedPlayerLoading] = useState(true)
 
@@ -43,6 +43,9 @@ export default function Player() {
                     }
                     {
                         !usedPlayerLoading && usedPlayerIndex === 1 && <WarningMessage message={"Bien que plus complet, cette source contient également des publicités, parfois NSFW. Si lors d'un clique sur le lecteur une nouvelle page s'ouvre, la fermer immédiatement."}/>
+                    }
+                    {
+                        !usedPlayerLoading && usedPlayerIndex === 2 && <WarningMessage message={"Bien que plus complet, cette source ne permet pas de sauvegarder la progression de la lecture des films et séries."}/>
                     }
                 </div>
             </div>

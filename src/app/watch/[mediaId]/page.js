@@ -8,6 +8,7 @@ import Popup from "@/app/components/ui/popup";
 import {searchStreamingLinks} from "@/app/controller/mediaController";
 import {getSource} from "@/app/controller/settingsController";
 import VidLink from "@/app/components/media/vidLink";
+import OneHundredElevenMovies from "@/app/components/media/oneHundredElevenMovies";
 
 export default function Watch() {
     const router = useRouter();
@@ -52,12 +53,12 @@ export default function Watch() {
                 showPopup ? <Popup title={"Hop hop hop !"} text={popupText} close={closePopup}/> : null
             }
             {
-                loading || !source ?
-                    <PageLoading phrase={loadingMessage}/> :
-                    source === "VidLinks" ?
-                        <VidLink mediaId={mediaId}/> :
-                        source === "TheyAllSayFlix" && links ?
-                        <VideoPlayer links={links} movieId={mediaId}/> : null
+                loading || !source ? <PageLoading phrase={loadingMessage}/> :
+                    <div>
+                        {source === "VidLinks" && <VidLink mediaId={mediaId}/>}
+                        {source === "111movies" && <OneHundredElevenMovies mediaId={mediaId}/>}
+                        {source === "TheyAllSayFlix" && links && <VideoPlayer links={links} movieId={mediaId}/>}
+                    </div>
             }
         </main>
 
