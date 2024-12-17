@@ -10,19 +10,18 @@ import {logout} from "@/app/controller/userController";
 export default function Navbar() {
     const router = useRouter();
     const pathname = usePathname();
-    const [deploy, setDeploy] = useState(false);
     const homeIconRef = useRef(null);
     const searchIconRef = useRef(null);
     const settingsIconRef = useRef(null);
     const userIconRef = useRef(null);
 
-    const activeRoute = useMemo(() => {
-        if (pathname === "/home") return "home";
-        if (pathname === "/search") return "search";
-        if (pathname === "/user") return "user";
-        if (pathname === "/settings") return "settings";
-        return "";
-    }, [pathname]);
+    const routes = {
+        home: "/home",
+        search: "/search",
+        user: "/user",
+        settings: "/settings"
+    }
+
 
     if (pathname.startsWith("/watch") || pathname === "/") {
         return null;
@@ -30,45 +29,40 @@ export default function Navbar() {
 
     return (
         <nav>
-            <div className={`${styles.nav} ${deploy ? styles.deploy : ''}`}
-                 onMouseEnter={() => {
-                     if (!deploy) setDeploy(true)
-                 }}
-                 onMouseLeave={() => {
-                     if (deploy) setDeploy(false)
-                 }}>
-                <div onClick={() => router.push("/home")}
-                     className={`${styles.navElem} ${activeRoute === "home" ? styles.selected : ''}`}
+            <div className={`${styles.nav}`}>
+
+                <div onClick={() => router.push(routes.home)}
+                     className={`${styles.navElem} ${pathname === routes.home && styles.selected}`}
                      onMouseEnter={() => {
                          if (homeIconRef) homeIconRef.current.triggerAnimation()
                      }}>
-                    <p>Accueil</p>
                     <LordIcon ref={homeIconRef} iconName={"home-white"} animationType={"hover"}/>
                 </div>
-                <div onClick={() => router.push("/search")}
-                     className={`${styles.navElem} ${activeRoute === "search" ? styles.selected : ''}`}
+
+                <div onClick={() => router.push(routes.search)}
+                     className={`${styles.navElem} ${pathname === routes.search && styles.selected}`}
                      onMouseEnter={() => {
                          if (searchIconRef) searchIconRef.current.triggerAnimation()
                      }}>
-                    <p>Rechercher</p>
                     <LordIcon ref={searchIconRef} iconName={"search-white"} animationType={"hover"}/>
                 </div>
-                <div onClick={() => router.push("/user")}
-                     className={`${styles.navElem} ${activeRoute === "user" ? styles.selected : ''}`}
+
+                <div onClick={() => router.push(routes.user)}
+                     className={`${styles.navElem} ${pathname === routes.user && styles.selected}`}
                      onMouseEnter={() => {
                          if (userIconRef) userIconRef.current.triggerAnimation()
                      }}>
-                    <p>Profile</p>
                     <LordIcon ref={userIconRef} iconName={"account-white"} animationType={"hover"}/>
                 </div>
-                <div onClick={() => router.push("/settings")}
-                     className={`${styles.navElem} ${activeRoute === "settings" ? styles.selected : ''}`}
+
+                <div onClick={() => router.push(routes.settings)}
+                     className={`${styles.navElem} ${pathname === routes.settings && styles.selected}`}
                      onMouseEnter={() => {
                          if (settingsIconRef) settingsIconRef.current.triggerAnimation()
                      }}>
-                    <p>Paramètres</p>
                     <LordIcon ref={settingsIconRef} iconName={"settings-white"} animationType={"hover"}/>
                 </div>
+
             </div>
 
 
