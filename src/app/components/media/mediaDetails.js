@@ -196,8 +196,7 @@ export default function MediaDetails({media, closeAction}) {
                                    className={styles.backdrop}/>
                             <div className={styles.mediaDetailsContent}>
                                 <h1>{mediaDetails.title}</h1>
-                                <p></p>
-                                <p>{mediaDetails.vote}/10 | {mediaDetails.year} | {mediaDetails.runtime} minutes</p>
+                                <p className={styles.resumeTxt}>{mediaDetails.vote}/10 | {mediaDetails.year} | {mediaDetails.runtime} minutes</p>
                                 <div className={styles.genreTag}>
                                     {
                                         mediaDetails.genres.map((genre) => {
@@ -251,7 +250,7 @@ export default function MediaDetails({media, closeAction}) {
                                                 Math.round(mediaDetails.progress/60)  + "min vues sur " + mediaDetails.runtime + "min" : null
                                     }
                                 </p>
-                                <p style={mediaDetails.type === "movie" ? {paddingBottom: 170} : null}>{mediaDetails.overview}</p>
+                                <p>{mediaDetails.overview}</p>
                                 {
                                     mediaDetails.type === "tv" ?
                                         <div>

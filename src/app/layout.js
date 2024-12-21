@@ -17,7 +17,6 @@ export default function RootLayout({children}) {
             <meta name="theme-color" content="#151515"/>
             <meta name="msapplication-navbutton-color" content="#151515"/>
             <meta name="apple-mobile-web-app-status-bar-style" content="#151515"/>
-
         </Head>
         <body className={rubik.className}>
         <LenisScroll/>

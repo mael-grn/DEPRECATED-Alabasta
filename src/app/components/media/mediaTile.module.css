@@ -95,7 +95,7 @@
 
 @media only screen and (max-width: 600px) {
     .movieResume:active {
-        transform: scale(.6);
+        transform: scale(.8);
     }
 
     .movieResume {
