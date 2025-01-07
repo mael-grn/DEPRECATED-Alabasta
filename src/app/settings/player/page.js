@@ -5,24 +5,23 @@ import defaultStyles from "@/app/settings/settingsPageBase.module.css"
 import WarningMessage from "@/app/components/ui/warningMessage";
 import {useEffect, useState} from "react";
 import DropDown from "@/app/components/ui/dropDown";
-import {getSource, setSource} from "@/app/controller/settingsController";
+import {getUserPreferredSource, possibleSources, setUsersPreferredSource} from "@/app/controller/settingsController";
 import LordIcon from "@/app/components/ui/lordIcon";
 
 export default function Player() {
 
-    const [usedPlayerOptions, setUsedPlayerOptions] = useState(["TheyAllSayFlix", "VidLinks", "111movies"])
     const [usedPlayerIndex, setUsedPlayerIndex] = useState(0)
     const [usedPlayerLoading, setUsedPlayerLoading] = useState(true)
 
     useEffect(() => {
-        getSource().then((res) => {
+        getUserPreferredSource().then((res) => {
             setUsedPlayerLoading(false)
-            setUsedPlayerIndex(usedPlayerOptions.indexOf(res) ? usedPlayerOptions.indexOf(res) : 0);
+            setUsedPlayerIndex(possibleSources.indexOf(res) ? possibleSources.indexOf(res) : 0);
         });
     }, []);
 
     const changeUsedPlayer = (index) => {
-        setSource(usedPlayerOptions[index]).then(() => {
+        setUsersPreferredSource(possibleSources[index]).then(() => {
             setUsedPlayerIndex(index);
         }).catch((e) => {
           console.log(e)
@@ -38,7 +37,7 @@ export default function Player() {
                 <div>
                     {
                         usedPlayerLoading ? <LordIcon iconName={"loader-white"} animationType={"loop"}/> :
-                            <DropDown defaultOptionIndex={usedPlayerIndex} onSelect={changeUsedPlayer} optionList={usedPlayerOptions}/>
+                            <DropDown defaultOptionIndex={usedPlayerIndex} onSelect={changeUsedPlayer} optionList={possibleSources}/>
 
                     }
                     {

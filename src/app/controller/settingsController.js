@@ -1,19 +1,34 @@
 import {getItem, setItem} from "@/app/utils/cookieUtils";
 
-const possibleSources = ["TheyAllSayFlix", "VidLinks", "111movies"];
-export const setSource = async (source) => {
-    if (possibleSources.find((x) => x === source)) {
-        await setItem("source", source);
+// Every possible apis and their endpoint that can be integrated in iframes
+export const possibleSources = [{name: "VidLinks", endpoint: ""}, {name: "111movies", endpoint: ""}];
+
+// Return just the names contained into possibleSourceName
+export const possibleSourceName = possibleSources.map((item) => item.name)
+
+/**
+ * Save in local the user's choice of source.
+ * @param source the name or the object of the source
+ * @returns {Promise<void>}
+ */
+export const setUsersPreferredSource = async (source) => {
+    let sourceName = source.name ? source.name : source;
+    let res = possibleSources.find((x) => x.name === sourceName);
+    if (res) {
+        await setItem("source", JSON.stringify(res));
     } else {
         throw new Error("Invalid source");
     }
 }
 
-export const getSource = async () => {
-    const source = await getItem("source");
-    if (possibleSources.find((x) => x === source)) {
-        return source;
-    } else {
-        return "TheyAllSayFlix";
+/**
+ * Return the user's choice of source that may have been saved in the browser. If nothing have been saved before, returns the first source of the list.
+ * @returns {Promise<{name: string, endpoint: string}>}
+ */
+export const getUserPreferredSource = async () => {
+    const source = JSON.parse(await getItem("source"));
+    if (!source) {
+        return possibleSources[0];
     }
+    return source;
 }
