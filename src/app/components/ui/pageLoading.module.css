@@ -50,3 +50,8 @@
     animation: phrase-appears 0.5s ease;
 }
 
+@media only screen and (max-width: 800px) {
+    .loadingPage {
+        background-color: var(--background-color);
+    }
+}
