@@ -1,7 +1,7 @@
 import {getItem, setItem} from "@/app/utils/cookieUtils";
 
 // Every possible apis and their endpoint that can be integrated in iframes
-export const possibleSources = [{name: "VidLinks", endpoint: ""}, {name: "111movies", endpoint: ""}];
+export const possibleSources = [{name: "TurboVid", endpoint: "https://turbovid.eu/api/req/"}, {name: "111movies", endpoint: "https://111movies.com/"}];
 
 // Return just the names contained into possibleSourceName
 export const possibleSourceName = possibleSources.map((item) => item.name)
@@ -26,9 +26,9 @@ export const setUsersPreferredSource = async (source) => {
  * @returns {Promise<{name: string, endpoint: string}>}
  */
 export const getUserPreferredSource = async () => {
-    const source = JSON.parse(await getItem("source"));
-    if (!source) {
+    const item = await getItem("source");
+    if (!item) {
         return possibleSources[0];
     }
-    return source;
+    return JSON.parse(item);
 }

@@ -4,9 +4,10 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    width: calc(100% - 40px);
+    width: fit-content;
     margin: 0;
-    height: 40px;
+    min-height: 40px;
+    max-height: 40px;
     font-size: 20px;
     border-radius: 10px;
     padding: 0 20px;
@@ -34,6 +35,8 @@
 .dropDown.developped {
     padding: 0;
     background-color: transparent;
+    min-height: 40px;
+    max-height: 200px;
 }
 
 .dropDown.developped .elementsDiv {
@@ -43,9 +46,6 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    position: absolute;
-    top: 0;
-    left: 0;
     height: fit-content;
     max-height: 300px;
     overflow: auto;

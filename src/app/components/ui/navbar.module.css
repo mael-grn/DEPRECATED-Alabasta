@@ -46,7 +46,7 @@
         height: 70px;
         flex-direction: row;
         justify-content: space-around;
-        background-color: black;
+        background-color: var(--background-color);
         border-radius: 25px 25px 0 0;
     }
 }
