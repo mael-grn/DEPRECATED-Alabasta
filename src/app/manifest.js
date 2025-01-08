@@ -5,8 +5,8 @@ export default function manifest() {
         description: 'Watch movies and TV shows online',
         start_url: '/home',
         display: 'standalone',
-        background_color: '#151515',
-        theme_color: '#232323',
+        background_color: '#232323',
+        theme_color: '#151515',
         icons: [
             {
                 src: '/icon-192x192.png',
