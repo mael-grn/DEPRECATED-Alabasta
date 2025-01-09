@@ -22,12 +22,12 @@ export const setUsersPreferredSource = async (source) => {
 
 /**
  * Return the user's choice of source that may have been saved in the browser. If nothing have been saved before, returns the first source of the list.
- * @returns string
+ * @returns {Promise<{name: string, endpoint: string}>}
  */
 export const getUserPreferredSource = async () => {
     const item = await getItem("source");
     if (!item) {
-        return possibleSourceName[0];
+        return possibleSources[0];
     }
-    return item;
+    return possibleSources.find((source) => source.name === item);
 }
