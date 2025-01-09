@@ -34,7 +34,7 @@ export default function Player() {
     }
     return (
         <div className={defaultStyles.settingsPage}>
-            <BackButton left={window.innerWidth < 600 ? "20px" : "110px"}/>
+            <BackButton /*left={window.innerWidth < 600 ? "20px" : "110px"}*//>
             <h1>Lecteur et source</h1>
             <p>Personnalisez et modifiez les option du lecteur et de la srouce.</p>
             <div className={defaultStyles.settingsOption}>
