@@ -32,35 +32,35 @@ export default function Navbar() {
             <div className={`${styles.nav}`}>
 
                 <div onClick={() => router.push(routes.home)}
-                     className={`${styles.navElem} ${pathname === routes.home && styles.selected}`}
+                     className={`${styles.navElem}`}
                      onMouseEnter={() => {
                          if (homeIconRef) homeIconRef.current.triggerAnimation()
                      }}>
-                    <LordIcon ref={homeIconRef} iconName={"home-white"} animationType={"hover"}/>
+                    <LordIcon ref={homeIconRef} iconName={pathname === routes.home ? "home-red-full" : "home-white"} animationType={"hover"}/>
                 </div>
 
                 <div onClick={() => router.push(routes.search)}
-                     className={`${styles.navElem} ${pathname === routes.search && styles.selected}`}
+                     className={`${styles.navElem}`}
                      onMouseEnter={() => {
                          if (searchIconRef) searchIconRef.current.triggerAnimation()
                      }}>
-                    <LordIcon ref={searchIconRef} iconName={"search-white"} animationType={"hover"}/>
+                    <LordIcon ref={searchIconRef} iconName={pathname === routes.search ? "search-red-full" : "search-white"} animationType={"hover"}/>
                 </div>
 
                 <div onClick={() => router.push(routes.user)}
-                     className={`${styles.navElem} ${pathname === routes.user && styles.selected}`}
+                     className={`${styles.navElem}`}
                      onMouseEnter={() => {
                          if (userIconRef) userIconRef.current.triggerAnimation()
                      }}>
-                    <LordIcon ref={userIconRef} iconName={"account-white"} animationType={"hover"}/>
+                    <LordIcon ref={userIconRef} iconName={pathname === routes.user ? "account-red-full" : "account-white"} animationType={"hover"}/>
                 </div>
 
                 <div onClick={() => router.push(routes.settings)}
-                     className={`${styles.navElem} ${pathname === routes.settings && styles.selected}`}
+                     className={`${styles.navElem}`}
                      onMouseEnter={() => {
                          if (settingsIconRef) settingsIconRef.current.triggerAnimation()
                      }}>
-                    <LordIcon ref={settingsIconRef} iconName={"settings-white"} animationType={"hover"}/>
+                    <LordIcon ref={settingsIconRef} iconName={pathname === routes.settings ? "settings-red-full" : "settings-white"} animationType={"hover"}/>
                 </div>
 
             </div>
