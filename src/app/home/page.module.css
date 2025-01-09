@@ -19,9 +19,6 @@
       }
 }
 
-.homeContainer {
-    background-color: var(--dark-background-color);
-}
 
 .home {
     overflow: auto;
@@ -70,7 +67,6 @@
     height: 100%;
     width: 100%;
     object-fit: cover;
-    border-radius: 25px 25px 0 0;
 }
 
 .home .heroMovie .heroMovieInfo {
@@ -82,7 +78,6 @@
     display: flex;
     width: 100%;
     align-items: center;
-    background: linear-gradient(0deg, var(--dark-background-color) 0%, rgba(0, 0, 0, 0) 100%);
 }
 
 .home .heroMovie .heroMovieInfo h1 {
@@ -153,8 +148,8 @@
 @media only screen and (max-width: 600px) {
 
     .home {
-        width: calc(100% - 40px);
-        padding: 20px 20px 130px 20px;
+        width: 100%;
+        padding: 0;
         margin: 0;
         min-height: 100vh;
     }
@@ -168,10 +163,14 @@
     }
 
     .home .heroMovie {
-        width: 100%;
+        width: 90%;
+        margin-top: 5%;
+        margin-left: 5%;
         height: 30vh;
         justify-content: center;
         align-items: flex-end;
+        overflow: hidden;
+        border-radius: 25px;
     }
 
     .home .heroMovie .heroMovieInfo {
@@ -183,7 +182,6 @@
         align-items: center;
         gap: 20px;
         padding: 20px;
-        background: linear-gradient(0deg, var(--dark-background-color) 30%, rgba(0, 0, 0, 0) 100%);
 
     }
 
@@ -198,6 +196,15 @@
 
     .home .heroMovie .heroMovieInfo .overview {
         display: none;
+    }
+
+    .home .carrousselDiv {
+        display: flex;
+        flex-direction: column;
+        background-color: var(--background-color);
+        border-radius: 40px 40px 0 0;
+        padding: 25px 25px 130px 25px;
+        gap: 40px;
     }
 
 }

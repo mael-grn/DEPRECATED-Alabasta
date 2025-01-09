@@ -101,9 +101,12 @@ export default function Home() {
                                 </div> : null
                         )
                 }
-                <MediaCarroussel mediaListFctn={getPopularMovies} title={"Films populaires"}/>
-                <MediaCarroussel mediaListFctn={getNowPlayingMovies} title={"En ce moment au cinéma"}/>
-                <MediaCarroussel mediaListFctn={getTopRatedMovies} title={"Films les mieux notés"}/>
+                <div className={styles.carrousselDiv}>
+                    <MediaCarroussel mediaListFctn={getPopularMovies} title={"Films populaires"}/>
+                    <MediaCarroussel mediaListFctn={getNowPlayingMovies} title={"En ce moment au cinéma"}/>
+                    <MediaCarroussel mediaListFctn={getTopRatedMovies} title={"Films les mieux notés"}/>
+                </div>
+
             </div>
 
         </div>

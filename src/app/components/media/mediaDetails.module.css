@@ -46,23 +46,17 @@
 
 @keyframes backdrop-intro {
     0% {
-        transform: scale(1.5);
-        opacity: 0;
+        transform: scale(4);
     }
     100% {
           transform: scale(1);
-        opacity: 1;
       }
 }
 
 @keyframes media-details-intro {
     0% {
-        opacity: 0;
-        backdrop-filter: blur(0);
     }
     100% {
-        opacity: 1;
-        backdrop-filter: blur(10px);
     }
 }
 
@@ -140,7 +134,7 @@
 }
 
 .mediaDetails .backdrop {
-    animation: backdrop-intro 1s ease;
+    animation: backdrop-intro 1s ease-in-out;
     object-fit: cover;
     z-index: 14;
     position: absolute;

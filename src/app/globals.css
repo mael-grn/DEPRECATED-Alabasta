@@ -106,9 +106,3 @@ html.lenis, html.lenis body {
 .lenis.lenis-smooth iframe {
     pointer-events: none;
 }
-
-@media (display-mode: standalone) {
-    body {
-        background-color: #151515; /* Même couleur que celle spécifiée */
-    }
-}
