@@ -13,9 +13,8 @@ export const possibleSourceName = possibleSources.map((item) => item.name)
  */
 export const setUsersPreferredSource = async (source) => {
     let sourceName = source.name ? source.name : source;
-    let res = possibleSources.find((x) => x.name === sourceName);
-    if (res) {
-        await setItem("source", JSON.stringify(res));
+    if (possibleSourceName.includes(sourceName)) {
+        await setItem("source", sourceName);
     } else {
         throw new Error("Invalid source");
     }
@@ -23,12 +22,12 @@ export const setUsersPreferredSource = async (source) => {
 
 /**
  * Return the user's choice of source that may have been saved in the browser. If nothing have been saved before, returns the first source of the list.
- * @returns {Promise<{name: string, endpoint: string}>}
+ * @returns string
  */
 export const getUserPreferredSource = async () => {
     const item = await getItem("source");
     if (!item) {
-        return possibleSources[0];
+        return possibleSourceName[0];
     }
-    return JSON.parse(item);
+    return item;
 }
