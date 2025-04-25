@@ -63,7 +63,7 @@ export default function Page() {
     return (
         <main className={styles.main}>
             <img alt="desert" src="/assets/desert.svg"/>
-            {showPopup ? <Popup title={popupTitle} text={popupMessage} close={closePopup}/> : null}
+            <Popup title={"Zut..."} text={"Alabasta est actuellement en refonte, et n'est donc plus accessible. Cependant, vous aurez bientôt le droit à un tout nouveau site, plus beau, plus pratique, plus rapide, plus efficace, bref à l'image de son créateur :)"} close={closePopup}/>
             <form onSubmit={handleSubmit}>
                 <h1>Bienvenue sur Alabasta !</h1>
                 <label htmlFor={"pin"}>Pour pouvoir acceder a la plateforme, merci de rentrer votre code pin
@@ -71,7 +71,7 @@ export default function Page() {
                 <div>
                     <input autoComplete={"off"} type={"password"} id={"pin"} name={"pin"} required placeholder={"Code Pin"}
                            onChange={(e) => setPin(e.target.value)}></input>
-                    <button type="submit" className={"button " + (formLoading ? styles.loading : "")}>
+                    <button type="submit" className={"button " + (formLoading ? styles.loading : "")} disabled={true}>
                         <LordIcon iconName={"arrow-white"} animationType={"hover"}/>
                         <LordIcon iconName={"loader-white"} animationType={"loop"}/>
                     </button>
