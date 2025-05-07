@@ -1,26 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #000000;
+  --background-opacity: rgba(0, 0, 0, 0.8);
+  --on-background: #131313;
+  --foreground: #ffffff;
+  --on-foreground: #e1e1e1;
+  --primary: #CF0F47;
+  --secondary: #FF0B55;
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-background-opacity: var(--background-opacity);
+  --color-on-background: var(--on-background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-on-foreground: var(--on-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary: var(--primary);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+  transition: all .4s ease;
+  font-family: "Lexend", sans-serif;
 }
+
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+  font-size: 40px;
+  font-weight: 800;
+}
+
+h2 {
+  font-size: 30px;
+  font-weight: 800;
+}
+
+h3 {
+  font-size: 28px;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 30px;
+    font-weight: 800;
+  }
+
+  h2 {
+    font-size: 25px;
+    font-weight: 800;
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 500;
+  }
+}
+
+button {
+  position: relative;
+  color: var(--foreground);
+  font-family: "Lexend", sans-serif;
+  font-size: 16px;
+  height: 40px;
+  cursor: pointer;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  background-color: var(--primary);
+}
+
+button:disabled {
+  cursor: default;
+  opacity: .7;
+}
+
+button:has(img){
+  padding: 10px 50px 10px 20px;
+}
+
+button img {
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  height: 20px;
+
+  object-fit: contain;
+}
+
+button:hover:not(:disabled) {
+  background-color: var(--secondary);
+}
+
+button:hover:has(img):not(:disabled) {
+  color: var(--secondary);
+}
+
+button:hover:not(:disabled) img  {
+  transform: scale(1.2);
+  right: calc(50% - 10px);
+}
+
+a {
+  cursor: pointer;
+  color: var(--foreground);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--on-foreground);
+  text-decoration: underline;
+}
+
+input {
+  color: var(--foreground);
+  font-family: "Lexend", sans-serif;
+  font-size: 16px;
+  height: 40px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  background-color: var(--on-background);
+}
+
+input::placeholder {
+  color: var(on-foreground);
+}
+
+input:focus {
+  outline: none;
 }
