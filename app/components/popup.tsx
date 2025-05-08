@@ -14,15 +14,16 @@ export default function Popup({showPopup, onClose, titre, texte}: PopupProps) {
                 {
                     showPopup &&
                         <motion.div
-                            className={"fixed top-0 left-0 w-full h-[100vh] bg-background-opacity flex items-center justify-center"}
+                            className={"fixed top-0 left-0 w-full h-[100vh] bg-background-opacity flex md:items-center items-end justify-center"}
                             key="popup-bg"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                         >
                             <motion.div
-                                className={"p-8 pt-16 flex flex-col justify-center items-center bg-on-background gap-6 relative rounded-3xl min-w-1/3 max-w-3/4"}
+                                className={" p-8 pt-16 flex flex-col justify-center items-center bg-on-background gap-6 relative md:rounded-3xl rounded-t-3xl md:w-1/2 w-full h-1/2 overflow-y-auto md:h-fit"}
                                 key="popup"
+                                style={{transformOrigin: "bottom center"}}
                                 initial={{ transform: "scale(0)" }}
                                 animate={{ transform: "scale(1)" }}
                                 exit={{ transform: "scale(0)" }}

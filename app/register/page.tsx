@@ -86,36 +86,33 @@ export default function Page() {
     }
 
     return (
-        <main className="bg-background w-full min-h-[100vh] flex items-center justify-center gap-6 flex-col p-6">
-
+        <main className="bg-background w-full min-h-[100vh] flex items-center justify-center gap-6 flex-col">
+            <img alt={"register"} src={"/img/informations.svg"} className={"md:w-1/8 w-1/2"}/>
             <h1 className={"text-center"}>Créez un compte sur Alabasta</h1>
             <p className={"text-center mb-12"}>Remplissez les informations ci-dessous afin de vous créer un compte.</p>
-            <div className="flex gap-10 flex-wrap items-center justify-center">
-                <img alt={"register"} src={"/img/informations.svg"} className={"md:w-1/4 w-1/2"}/>
-                <form className={"flex flex-col items-center justify-center gap-2"} onSubmit={onSubmit}>
-                    <input placeholder={"Nom"} type={"text"} value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-                    <input placeholder={"Prenom"} type={"text"} value={lastName} onChange={(e) => setLastName(e.target.value)} />
-                    <input placeholder={"Nom d'utilisateur"} type={"text"} value={username} onChange={(e) => setUsername(e.target.value)} />
-                    <input placeholder={"Mot de passe"} type={"password"} value={password} onChange={(e) => setPassword(e.target.value)} />
-                    <input placeholder={"Répétez le mot de passe"} type={"password"} value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)} />
+            <form className={"flex flex-col items-center justify-center gap-2"} onSubmit={onSubmit}>
+                <input placeholder={"Nom"} type={"text"} value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                <input placeholder={"Prenom"} type={"text"} value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                <input placeholder={"Nom d'utilisateur"} type={"text"} value={username} onChange={(e) => setUsername(e.target.value)} />
+                <input placeholder={"Mot de passe"} type={"password"} value={password} onChange={(e) => setPassword(e.target.value)} />
+                <input placeholder={"Répétez le mot de passe"} type={"password"} value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)} />
 
-                    <button disabled={loading} type={"submit"} className={`mt-6`}>
-                        {
-                            loading ?
-                                <img alt={"redirect"} src={"/icons/loader-light.gif"} className={"-translate-x-[5px]"}/>
-                                :
-                                <>
-                                    <img alt={"redirect"} src={"/icons/ship.svg"} className="invert"/>
-                                    Créer un compte
-                                </>
-                        }
-                    </button>
-                    <a className={"flex gap-2 mt-6"} onClick={() => router.push("/login")}>
-                        J&apos;ai déjà un compte
-                        <img alt={"redirect"} src={"/icons/redirect.svg"} className="invert h-4 w-4"/>
-                    </a>
-                </form>
-            </div>
+                <button disabled={loading} type={"submit"} className={`mt-6`}>
+                    {
+                        loading ?
+                            <img alt={"redirect"} src={"/icons/loader-light.gif"} className={"-translate-x-[5px]"}/>
+                            :
+                            <>
+                                <img alt={"redirect"} src={"/icons/ship.svg"} className="invert"/>
+                                Créer un compte
+                            </>
+                    }
+                </button>
+                <a className={"flex gap-2 mt-6"} onClick={() => router.push("/login")}>
+                    J&apos;ai déjà un compte
+                    <img alt={"redirect"} src={"/icons/redirect.svg"} className="invert h-4 w-4"/>
+                </a>
+            </form>
 
             <Loading showLoading={loadingToken}/>
             <Popup showPopup={showPopup} titre={popupTitle} texte={popupContent} onClose={() => setShowPopup(false)} />

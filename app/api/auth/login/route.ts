@@ -8,7 +8,7 @@ export async function POST(req: Request) {
 
     //récuperation de l'utilisateur
     const sql = neon(`${process.env.DATABASE_URL}`);
-    const res = await sql`SELECT * FROM USERS WHERE username = ${username} LIMIT 1`;
+    const res = await sql`SELECT * FROM USERS WHERE username = ${username.toLowerCase()} LIMIT 1`;
     if (res.length < 1) return NextResponse.json({}, {status: 404});
 
     //verification du mot de passe
