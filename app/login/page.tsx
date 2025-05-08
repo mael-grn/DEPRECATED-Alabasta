@@ -4,6 +4,7 @@ import {FormEvent, useEffect, useState} from "react";
 import Popup from "@/app/components/popup";
 import {useRouter} from "next/navigation";
 import Loading from "@/app/components/loading";
+import AuthService from "@/app/services/authService";
 
 export default function Page() {
 
@@ -40,34 +41,12 @@ export default function Page() {
 
         setLoading(true);
 
-        const response = await fetch('/api/auth/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username, password }),
-        })
-
+        const res = await AuthService.login(username, password);
         setLoading(false);
-
-        if (!response.ok) {
-            if (response.status === 404) {
-                setPopupTitle("Erreur");
-                setPopupContent("Aucun utilisateur n'existe avec ce nom d'utilisateur.")
-                setShowPopup(true);
-            } else if (response.status === 401) {
-                setPopupTitle("Erreur");
-                setPopupContent("Le mot de passe est incorrect.")
-                setShowPopup(true);
-            } else if (response.status === 403) {
-                setPopupTitle("Pas trop vite !");
-                setPopupContent("Votre compte n'a pas encore été approuvé par un administrateur, merci de revenir plus tard.")
-                setShowPopup(true);
-            } else {
-                setPopupTitle("Erreur");
-                setPopupContent("Une erreur s'est produite, merci de réessayer plus tard.")
-                setShowPopup(true);
-            }
+        if (!res.success) {
+            setPopupTitle("Erreur");
+            setPopupContent(res.error!)
+            setShowPopup(true);
         } else {
             router.push("/secure");
         }

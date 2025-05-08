@@ -3,10 +3,12 @@
 
 :root {
   --background: #000000;
-  --background-opacity: rgba(0, 0, 0, 0.8);
+  --background-opacity: rgba(0, 0, 0, 0.66);
   --on-background: #131313;
+  --on-background-hover: #272727;
   --foreground: #ffffff;
   --on-foreground: #e1e1e1;
+  --on-foreground-hover: #d1d1d1;
   --primary: #CF0F47;
   --secondary: #FF0B55;
 }
@@ -15,8 +17,10 @@
   --color-background: var(--background);
   --color-background-opacity: var(--background-opacity);
   --color-on-background: var(--on-background);
+  --color-on-background-hover: var(--on-background-hover);
   --color-foreground: var(--foreground);
   --color-on-foreground: var(--on-foreground);
+  --color-on-foreground-hover: var(--on-foreground-hover);
   --color-secondary: var(--secondary);
   --color-primary: var(--primary);
 }
@@ -136,10 +140,21 @@ input {
   background-color: var(--on-background);
 }
 
-input::placeholder {
-  color: var(on-foreground);
+input:hover {
+  background-color: var(--on-background-hover);
 }
 
 input:focus {
   outline: none;
+  background-color: var(--on-background-hover);
+}
+
+@media (max-width: 768px) {
+  a:hover {
+    color: var(--foreground);
+    text-decoration: none;
+  }
+  input:hover {
+    background-color: var(--on-background);
+  }
 }

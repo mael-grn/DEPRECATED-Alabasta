@@ -14,7 +14,7 @@ export default function Popup({showPopup, onClose, titre, texte}: PopupProps) {
                 {
                     showPopup &&
                         <motion.div
-                            className={"fixed top-0 left-0 w-full h-[100vh] bg-background-opacity flex md:items-center items-end justify-center"}
+                            className={"fixed top-0 left-0 w-full h-[100vh] bg-background-opacity flex md:items-center items-end justify-center backdrop-blur"}
                             key="popup-bg"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}

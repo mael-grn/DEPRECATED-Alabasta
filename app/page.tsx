@@ -24,7 +24,7 @@ export default function Home() {
             <h1 className={"text-center"}>Bienvenue sur Alabasta !</h1>
           <p className={"text-center"}>Pour commencer, créez vous un compte ou connectez-vous.</p>
           <div className={"flex gap-4"}>
-              <button onClick={() => router.push("/login")}>Se connecter</button>
+              <button style={{background: "transparent"}} className={"border-2 border-foreground"} onClick={() => router.push("/login")}>Se connecter</button>
               <button onClick={() => router.push("/register")}>Créer un compte</button>
           </div>
 

@@ -4,6 +4,7 @@ import {FormEvent, useEffect, useState} from "react";
 import Popup from "@/app/components/popup";
 import {useRouter} from "next/navigation";
 import Loading from "@/app/components/loading";
+import AuthService from "@/app/services/authService";
 
 export default function Page() {
 
@@ -48,6 +49,20 @@ export default function Page() {
             return;
         }
 
+        if (password.length < 4) {
+            setPopupTitle("Erreur dans le formulaire");
+            setPopupContent("Le mot de passe doit faire au moins 4 caractères")
+            setShowPopup(true);
+            return;
+        }
+
+        if (username.length < 4) {
+            setPopupTitle("Erreur dans le formulaire");
+            setPopupContent("Le nom d'utilisateur doit faire au moins 4 caractères")
+            setShowPopup(true);
+            return;
+        }
+
         const regex = /^[\p{L}0-9-]+$/u;
         if (!regex.test(firstName) || !regex.test(lastName) || !regex.test(password)) {
             setPopupTitle("Erreur dans le formulaire");
@@ -58,26 +73,13 @@ export default function Page() {
 
         setLoading(true);
 
-        const response = await fetch('/api/auth/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username, firstName, lastName, password }),
-        })
+        const res = await AuthService.register(username, firstName, lastName, password);
 
-        setLoading(false);
-
-        if (!response.ok) {
-            if (response.status === 409) {
-                setPopupTitle("Erreur");
-                setPopupContent("Un utilisateur existe déjà avec ce nom d'utilisateur, essayez-en un autre.")
-                setShowPopup(true);
-            } else {
-                setPopupTitle("Erreur");
-                setPopupContent("Une erreur s'est produite, merci de réessayer plus tard.")
-                setShowPopup(true);
-            }
+        setLoading(false)
+        if (!res.success) {
+            setPopupTitle("Erreur");
+            setPopupContent(res.error!)
+            setShowPopup(true);
         } else {
             setPopupTitle("Compte créé");
             setPopupContent("Merci d'avoir créé un compte sur Alabasta. Avant de pouvoir accéder à l'application, un administrateur doit valider votre demande. Merci de réessayer de vous connecter plus tard.")

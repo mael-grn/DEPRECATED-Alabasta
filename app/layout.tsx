@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import TransitionWrapper from "@/app/components/transitions";
 
 export const metadata: Metadata = {
   title: "Alabasta",
@@ -15,7 +16,10 @@ export default function RootLayout({
     <html lang="fr">
       <body
       >
-        {children}
+      <TransitionWrapper>
+          {children}
+      </TransitionWrapper>
+
       </body>
     </html>
   );
