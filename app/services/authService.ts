@@ -3,7 +3,7 @@ import ServiceResponse from "@/app/models/ServiceResponse";
 
 export default class AuthService {
 
-    static async login(username: string, password: string) : Promise<ServiceResponse> {
+    static async login(username: string, password: string) : Promise<ServiceResponse<null>> {
 
         const response = await fetch('/api/auth/login', {
             method: 'POST',
@@ -24,11 +24,11 @@ export default class AuthService {
                 return {success: false, error: ErrorType.SERVER_ERROR}
             }
         } else {
-            return {success: true, error: null}
+            return {success: true}
         }
     }
 
-    static async register(username: string, firstName: string, lastName: string, password: string) : Promise<ServiceResponse> {
+    static async register(username: string, firstName: string, lastName: string, password: string) : Promise<ServiceResponse<null>> {
         const response = await fetch('/api/auth/register', {
             method: 'POST',
             headers: {
@@ -44,7 +44,7 @@ export default class AuthService {
                 return {success: false, error: ErrorType.SERVER_ERROR}
             }
         } else {
-            return {success: true, error: null}
+            return {success: true}
         }
     }
 }

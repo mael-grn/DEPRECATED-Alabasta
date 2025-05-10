@@ -2,9 +2,10 @@ import {AnimatePresence, motion} from "framer-motion";
 
 interface LoadingProps {
     showLoading: boolean;
+    message?: string | null;
 }
 
-export default function Loading({showLoading}: LoadingProps) {
+export default function Loading({showLoading, message}: LoadingProps) {
     return (
         <div>
             <AnimatePresence>
@@ -25,6 +26,10 @@ export default function Loading({showLoading}: LoadingProps) {
                             exit={{ transform: "scale(0)" }}
                         >
                             <img alt={"loading"} src={"/icons/loader-light.gif"} className={"w-16 h-16"}/>
+
+                            {
+                                message && <p>{message}</p>
+                            }
                         </motion.div>
                     </motion.div>
                 }

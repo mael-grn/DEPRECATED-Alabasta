@@ -1,6 +1,7 @@
 import ErrorType from "@/app/enum/ErrorTypeEnum";
 
-export default interface ServiceResponse {
+export default interface ServiceResponse<T> {
     success: boolean;
-    error: ErrorType | null;
+    data?: T;
+    error?: ErrorType;
 }

@@ -4,7 +4,7 @@
 :root {
   --background: #000000;
   --background-opacity: rgba(0, 0, 0, 0.66);
-  --on-background: #131313;
+  --on-background: #1e1e1e;
   --on-background-hover: #272727;
   --foreground: #ffffff;
   --on-foreground: #e1e1e1;
@@ -29,6 +29,8 @@
   box-sizing: border-box;
   transition: all .4s ease;
   font-family: "Lexend", sans-serif;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 
@@ -157,4 +159,8 @@ input:focus {
   input:hover {
     background-color: var(--on-background);
   }
+}
+
+*::-webkit-scrollbar {
+  display: none;
 }
