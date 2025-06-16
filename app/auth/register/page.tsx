@@ -1,26 +1,117 @@
 'use client'
 import Input from "@/app/components/Input";
 import {useState} from "react";
+import {
+    basicStringValidator,
+    passwordStringValidator
+} from "@/app/utils/stringUtil";
+import DropDown from "@/app/components/DropDown";
+import Button from "@/app/components/Button";
+import Popup from "@/app/components/popup";
+import {UserService} from "@/app/services/userService";
+import {InsertableUser} from "@/app/models/user";
+import BackButton from "@/app/components/backButton";
 
 export default function Page() {
 
-    const [nameForm, setNameForm] = useState("");
+    const [firstNameForm, setFirstNameForm] = useState("");
+    const [lastNameForm, setLastNameForm] = useState("");
+    const [usernameForm, setUsernameForm] = useState("");
+    const [passwordForm, setPasswordForm] = useState("");
+    const [passwordValidationForm, setPasswordValidationForm] = useState("");
+    const [accountVisibility, setAccountVisibility] = useState("publique");
+
+    const [loading, setLoading] = useState(false);
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupMessage, setPopupMessage] = useState("");
+    const [popupTitle, setPopupTitle] = useState("");
+    const [popupIcon, setPopupIcon] = useState("info");
+
+    function passorwValidationVerificator(secondPassword: string) {
+        if (passwordForm !== secondPassword) {
+            return "Les mots de passe ne correspondent pas.";
+        }
+        return null;
+    }
+
+    async function handleSubmit(event: React.FormEvent) {
+        event.preventDefault();
+
+        if (basicStringValidator(firstNameForm) !== null || basicStringValidator(lastNameForm) !== null || basicStringValidator(usernameForm) !== null || passwordStringValidator(passwordForm) !== null || passwordForm !== passwordValidationForm) {
+            setShowPopup(true);
+            setPopupMessage("Veuillez remplir tous les champs correctement.");
+            setPopupTitle("Erreur de saisie");
+            setPopupIcon("warning");
+            return;
+        }
+
+        const newUser: InsertableUser = {
+            username: usernameForm,
+            first_name: firstNameForm,
+            last_name: lastNameForm,
+            is_public: accountVisibility === "publique",
+            password: passwordForm,
+        }
+
+        setLoading(true);
+        const res = await UserService.createUser(newUser)
+        setLoading(false);
+
+        if (res.success) {
+            setShowPopup(true);
+            setPopupMessage("Votre demande de création de compte a été créée avec succès. Vous devez maintenant attendre l'activation de votre compte par un administrateur.");
+            setPopupTitle("Succès");
+            setFirstNameForm("");
+            setLastNameForm("");
+            setUsernameForm("");
+            setPasswordForm("");
+            setPasswordValidationForm("");
+            setPopupIcon("check")
+            setAccountVisibility("publique");
+        } else {
+            setShowPopup(true);
+            setPopupMessage(res.error || "Une erreur est survenue lors de la création de votre compte. Veuillez réessayer plus tard.");
+            setPopupTitle("Erreur");
+            setPopupIcon("error");
+        }
+    }
 
     return (
+
+
         <main className={"flex items-center justify-center h-screen flex-col gap-6"}>
 
-            <h2
-            >
+            <BackButton/>
+
+            <h2>
                 Créez-vous un compte
             </h2>
 
-            <form>
-                <Input placeholder={"Nom"} value={nameForm} setValueAction={setNameForm}/>
+            <form
+                onSubmit={handleSubmit}
+                className="flex flex-col gap-4 bg-background-deep p-8 rounded-xl"
+            >
+                <Input placeholder={"Prénom"} value={firstNameForm} setValueAction={setFirstNameForm} iconName={"user"}
+                       validatorAction={basicStringValidator}/>
+                <Input placeholder={"Nom"} value={lastNameForm} setValueAction={setLastNameForm} iconName={"user"}
+                       validatorAction={basicStringValidator}/>
+                <Input placeholder={"Nom d'utilisateur"} value={usernameForm} setValueAction={setUsernameForm}
+                       iconName={"user"} validatorAction={basicStringValidator}/>
+                <Input placeholder={"Mot de passe"} value={passwordForm} setValueAction={setPasswordForm}
+                       iconName={"lock"} validatorAction={passwordStringValidator} type={"password"}/>
+                <Input placeholder={"Validation du mot de passe"} value={passwordValidationForm}
+                       setValueAction={setPasswordValidationForm} iconName={"lock"}
+                       validatorAction={passorwValidationVerificator} type={"password"}/>
+                <div className={"flex flex-col gap-3 items-center justify-center"}>
+                    <p>Visibilité de votre compte : </p>
+                    <DropDown items={["publique", "privé"]} selectedItem={accountVisibility}
+                              setSelectedItemAction={setAccountVisibility}/>
+                </div>
+                <Button isLoading={loading} isForm={true} iconName={"ship"} text={"Créer mon compte"}></Button>
             </form>
 
-            <a>
-                J'ai déjà un compte
-            </a>
+            <Popup show={showPopup} message={popupMessage} title={popupTitle} closePopup={() => setShowPopup(false)}
+                   icon={popupIcon}/>
 
         </main>
     );

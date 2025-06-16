@@ -1,19 +1,19 @@
 import ServiceResponse from "@/app/models/serviceResponse";
-import axios from "axios";
+import axios, {AxiosError} from "axios";
 import {getErrorMessageFromStatus} from "@/app/utils/stringUtil";
 import {User} from "@/app/models/user";
 
 export default class SessionService {
     static async login(username: string, password: string): Promise<ServiceResponse<User>> {
-        const response = await axios.post('/api/session', {username, password});
-        if (response.status === 200) {
+        try {
+            await axios.post('/api/session', {username, password});
             return {
                 success: true,
             };
-        } else {
+        } catch (e) {
             return {
                 success: false,
-                error: getErrorMessageFromStatus(response.status)
+                error: getErrorMessageFromStatus((e as AxiosError).status || 500)
             };
         }
     }

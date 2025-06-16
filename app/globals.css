@@ -2,10 +2,11 @@
 @import "tailwindcss";
 
 :root {
-  --background: #101010;
+  --background: #191919;
   --background-opacity: rgba(16, 16, 16, 0.93);
-  --on-background: #000000;
-  --background-hover: #1b1b1b;
+  --background-deep: #000000;
+  --on-background: #252525;
+  --background-hover: #333333;
   --foreground: #ffffff;
   --on-foreground: #cfcfcf;
   --on-foreground-hover: #bfbfbf;
@@ -17,6 +18,7 @@
 
 @theme inline {
   --color-background: var(--background);
+    --color-background-deep: var(--background-deep);
   --color-background-opacity: var(--background-opacity);
   --color-on-background: var(--on-background);
   --color-on-background-hover: var(--background-hover);
