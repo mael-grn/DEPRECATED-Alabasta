@@ -2,27 +2,31 @@
 @import "tailwindcss";
 
 :root {
-  --background: #000000;
-  --background-opacity: rgba(0, 0, 0, 0.66);
-  --on-background: #1e1e1e;
-  --on-background-hover: #272727;
+  --background: #101010;
+  --background-opacity: rgba(16, 16, 16, 0.93);
+  --on-background: #000000;
+  --background-hover: #1b1b1b;
   --foreground: #ffffff;
-  --on-foreground: #e1e1e1;
-  --on-foreground-hover: #d1d1d1;
-  --primary: #CF0F47;
-  --secondary: #FF0B55;
+  --on-foreground: #cfcfcf;
+  --on-foreground-hover: #bfbfbf;
+  --primary: #A91D3A;
+    --primary-hover: #8f1831;
+  --secondary: #2F7C8A;
+  --secondary-hover: #25616c;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-background-opacity: var(--background-opacity);
   --color-on-background: var(--on-background);
-  --color-on-background-hover: var(--on-background-hover);
+  --color-on-background-hover: var(--background-hover);
   --color-foreground: var(--foreground);
   --color-on-foreground: var(--on-foreground);
   --color-on-foreground-hover: var(--on-foreground-hover);
   --color-secondary: var(--secondary);
+    --color-secondary-hover: var(--secondary-hover);
   --color-primary: var(--primary);
+    --color-primary-hover: var(--primary-hover);
 }
 
 * {
@@ -45,7 +49,7 @@ h1 {
 }
 
 h2 {
-  font-size: 30px;
+  font-size: 32px;
   font-weight: 800;
 }
 
@@ -74,93 +78,6 @@ main {
     font-weight: 500;
   }
 }
-
-button {
-  position: relative;
-  color: var(--foreground);
-  font-family: "Lexend", sans-serif;
-  font-size: 16px;
-  height: 40px;
-  cursor: pointer;
-  padding: 10px 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 10px;
-  background-color: var(--primary);
-}
-
-button:disabled {
-  cursor: default;
-  opacity: .7;
-}
-
-button:has(img){
-  padding: 10px 50px 10px 20px;
-}
-
-button img {
-  position: absolute;
-  right: 20px;
-  top: 10px;
-  height: 20px;
-
-  object-fit: contain;
-}
-
-button:hover:not(:disabled) {
-  background-color: var(--secondary);
-}
-
-button:hover:has(img):not(:disabled) {
-  color: var(--secondary);
-}
-
-button:hover:not(:disabled) img  {
-  transform: scale(1.2);
-  right: calc(50% - 10px);
-}
-
-a {
-  cursor: pointer;
-  color: var(--foreground);
-  text-decoration: none;
-}
-
-a:hover {
-  color: var(--on-foreground);
-  text-decoration: underline;
-}
-
-input {
-  color: var(--foreground);
-  font-family: "Lexend", sans-serif;
-  font-size: 16px;
-  height: 40px;
-  padding: 10px 20px;
-  border-radius: 10px;
-  background-color: var(--on-background);
-}
-
-input:hover {
-  background-color: var(--on-background-hover);
-}
-
-input:focus {
-  outline: none;
-  background-color: var(--on-background-hover);
-}
-
-@media (max-width: 768px) {
-  a:hover {
-    color: var(--foreground);
-    text-decoration: none;
-  }
-  input:hover {
-    background-color: var(--on-background);
-  }
-}
-
 *::-webkit-scrollbar {
   display: none;
 }

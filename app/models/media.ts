@@ -1,13 +1,11 @@
-import MediaType from "@/app/enum/MediaTypeEnum";
-import StreamLink from "@/app/models/StreamLink";
+import MediaType from "@/app/enums/mediaTypeEnum";
 
-export default interface Media {
+export interface Media {
     title: string;
     type: MediaType
     year: number;
     posterUrl: string;
     backdropUrl: string;
-    streamLinks: StreamLink[];
     genres: string[];
     imdbId: string;
     tmdbId: string;

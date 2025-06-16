@@ -1,0 +1,50 @@
+import {getConnectedUser} from "@/app/utils/apiUtil";
+import {NextResponse} from "next/server";
+import {InsertableUser} from "@/app/models/user";
+import {neon} from "@neondatabase/serverless";
+import {hashPassword} from "@/app/utils/passwordUtil";
+
+export async function GET() {
+    const user = await getConnectedUser();
+
+    return NextResponse.json((user), {status: 200});
+}
+
+/**
+ * Update the connected user profile
+ * @param request
+ * @constructor
+ */
+export async function PUT(request: Request) {
+    const user = await getConnectedUser();
+    const data: InsertableUser = await request.json();
+
+    const sql = neon(`${process.env.DATABASE_URL}`);
+    const hashedPassword = hashPassword(data.password);
+
+    await sql`UPDATE users SET 
+                 username = ${data.username},
+        first_name = ${data.first_name},
+        last_name = ${data.last_name},
+        is_public = ${data.is_public},
+        password = ${hashedPassword}
+             WHERE id = ${user.id}`;
+
+    return NextResponse.json({message: "Profile updated successfully"}, {status: 200});
+}
+
+/**
+ * Delete the connected user
+ * @param request
+ * @constructor
+ */
+export async function DELETE() {
+    const user = await getConnectedUser();
+
+    const sql = neon(`${process.env.DATABASE_URL}`);
+
+    // Delete the user from the database
+    await sql`DELETE FROM users WHERE id = ${user.id}`;
+
+    return NextResponse.json({message: "User deleted successfully"}, {status: 200});
+}

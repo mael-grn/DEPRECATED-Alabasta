@@ -1,24 +1,14 @@
-import type { Metadata } from "next";
 import "./globals.css";
+import MotionProvider from "@/app/components/motionProvider";
 
-export const metadata: Metadata = {
-  title: "Alabasta",
-  description: "",
-};
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="fr">
-      <body
-      >
-
-      {children}
-
-      </body>
-    </html>
-  );
+export default function RootLayout({children}: { children: React.ReactNode }) {
+    return (
+        <html lang="fr">
+        <body>
+        <MotionProvider>
+            {children}
+        </MotionProvider>
+        </body>
+        </html>
+    );
 }

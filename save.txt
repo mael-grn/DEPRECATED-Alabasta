@@ -1,0 +1,227 @@
+import MediaType from "@/app/enum/MediaTypeEnum";
+
+export default interface LightMedia {
+    title: string,
+    year: number,
+    posterUrl: string,
+    type: MediaType,
+    tmdbId: string,
+}
+
+import Media from "@/app/models/media";
+import LightMedia from "@/app/models/LightMedia";
+import MediaType from "@/app/enum/MediaTypeEnum";
+import ServiceResponse from "@/app/models/ServiceResponse";
+import ErrorType from "@/app/enum/ErrorTypeEnum";
+import {TmdbLightMedia} from "@/app/models/tmdbLightMedia";
+import TmdbGenre from "@/app/models/TmdbGenre";
+
+export default class TmdbService {
+
+    static apiKey: string = process.env.NEXT_PUBLIC_TMDB_KEY ?? "";
+
+    private static parseLightMovie(data: TmdbLightMedia) : LightMedia {
+        return {
+            title: data.title,
+            year: parseInt(data.release_date?.split('-')[0] ?? 2005),
+            posterUrl: data.poster_path ? "https://image.tmdb.org/t/p/w500" + data.poster_path : "",
+            type: MediaType.MOVIE,
+            tmdbId: data.id,
+        }
+    }
+
+    static async getPopularMovies() : Promise<ServiceResponse<LightMedia[]>> {
+        const url = 'https://api.themoviedb.org/3/movie/popular?language=fr&page=1';
+        const options = {
+            method: 'GET',
+            headers: {
+                accept: 'application/json',
+                Authorization: `Bearer ${this.apiKey}`
+            }
+        };
+
+        const res = await fetch(url, options);
+
+        if (!res.ok) {
+            return {
+                success: false,
+                error: ErrorType.TMDB_API_ERROR
+            }
+        }
+
+        const data = await res.json();
+
+        const mediaList : LightMedia[] = [];
+        for (const item of data.results) {
+            if (item.poster_path && item.release_date) {
+                mediaList.push(this.parseLightMovie(item));
+            }
+        }
+
+        return {
+            success: true,
+            data: mediaList,
+        };
+    }
+
+    static async getMovieDetails(tmdbId: string, lang: string = "fr") : Promise<ServiceResponse<Media>> {
+        const url = `https://api.themoviedb.org/3/movie/${tmdbId}?language=${lang}`;
+        const options = {
+            method: 'GET',
+            headers: {
+                accept: 'application/json',
+                Authorization: `Bearer ${this.apiKey}`
+            }
+        };
+
+        const res = await fetch(url, options)
+
+        if (res.status ===404) {
+            return {
+                success: false,
+                error: ErrorType.MEDIA_NOT_FOUND
+            }
+        }
+
+        if (!res.ok) {
+            return {
+                success: false,
+                error: ErrorType.TMDB_API_ERROR
+            }
+        }
+
+        const data = await res.json();
+
+        return {
+            success: true,
+            data: {
+                type: MediaType.MOVIE,
+                title: data.title,
+                year: data.release_date.split('-')[0],
+                posterUrl: data.poster_path ? "https://image.tmdb.org/t/p/w500" + data.poster_path : "",
+                backdropUrl: "https://image.tmdb.org/t/p/w1280" + data.backdrop_path,
+                streamLinks: [],
+                genres: data.genres.map((genre:TmdbGenre) => genre.name),
+                imdbId: data.imdb_id,
+                vo: data.original_language,
+                overview: data.overview,
+                runtime: parseFloat(data.runtime),
+                vote: data.vote_average,
+                voteCount: data.vote_count,
+                tmdbId: tmdbId,
+            }
+        }
+    }
+
+    static async searchMovie(queryString: string): Promise<ServiceResponse<LightMedia[]>> {
+
+        const url = `https://api.themoviedb.org/3/search/movie?query=${queryString}&include_adult=false&language=fr`;
+        const options = {
+            method: 'GET',
+            headers: {
+                accept: 'application/json',
+                Authorization: `Bearer ${this.apiKey}`
+            }
+        };
+
+        const movieRes = await fetch(url, options);
+
+        if (!movieRes.ok) {
+            return {
+                success: false,
+                error: ErrorType.TMDB_API_ERROR
+            }
+        }
+
+        const movieData = await movieRes.json();
+        const mediaList: LightMedia[] = [];
+
+        for (const item of movieData.results) {
+            if (item.poster_path && item.release_date) {
+                mediaList.push(this.parseLightMovie(item));
+            }
+        }
+
+        return {
+            success: true,
+            data: mediaList,
+        };
+    }
+}
+
+import ServiceResponse from "@/app/models/ServiceResponse";
+import StreamLink from "@/app/models/StreamLink";
+import ErrorType from "@/app/enum/ErrorTypeEnum";
+import Quality from "@/app/enum/QualityEnum";
+import { JSDOM } from 'jsdom';
+import TmdbService from "@/app/services/tmdbService";
+
+export async function getMagnetLinks(tmdbId: string) :Promise<ServiceResponse<StreamLink[]>> {
+
+    const mediaRes = await TmdbService.getMovieDetails(tmdbId, "en");
+    if (!mediaRes.success) {
+        return {
+            success:false,
+            error: mediaRes.error
+        }
+    }
+
+    const newTitle = mediaRes.data!.title
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9-]+/g, "-");
+    const firstTryRes = await fetch(`https://yts.rs/movie/${newTitle}-${mediaRes.data!.year}`)
+    if (firstTryRes.status === 404) {
+        return {
+            success:false,
+            error: ErrorType.MEDIA_NOT_FOUND
+        }
+    }
+
+    if (firstTryRes.ok) {
+        const data = await firstTryRes.text();
+        const dom = new JSDOM(data);
+        const document = dom.window.document;
+        return searchMagnetLinksOnMoviePage(document);
+    }
+
+    return {
+        success:false,
+        error: ErrorType.SERVER_ERROR
+    }
+}
+
+export async function searchMagnetLinksOnMoviePage(page: Document) : Promise<ServiceResponse<StreamLink[]>> {
+
+    const links = page.querySelectorAll("a.download-torrent");
+
+    if (links.length < 1) {
+        return {
+            success: false,
+            error: ErrorType.MEDIA_NOT_FOUND,
+        }
+    }
+
+    const resultLinks: StreamLink[] = []
+
+    for (const link of links) {
+        if (link.getAttribute("href")?.startsWith("magnet")) {
+            let quality: Quality | null = null
+            if (link.textContent?.toString().includes("720")) quality = Quality.SD
+            else if (link.textContent?.toString().includes("1080")) quality = Quality.HD
+            else if (link.textContent?.toString().includes("2160")) quality = Quality.K4
+            else quality = Quality.UNKNOWN
+
+            resultLinks.push({
+                quality: quality,
+                magnetLink: link.getAttribute("href")!
+            })
+        }
+    }
+
+    return {
+        success: true,
+        data: resultLinks
+    }
+}
