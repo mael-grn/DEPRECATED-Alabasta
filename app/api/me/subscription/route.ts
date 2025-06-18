@@ -5,6 +5,9 @@ import {User} from "@/app/models/user";
 
 export async function GET() {
     const user = await getConnectedUser();
+    if (!user) {
+        return NextResponse.json({error: "Unauthorized"}, {status: 401});
+    }
     const sql = neon(`${process.env.DATABASE_URL}`);
     const response = await sql`
         SELECT u.*

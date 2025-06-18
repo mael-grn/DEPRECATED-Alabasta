@@ -1,16 +1,14 @@
 'use client'
 import Input from "@/app/components/Input";
 import {useState} from "react";
-import {
-    basicStringValidator,
-    passwordStringValidator
-} from "@/app/utils/stringUtil";
+import {basicStringValidator, passwordStringValidator} from "@/app/utils/stringUtil";
 import DropDown from "@/app/components/DropDown";
-import Button from "@/app/components/Button";
 import Popup from "@/app/components/popup";
 import {UserService} from "@/app/services/userService";
 import {InsertableUser} from "@/app/models/user";
-import BackButton from "@/app/components/backButton";
+import Section from "@/app/components/section";
+import MainPage, {PageAlignmentEnum} from "@/app/components/mainPage";
+import {useRouter} from "next/navigation";
 
 export default function Page() {
 
@@ -26,6 +24,8 @@ export default function Page() {
     const [popupMessage, setPopupMessage] = useState("");
     const [popupTitle, setPopupTitle] = useState("");
     const [popupIcon, setPopupIcon] = useState("info");
+
+    const router = useRouter();
 
     function passorwValidationVerificator(secondPassword: string) {
         if (passwordForm !== secondPassword) {
@@ -79,40 +79,34 @@ export default function Page() {
     return (
 
 
-        <main className={"flex items-center justify-center h-screen flex-col gap-6"}>
-
-            <BackButton/>
-
-            <h2>
-                Créez-vous un compte
-            </h2>
-
-            <form
-                onSubmit={handleSubmit}
-                className="flex flex-col gap-4 bg-background-deep p-8 rounded-xl"
-            >
-                <Input placeholder={"Prénom"} value={firstNameForm} setValueAction={setFirstNameForm} iconName={"user"}
-                       validatorAction={basicStringValidator}/>
-                <Input placeholder={"Nom"} value={lastNameForm} setValueAction={setLastNameForm} iconName={"user"}
-                       validatorAction={basicStringValidator}/>
-                <Input placeholder={"Nom d'utilisateur"} value={usernameForm} setValueAction={setUsernameForm}
-                       iconName={"user"} validatorAction={basicStringValidator}/>
-                <Input placeholder={"Mot de passe"} value={passwordForm} setValueAction={setPasswordForm}
-                       iconName={"lock"} validatorAction={passwordStringValidator} type={"password"}/>
-                <Input placeholder={"Validation du mot de passe"} value={passwordValidationForm}
-                       setValueAction={setPasswordValidationForm} iconName={"lock"}
-                       validatorAction={passorwValidationVerificator} type={"password"}/>
-                <div className={"flex flex-col gap-3 items-center justify-center"}>
-                    <p>Visibilité de votre compte : </p>
-                    <DropDown items={["publique", "privé"]} selectedItem={accountVisibility}
-                              setSelectedItemAction={setAccountVisibility}/>
-                </div>
-                <Button isLoading={loading} isForm={true} iconName={"ship"} text={"Créer mon compte"}></Button>
-            </form>
+        <MainPage title={"Créer un compte"} pageAlignment={PageAlignmentEnum.center}>
+            <Section actions={[{iconName:"login", text:"Connexion", isSecondary:true, onClick: () => router.push("/auth/login")},{isLoading:loading, isForm:true, iconName:"ship", text:"Créer mon compte"}]}>
+                <form
+                    onSubmit={handleSubmit}
+                    className="flex flex-col gap-3"
+                >
+                    <Input placeholder={"Prénom"} value={firstNameForm} setValueAction={setFirstNameForm} iconName={"user"}
+                           validatorAction={basicStringValidator}/>
+                    <Input placeholder={"Nom"} value={lastNameForm} setValueAction={setLastNameForm} iconName={"user"}
+                           validatorAction={basicStringValidator}/>
+                    <Input placeholder={"Nom d'utilisateur"} value={usernameForm} setValueAction={setUsernameForm}
+                           iconName={"user"} validatorAction={basicStringValidator}/>
+                    <Input placeholder={"Mot de passe"} value={passwordForm} setValueAction={setPasswordForm}
+                           iconName={"lock"} validatorAction={passwordStringValidator} type={"password"}/>
+                    <Input placeholder={"Validation du mot de passe"} value={passwordValidationForm}
+                           setValueAction={setPasswordValidationForm} iconName={"lock"}
+                           validatorAction={passorwValidationVerificator} type={"password"}/>
+                    <div className={"flex gap-3 items-center justify-center"}>
+                        <p>Visibilité de votre compte : </p>
+                        <DropDown items={["publique", "privé"]} selectedItem={accountVisibility}
+                                  setSelectedItemAction={setAccountVisibility}/>
+                    </div>
+                </form>
+            </Section>
 
             <Popup show={showPopup} message={popupMessage} title={popupTitle} closePopup={() => setShowPopup(false)}
                    icon={popupIcon}/>
 
-        </main>
+        </MainPage>
     );
 }

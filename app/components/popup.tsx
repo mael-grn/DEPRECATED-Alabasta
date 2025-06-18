@@ -1,14 +1,7 @@
 import {AnimatePresence, motion} from "framer-motion";
-import Button from "@/app/components/Button";
+import Button, {ButtonProps} from "@/app/components/Button";
 
-export interface PopupAction {
-    label: string;
-    action: () => void;
-    icon: string;
-    isSecondary?: boolean;
-}
-
-export default function Popup({show, icon="info", title, message, closePopup, actions} : {show: boolean, icon?: string, message: string, title: string, closePopup: () => void, actions?: PopupAction[] }) {
+export default function Popup({show, icon="info", title, message, closePopup, actions} : {show: boolean, icon?: string, message: string, title: string, closePopup: () => void, actions?: ButtonProps[] }) {
     return (
         <AnimatePresence>
             {
@@ -33,10 +26,12 @@ export default function Popup({show, icon="info", title, message, closePopup, ac
                                 actions && actions.map((action, index) => (
                                     <Button
                                         key={index}
-                                        iconName={action.icon}
-                                        text={action.label}
-                                        onClick={action.action}
-                                        isSecondary={action.isSecondary}
+                                        iconName={action.iconName}
+                                        text={action.text}
+                                        onClick={action.onClick}
+                                        actionType={action.actionType}
+                                        isForm={action.isForm}
+                                        isLoading={action.isLoading}
                                     />
                                 ))
                             }

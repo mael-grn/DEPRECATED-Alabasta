@@ -1,17 +1,33 @@
 'use client';
-export default function Button({iconName, text, onClick, isSecondary, isForm = false, isLoading}: { iconName: string, text: string, animationDelay? : number, onClick?: () => void, isSecondary?: boolean, isForm?: boolean, isLoading?: boolean }) {
+
+export interface ButtonProps {
+    iconName: string;
+    text: string;
+    onClick?: () => void;
+    actionType?: ActionTypeEnum;
+    isForm?: boolean;
+    isLoading?: boolean;
+    isSecondary?: boolean;
+}
+
+export enum ActionTypeEnum {
+    dangerous,
+    safe
+}
+
+export default function Button({iconName, text, onClick, actionType, isSecondary=false, isForm = false, isLoading}:ButtonProps) {
 
     return (
         <button
             disabled={isLoading}
             type={isForm ? "submit" : "button"}
-            className={`flex gap-2 cursor-pointer items-center justify-center pt-3 pb-3 pl-6 pr-6 ${isSecondary ? "bg-secondary" : "bg-primary"} rounded-xl ${isSecondary ? "md:hover:bg-secondary-hover" : "md:hover:bg-primary-hover"} ${isSecondary ? "active:bg-secondary-hover" : "active:bg-primary-hover "} disabled:cursor-default `}
+            className={`flex  gap-2 cursor-pointer text-background items-center justify-center pt-2 pb-2 pl-4 pr-4 ${actionType === undefined ? isSecondary ? "bg-background text-foreground border-1 border-foreground md:hover:bg-on-background-hover active:bg-on-background-hover" : "bg-foreground md:hover:bg-on-foreground active:bg-on-foreground" : actionType === ActionTypeEnum.safe ? "bg-safe md:hover:bg-safe-hover active:bg-safe-hover" : "bg-dangerous md:hover:bg-dangerous-hover active:bg-dangerous"} rounded-lg disabled:cursor-default `}
             onClick={onClick}
         >
             {
-                isLoading ? <img src={"/icons/loader-light.gif"} alt={"loader-light"} className={"w-6"} /> :
+                isLoading ? <img src={"/icons/loader-dark.gif"} alt={"loader-light"} className={"w-6"} /> :
                     <>
-                        <img src={`/icons/${iconName}.svg`} alt={iconName} className={"w-6 invert"} />
+                        <img src={`/icons/${iconName}.svg`} alt={iconName} className={`w-5 ${isSecondary && "invert"}`} />
                         {text}
                     </>
             }

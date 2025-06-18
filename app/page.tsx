@@ -13,10 +13,10 @@ export default function Home() {
 
     useEffect(() => {
         setLoading(true);
-        MeService.getMe().then((res) => {
-            if(res.success && res.data?.is_approved) {
-                router.push("/secure/home");
-            }
+        MeService.getMe().then(() => {
+            router.push("/secure/home");
+        }).catch(() => {
+
         }).finally(() => {
             setLoading(false);
         })
@@ -36,14 +36,13 @@ export default function Home() {
                   iconName={"ship"}
                   text={"Créer un compte"}
                   onClick={() => router.push("/auth/register")}
-                  isSecondary={true}
               />
 
               <Button
-                  iconName={"key"}
+                  iconName={"login"}
                   text={"Connexion"}
                   onClick={() => router.push("/auth/login")}
-                  animationDelay={0.2}
+                  isSecondary={true}
               />
           </div>
 

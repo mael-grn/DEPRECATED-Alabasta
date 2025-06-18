@@ -2,33 +2,31 @@
 @import "tailwindcss";
 
 :root {
-  --background: #191919;
-  --background-opacity: rgba(16, 16, 16, 0.93);
-  --background-deep: #000000;
-  --on-background: #252525;
-  --background-hover: #333333;
+  --background: #000000;
+  --background-opacity: rgba(0, 0, 0, 0.89);
+  --on-background: #0c0c0c;
+  --on-background-hover: #2c2c2c;
   --foreground: #ffffff;
   --on-foreground: #cfcfcf;
   --on-foreground-hover: #bfbfbf;
-  --primary: #A91D3A;
-    --primary-hover: #8f1831;
-  --secondary: #2F7C8A;
-  --secondary-hover: #25616c;
+  --dangerous: #A91D3A;
+  --dangerous-hover: #8f1831;
+  --safe: #2F7C8A;
+  --safe-hover: #25616c;
 }
 
 @theme inline {
   --color-background: var(--background);
-    --color-background-deep: var(--background-deep);
   --color-background-opacity: var(--background-opacity);
   --color-on-background: var(--on-background);
-  --color-on-background-hover: var(--background-hover);
+  --color-on-background-hover: var(--on-background-hover);
   --color-foreground: var(--foreground);
   --color-on-foreground: var(--on-foreground);
   --color-on-foreground-hover: var(--on-foreground-hover);
-  --color-secondary: var(--secondary);
-    --color-secondary-hover: var(--secondary-hover);
-  --color-primary: var(--primary);
-    --color-primary-hover: var(--primary-hover);
+  --color-safe: var(--safe);
+    --color-safe-hover: var(--safe-hover);
+  --color-dangerous: var(--dangerous);
+    --color-dangerous-hover: var(--dangerous-hover);
 }
 
 * {
@@ -46,40 +44,20 @@ body {
 }
 
 h1 {
-  font-size: 40px;
-  font-weight: 800;
+  font-size: 35px;
+  font-weight: 450;
 }
 
 h2 {
-  font-size: 32px;
-  font-weight: 800;
+  font-size: 30px;
+  font-weight: 400;
 }
 
 h3 {
-  font-size: 28px;
-  font-weight: 500;
+  font-size: 25px;
+  font-weight: 400;
 }
 
-main {
-  padding: 16px;
-}
-
-@media (max-width: 768px) {
-  h1 {
-    font-size: 30px;
-    font-weight: 800;
-  }
-
-  h2 {
-    font-size: 25px;
-    font-weight: 800;
-  }
-
-  h3 {
-    font-size: 20px;
-    font-weight: 500;
-  }
-}
 *::-webkit-scrollbar {
   display: none;
 }
