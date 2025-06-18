@@ -1,5 +1,54 @@
 import {Media} from "@/app/models/media";
 import MediaType from "@/app/enums/mediaTypeEnum";
+import LightMedia from "@/app/models/lightMedia";
+import {getErrorMessageFromStatus} from "@/app/utils/stringUtil";
+
+
+export function parseLightMovie(data: {
+    title: string,
+    release_date: string,
+    poster_path: string,
+    id: string
+}): LightMedia {
+    return {
+        title: data.title,
+        year: parseInt(data.release_date?.split('-')[0] ?? 2005),
+        posterUrl: data.poster_path ? "https://image.tmdb.org/t/p/w500" + data.poster_path : "",
+        type: MediaType.MOVIE,
+        tmdbId: data.id,
+    }
+}
+
+export async function getPopularMovies(): Promise<LightMedia[]> {
+    const apiKey: string = process.env.NEXT_PUBLIC_TMDB_KEY ?? "";
+
+    const url = 'https://api.themoviedb.org/3/movie/popular?language=fr&page=1';
+    const options = {
+        method: 'GET',
+        headers: {
+            accept: 'application/json',
+            Authorization: `Bearer ${apiKey}`
+        }
+    };
+
+    const res = await fetch(url, options);
+
+    if (!res.ok) {
+        throw getErrorMessageFromStatus(res.status);
+
+    }
+
+    const data = await res.json();
+
+    const mediaList: LightMedia[] = [];
+    for (const item of data.results) {
+        if (item.poster_path && item.release_date) {
+            mediaList.push(parseLightMovie(item));
+        }
+    }
+
+    return mediaList;
+}
 
 export async function getMediaDetails(tmdbId: string, lang: string = "fr") {
     let media = getMovieDetailsFromTmdb(tmdbId, lang);
@@ -8,7 +57,7 @@ export async function getMediaDetails(tmdbId: string, lang: string = "fr") {
     return media;
 }
 
-export async function getMovieDetailsFromTmdb(tmdbId: string, lang: string = "fr"): Promise<Media | null> {
+export async function getMovieDetailsFromTmdb(tmdbId: string, lang: string = "fr"): Promise<Media> {
 
     const apiKey: string = process.env.NEXT_PUBLIC_TMDB_KEY ?? "";
 
@@ -23,7 +72,7 @@ export async function getMovieDetailsFromTmdb(tmdbId: string, lang: string = "fr
 
     const res = await fetch(url, options)
 
-    if (!res.ok) return null;
+    if (!res.ok) throw getErrorMessageFromStatus(res.status);
 
     const data = await res.json();
 
@@ -33,7 +82,7 @@ export async function getMovieDetailsFromTmdb(tmdbId: string, lang: string = "fr
         year: data.release_date.split('-')[0],
         posterUrl: data.poster_path ? "https://image.tmdb.org/t/p/w500" + data.poster_path : "",
         backdropUrl: "https://image.tmdb.org/t/p/w1280" + data.backdrop_path,
-        genres: data.genres.map((genre: {name: string}) => genre.name),
+        genres: data.genres.map((genre: { name: string }) => genre.name),
         imdbId: data.imdb_id,
         vo: data.original_language,
         overview: data.overview,
@@ -45,7 +94,7 @@ export async function getMovieDetailsFromTmdb(tmdbId: string, lang: string = "fr
 
 }
 
-export async function getTvDetailsFromTmdb(tmdbId: string, lang: string = "fr"): Promise<Media | null> {
+export async function getTvDetailsFromTmdb(tmdbId: string, lang: string = "fr"): Promise<Media> {
 
     const apiKey: string = process.env.NEXT_PUBLIC_TMDB_KEY ?? "";
 
@@ -60,7 +109,7 @@ export async function getTvDetailsFromTmdb(tmdbId: string, lang: string = "fr"):
 
     const res = await fetch(url, options)
 
-    if (!res.ok) return null;
+    if (!res.ok) throw getErrorMessageFromStatus(res.status);
 
     const data = await res.json();
 
@@ -70,7 +119,7 @@ export async function getTvDetailsFromTmdb(tmdbId: string, lang: string = "fr"):
         year: data.first_air_date.split('-')[0],
         posterUrl: data.poster_path ? "https://image.tmdb.org/t/p/w500" + data.poster_path : "",
         backdropUrl: "https://image.tmdb.org/t/p/w1280" + data.backdrop_path,
-        genres: data.genres.map((genre: {name: string}) => genre.name),
+        genres: data.genres.map((genre: { name: string }) => genre.name),
         imdbId: data.external_ids?.imdb_id,
         vo: data.original_language,
         overview: data.overview,

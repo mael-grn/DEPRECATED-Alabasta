@@ -4,7 +4,7 @@ import {MotionConfig} from 'framer-motion';
 export default function MotionProvider({children}: { children: React.ReactNode }) {
 
     return (
-        <MotionConfig transition={{duration: 0.4, type: "easeInOut"}}>
+        <MotionConfig transition={{duration: 0.4, type: "tween"}}>
             {children}
         </MotionConfig>
     );
