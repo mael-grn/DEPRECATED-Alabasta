@@ -35,7 +35,6 @@ export async function getPopularMovies(): Promise<LightMedia[]> {
 
     if (!res.ok) {
         throw getErrorMessageFromStatus(res.status);
-
     }
 
     const data = await res.json();
