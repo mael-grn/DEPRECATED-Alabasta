@@ -21,16 +21,16 @@ export async function middleware(request: NextRequest) {
     const token = cookieStore.get('token')
 
     // Si le token existe pas erreur 401
-    if (!token) return NextResponse.json('Non autorisé', { status: 401 });
+    if (!token || !token.value || token.value.length === 0) return NextResponse.json({ status: 401 });
 
     // On vérifie le token
-    const res = verifyToken(token.value);
+    const res = await verifyToken(token.value);
 
     // Si le token est invalide ou expiré, on supprime le cookie et retourne une erreur 401
     if (!res) {
         cookieStore.delete('token');
         cookieStore.delete('user');
-        return NextResponse.json('Non autorisé', { status: 401 });
+        return NextResponse.json({ status: 401 });
     }
 }
 

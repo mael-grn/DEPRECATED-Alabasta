@@ -6,7 +6,9 @@ import {hashPassword} from "@/app/utils/passwordUtil";
 
 export async function GET() {
     const user = await getConnectedUser();
-
+    if (!user) {
+        return NextResponse.json({message: "User not found"}, {status: 404});
+    }
     return NextResponse.json((user), {status: 200});
 }
 
@@ -17,6 +19,9 @@ export async function GET() {
  */
 export async function PUT(request: Request) {
     const user = await getConnectedUser();
+    if (!user) {
+        return NextResponse.json({message: "User not found"}, {status: 404});
+    }
     const data: InsertableUser = await request.json();
 
     const sql = neon(`${process.env.DATABASE_URL}`);
@@ -40,6 +45,9 @@ export async function PUT(request: Request) {
  */
 export async function DELETE() {
     const user = await getConnectedUser();
+    if (!user) {
+        return NextResponse.json({message: "User not found"}, {status: 404});
+    }
 
     const sql = neon(`${process.env.DATABASE_URL}`);
 

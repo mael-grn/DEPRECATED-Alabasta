@@ -21,6 +21,7 @@ export async function verifyToken(token: string): Promise<boolean> {
 }
 
 export async function getIdFromToken(token: string): Promise<number> {
+    console.log('getIdFromToken: Vérification du token', token);
     const encoder = new TextEncoder();
     const { payload } = await jwtVerify(token, encoder.encode(SECRET));
     return payload.id as unknown as number;

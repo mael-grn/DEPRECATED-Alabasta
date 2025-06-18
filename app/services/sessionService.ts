@@ -17,4 +17,18 @@ export default class SessionService {
             };
         }
     }
+
+    static async logout(): Promise<ServiceResponse<User>> {
+        try {
+            await axios.delete('/api/session');
+            return {
+                success: true,
+            };
+        } catch (e) {
+            return {
+                success: false,
+                error: getErrorMessageFromStatus((e as AxiosError).status || 500)
+            };
+        }
+    }
 }

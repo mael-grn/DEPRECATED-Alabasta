@@ -6,6 +6,7 @@ export interface User {
     is_approved: boolean;
     is_admin: boolean;
     is_public: boolean;
+    profile_picture?: string;
     created_at: Date;
 }
 

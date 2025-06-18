@@ -32,3 +32,10 @@ export async function POST(request: Request) {
 
     return response
 }
+
+export async function DELETE(request: Request) {
+    const response = NextResponse.json("Session deleted", {status: 200})
+    // Supprimer le cookie de session
+    response.cookies.delete('token');
+    return response;
+}
