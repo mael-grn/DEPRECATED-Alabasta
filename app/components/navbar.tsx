@@ -1,5 +1,6 @@
 "use client";
 
+import {AnimatePresence, motion} from "framer-motion";
 import {usePathname, useRouter} from "next/navigation";
 import {useEffect, useState} from "react";
 
@@ -44,7 +45,7 @@ export default function Navbar() {
         {
             name: "Profil",
             icon: "user",
-            route: "/secure/me"
+            route: "/secure/settings"
         }
     ];
 
@@ -73,11 +74,19 @@ export default function Navbar() {
                         </li>
                     ))
                 }
-                <span
-                    style={{left: (1.5+pageIndex*14)*0.250 + "rem"}}
-                    onMouseUp={() => changePage(pageIndex)}
-                    className={`h-12 w-12 rounded-full bg-transparent backdrop-invert absolute top-1.5 cursor-pointer`}
-                />
+                <AnimatePresence>
+                    {
+                        pageIndex >= 0 &&
+                        <motion.span
+                            initial={{transform: "scale(0"}}
+                            animate={{transform: "scale(1)"}}
+                            exit={{transform: "scale(0)"}}
+                            style={{left: (1.5+pageIndex*14)*0.250 + "rem"}}
+                            onMouseUp={() => changePage(pageIndex)}
+                            className={`h-12 w-12 rounded-full bg-transparent backdrop-invert absolute top-1.5 cursor-pointer`}
+                        />
+                    }
+                </AnimatePresence>
             </ul>
         </div>
 );

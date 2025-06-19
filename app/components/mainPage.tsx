@@ -21,17 +21,17 @@ export default function MainPage({children, title, pageAlignment=PageAlignmentEn
     const router = useRouter();
 
     return (
-        <main className={"flex items-start justify-start flex-col gap-6 p-6"}>
+        <main className={"flex items-start justify-start flex-col gap-6 p-6 mb-20"}>
             {title && <>
                 <div className="flex gap-4 items-center">
                     <button
-                        className="flex gap-2 items-center justify-center pl-4 pr-4 pt-2 pb-2 bg-on-background rounded-lg md:hover:bg-on-background-hover active:bg-on-background-hover cursor-pointer"
+                        className="flex gap-2 items-center justify-center border-1 border-on-background-hover pl-4 pr-4 pt-2 pb-2 bg-on-background rounded-lg md:hover:bg-on-background-hover active:bg-on-background-hover cursor-pointer"
                         onClick={() => router.back()}
                     >
                         <img src="/icons/arrow-back.svg" alt="Back" className="w-4 invert" />
                         <span>Retour</span>
                     </button>
-                    <h1>{title}</h1>
+                    <h1 className={"line-clamp-2"}>{title}</h1>
                 </div>
                 <hr className={"border-0 h-[1px] w-full bg-on-background-hover"}/>
             </>}

@@ -9,10 +9,10 @@
   --foreground: #ffffff;
   --on-foreground: #cfcfcf;
   --on-foreground-hover: #bfbfbf;
-  --dangerous: #A91D3A;
-  --dangerous-hover: #8f1831;
-  --safe: #2F7C8A;
-  --safe-hover: #25616c;
+  --dangerous: #c53854;
+  --dangerous-hover: #A91D3A;
+  --safe: #5ca6b3;
+  --safe-hover: #2F7C8A;
 }
 
 @theme inline {

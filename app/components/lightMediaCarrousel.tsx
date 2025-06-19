@@ -36,7 +36,7 @@ export default function LightMediaCarrousel({medias, title, loading = false}: {
             </div>
             <div ref={scrollRef} className={"flex overflow-x-auto gap-3 relative"}>
                 {
-                    medias.map((media, index) => <LightMediaComponent key={index} media={media}/>)
+                    medias.map((media, index) => <LightMediaComponent key={index} media={media} index={index}/>)
                 }
                 {
                     loading && <div
