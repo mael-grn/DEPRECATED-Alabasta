@@ -66,7 +66,8 @@ export default function Navbar() {
                 {
                     routes.map((route, index) => (
                         <li
-                            className={"cursor-pointer"}
+                            className={'cursor-pointer'}
+                            onMouseUp={() => changePage(pageIndex)}
                             key={index-1}
                             onMouseEnter={() => setPageIndex(index)}
                         >

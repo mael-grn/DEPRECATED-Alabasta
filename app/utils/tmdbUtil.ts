@@ -1,7 +1,6 @@
 import {Media} from "@/app/models/media";
 import MediaType from "@/app/enums/mediaTypeEnum";
 import LightMedia from "@/app/models/lightMedia";
-import {getErrorMessageFromStatus} from "@/app/utils/stringUtil";
 
 
 export function parseLightMovie(data: {
@@ -20,7 +19,9 @@ export function parseLightMovie(data: {
 }
 
 export async function getPopularMovies(): Promise<LightMedia[]> {
-    const apiKey: string = process.env.NEXT_PUBLIC_TMDB_KEY ?? "";
+    'use server';
+    const apiKey: string = process.env.TMDB_KEY ?? "";
+    console.log("TMDB_KEY", apiKey);
 
     const url = 'https://api.themoviedb.org/3/movie/popular?language=fr&page=1';
     const options = {
@@ -34,7 +35,7 @@ export async function getPopularMovies(): Promise<LightMedia[]> {
     const res = await fetch(url, options);
 
     if (!res.ok) {
-        throw getErrorMessageFromStatus(res.status);
+        throw res.status;
     }
 
     const data = await res.json();
@@ -50,6 +51,7 @@ export async function getPopularMovies(): Promise<LightMedia[]> {
 }
 
 export async function getMediaDetails(tmdbId: string, lang: string = "fr") {
+    'use server';
     let media = getMovieDetailsFromTmdb(tmdbId, lang);
     if (media) return media;
     media = getTvDetailsFromTmdb(tmdbId, lang);
@@ -57,8 +59,9 @@ export async function getMediaDetails(tmdbId: string, lang: string = "fr") {
 }
 
 export async function getMovieDetailsFromTmdb(tmdbId: string, lang: string = "fr"): Promise<Media> {
+    'use server';
 
-    const apiKey: string = process.env.NEXT_PUBLIC_TMDB_KEY ?? "";
+    const apiKey: string = process.env.TMDB_KEY ?? "";
 
     const url = `https://api.themoviedb.org/3/movie/${tmdbId}?language=${lang}`;
     const options = {
@@ -71,7 +74,7 @@ export async function getMovieDetailsFromTmdb(tmdbId: string, lang: string = "fr
 
     const res = await fetch(url, options)
 
-    if (!res.ok) throw getErrorMessageFromStatus(res.status);
+    if (!res.ok) throw res.status;
 
     const data = await res.json();
 
@@ -94,8 +97,9 @@ export async function getMovieDetailsFromTmdb(tmdbId: string, lang: string = "fr
 }
 
 export async function getTvDetailsFromTmdb(tmdbId: string, lang: string = "fr"): Promise<Media> {
+    'use server';
 
-    const apiKey: string = process.env.NEXT_PUBLIC_TMDB_KEY ?? "";
+    const apiKey: string = process.env.TMDB_KEY ?? "";
 
     const url = `https://api.themoviedb.org/3/tv/${tmdbId}?language=${lang}`;
     const options = {
@@ -108,7 +112,7 @@ export async function getTvDetailsFromTmdb(tmdbId: string, lang: string = "fr"):
 
     const res = await fetch(url, options)
 
-    if (!res.ok) throw getErrorMessageFromStatus(res.status);
+    if (!res.ok) throw  res.status;
 
     const data = await res.json();
 

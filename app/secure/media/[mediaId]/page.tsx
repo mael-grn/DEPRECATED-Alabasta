@@ -1,6 +1,6 @@
 'use client';
 
-import {useParams} from "next/navigation";
+import {useParams, useRouter} from "next/navigation";
 import {useEffect, useState} from "react";
 import {Media} from "@/app/models/media";
 import MediaService from "@/app/services/mediaService";
@@ -14,6 +14,7 @@ export default function Page() {
 
     const {mediaId} = useParams();
 
+    const router = useRouter();
 
     const [media, setMedia] = useState<Media | null>(null);
     const [loading, setLoading] = useState(true);
@@ -50,7 +51,7 @@ export default function Page() {
 
                 </>
             }
-            <Section actions={[{iconName:"bookmark", text:"Enregistrer"}, {iconName:"play", text:"regarder", actionType: ActionTypeEnum.dangerous}]}>
+            <Section actions={[{iconName:"bookmark", text:"Enregistrer"}, {iconName:"play", text:"regarder", actionType: ActionTypeEnum.dangerous, onClick: () => router.push(`/secure/media/${mediaId}/stream`)}]}>
                 <p className={"text-xs text-on-foreground-hover"}>ID: {media?.imdbId}</p>
                 <h1>{media?.title}</h1>
 

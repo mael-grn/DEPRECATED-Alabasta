@@ -80,11 +80,11 @@ export default function Page() {
 
 
         <MainPage title={"Créer un compte"} pageAlignment={PageAlignmentEnum.center}>
-            <Section actions={[{iconName:"login", text:"Connexion", isSecondary:true, onClick: () => router.push("/auth/login")},{isLoading:loading, isForm:true, iconName:"ship", text:"Créer mon compte"}]}>
-                <form
-                    onSubmit={handleSubmit}
-                    className="flex flex-col gap-3"
-                >
+            <form
+                onSubmit={handleSubmit}
+                className="flex flex-col gap-3"
+            >
+                <Section actions={[{iconName:"login", text:"Connexion", isSecondary:true, onClick: () => router.push("/auth/login")},{isLoading:loading, isForm:true, iconName:"ship", text:"Créer mon compte"}]}>
                     <Input placeholder={"Prénom"} value={firstNameForm} setValueAction={setFirstNameForm} iconName={"user"}
                            validatorAction={basicStringValidator}/>
                     <Input placeholder={"Nom"} value={lastNameForm} setValueAction={setLastNameForm} iconName={"user"}
@@ -101,8 +101,9 @@ export default function Page() {
                         <DropDown items={["publique", "privé"]} selectedItem={accountVisibility}
                                   setSelectedItemAction={setAccountVisibility}/>
                     </div>
-                </form>
-            </Section>
+                </Section>
+            </form>
+
 
             <Popup show={showPopup} message={popupMessage} title={popupTitle} closePopup={() => setShowPopup(false)}
                    icon={popupIcon}/>

@@ -13,7 +13,7 @@ export class UserService {
         } catch (e) {
             return {
                 success: false,
-                error: getErrorMessageFromStatus((e as AxiosError).status || 500)
+                error: getErrorMessageFromStatus((e as AxiosError).status || -1)
             };
         }
     }
@@ -28,7 +28,7 @@ export class UserService {
         } catch (e) {
             return {
                 success: false,
-                error: getErrorMessageFromStatus((e as AxiosError).status || 500)
+                error: getErrorMessageFromStatus((e as AxiosError).status || -1)
             };
         }
     }
@@ -43,7 +43,7 @@ export class UserService {
         } catch (e) {
             return {
                 success: false,
-                error: getErrorMessageFromStatus((e as AxiosError).status || 500)
+                error: getErrorMessageFromStatus((e as AxiosError).status || -1)
             };
         }
     }
@@ -58,7 +58,7 @@ export class UserService {
         } catch (e) {
             return {
                 success: false,
-                error: getErrorMessageFromStatus((e as AxiosError).status || 500)
+                error: getErrorMessageFromStatus((e as AxiosError).status || -1)
             };
         }
     }
@@ -72,7 +72,7 @@ export class UserService {
         } catch (e) {
             return {
                 success: false,
-                error: getErrorMessageFromStatus((e as AxiosError).status || 500)
+                error: getErrorMessageFromStatus((e as AxiosError).status || -1)
             };
         }
     }
@@ -86,7 +86,7 @@ export class UserService {
         } catch (e) {
             return {
                 success: false,
-                error: getErrorMessageFromStatus((e as AxiosError).status || 500)
+                error: getErrorMessageFromStatus((e as AxiosError).status || -1)
             };
         }
     }

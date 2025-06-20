@@ -12,16 +12,17 @@ export interface ButtonProps {
 
 export enum ActionTypeEnum {
     dangerous,
-    safe
+    safe,
+    neutral
 }
 
-export default function Button({iconName, text, onClick, actionType, isSecondary=false, isForm = false, isLoading}:ButtonProps) {
+export default function Button({iconName, text, onClick, actionType = ActionTypeEnum.neutral, isSecondary=false, isForm = false, isLoading}:ButtonProps) {
 
     return (
         <button
             disabled={isLoading}
             type={isForm ? "submit" : "button"}
-            className={`flex  gap-2 cursor-pointer text-background items-center justify-center pt-2 pb-2 pl-4 pr-4 ${actionType === undefined ? isSecondary ? "bg-background text-foreground border-1 border-foreground md:hover:bg-on-background-hover active:bg-on-background-hover" : "bg-foreground md:hover:bg-on-foreground active:bg-on-foreground" : actionType === ActionTypeEnum.safe ? "bg-safe md:hover:bg-safe-hover active:bg-safe-hover" : "bg-dangerous md:hover:bg-dangerous-hover active:bg-dangerous"} rounded-lg disabled:cursor-default disabled:opacity-50 `}
+            className={`flex  gap-2 cursor-pointer text-background items-center justify-center pt-2 pb-2 pl-4 pr-4 ${actionType === ActionTypeEnum.neutral ? isSecondary ? "bg-background text-foreground border-1 border-foreground md:hover:bg-on-background-hover active:bg-on-background-hover" : "bg-foreground md:hover:bg-on-foreground active:bg-on-foreground" : actionType === ActionTypeEnum.safe ? "bg-safe md:hover:bg-safe-hover active:bg-safe-hover" : "bg-dangerous md:hover:bg-dangerous-hover active:bg-dangerous"} rounded-lg disabled:cursor-default disabled:opacity-50 `}
             onClick={onClick}
         >
             <>

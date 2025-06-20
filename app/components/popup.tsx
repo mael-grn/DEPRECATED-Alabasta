@@ -1,7 +1,7 @@
 import {AnimatePresence, motion} from "framer-motion";
-import Button, {ButtonProps} from "@/app/components/Button";
+import Button, {ActionTypeEnum, ButtonProps} from "@/app/components/Button";
 
-export default function Popup({show, icon="info", title, message, closePopup, actions} : {show: boolean, icon?: string, message: string, title: string, closePopup: () => void, actions?: ButtonProps[] }) {
+export default function Popup({show, icon="info", title, message, closePopup, actions, isCloseDangerous=false} : {show: boolean, icon?: string, message: string, title: string, closePopup: () => void, actions?: ButtonProps[], isCloseDangerous?:boolean }) {
     return (
         <AnimatePresence>
             {
@@ -21,7 +21,7 @@ export default function Popup({show, icon="info", title, message, closePopup, ac
                         <h2 className={"text-center"}>{title}</h2>
                         <p className={"text-center"}>{message}</p>
                         <div className={"flex flex-1 gap-2 items-center justify-center"}>
-                            <Button iconName={"close"} text={"Fermer"} onClick={closePopup} />
+                            <Button iconName={"close"} text={"Fermer"} actionType={isCloseDangerous ? ActionTypeEnum.dangerous : ActionTypeEnum.neutral} onClick={closePopup} />
                             {
                                 actions && actions.map((action, index) => (
                                     <Button

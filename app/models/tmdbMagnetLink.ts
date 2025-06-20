@@ -6,13 +6,14 @@ export interface TmdbMagnetLink {
     magnet_link: string;
     quality: string;
     language: string;
+    source: string;
     created_at: Date;
 }
 
 export interface InsertableTmdbMagnetLink {
-    tmdb_id: number;
+    tmdb_id: string;
     magnet_link: string;
     quality: string;
     language: string;
-    created_at?: Date;
+    source: string;
 }

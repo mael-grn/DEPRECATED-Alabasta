@@ -36,8 +36,9 @@ CREATE TABLE SUBSCRIPTIONS (
 CREATE TABLE TMDB_MAGNET_LINKS (
                                    tmdb_id INT NOT NULL,
                                    quality VARCHAR(255) NOT NULL,
-                                   magnet_link TEXT NOT NULL,
-                                   PRIMARY KEY (tmdb_id, quality),
+                                   magnet_link TEXT NOT NULL PRIMARY KEY ,
+                                    language VARCHAR(255) NOT NULL,
+                                    source VARCHAR(255) NOT NULL,
                                    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 

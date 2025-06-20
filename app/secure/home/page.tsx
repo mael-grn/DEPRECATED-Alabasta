@@ -20,11 +20,11 @@ export default function Page() {
     useEffect(() => {
         setPopularLoading(true);
         MediaService.getPopular().then((medias) => {
-            setPopularMovies(medias);
+            setPopularMovies(medias.popularMovies);
         }).catch((e) => {
             setShowPopup(true)
             setPopupTitle("Erreur");
-            setPopupMessage(e);
+            setPopupMessage(e.toString());
         }).finally(() => setPopularLoading(false));
     }, []);
 

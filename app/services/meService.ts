@@ -8,7 +8,7 @@ export default class MeService {
             const response = await axios.get('/api/me/', {withCredentials: true});
             return response.data as User;
         } catch (e) {
-            throw getErrorMessageFromStatus((e as AxiosError).status || 500)
+            throw getErrorMessageFromStatus((e as AxiosError).status || -1)
         }
     }
 }

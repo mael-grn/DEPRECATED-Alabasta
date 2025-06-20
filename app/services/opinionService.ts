@@ -14,7 +14,7 @@ export default class OpinionService {
         } catch (e) {
             return {
                 success: false,
-                error: getErrorMessageFromStatus((e as AxiosError).status || 500)
+                error: getErrorMessageFromStatus((e as AxiosError).status || -1)
             };
         }
     }

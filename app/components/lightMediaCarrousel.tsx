@@ -34,16 +34,17 @@ export default function LightMediaCarrousel({medias, title, loading = false}: {
                     </button>
                 </div>
             </div>
+            {
+                loading && <div
+                    className={"flex justify-center items-center bg-transparent backdrop-blur w-full h-[380px]"}>
+                    <img src={"/icons/loader-light.gif"} alt={"loading"} className={"w-10"}/>
+                </div>
+            }
             <div ref={scrollRef} className={"flex overflow-x-auto gap-3 relative"}>
                 {
                     medias.map((media, index) => <LightMediaComponent key={index} media={media} index={index}/>)
                 }
-                {
-                    loading && <div
-                        className={"flex justify-center items-center bg-transparent backdrop-blur absolute top-0 left-0 w-full h-full"}>
-                        <img src={"/icons/loader-light.gif"} alt={"loading"} className={"w-6"}/>
-                    </div>
-                }
+
             </div>
         </div>
     );

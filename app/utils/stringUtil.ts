@@ -28,6 +28,8 @@ export function getErrorMessageFromStatus(
             return "Le service est temporairement indisponible. Merci de réessayer dans quelques instants. (503)";
         case 504:
             return "Le délai d’attente a été dépassé. Veuillez vérifier votre connexion ou réessayer plus tard. (504)";
+        case -1:
+            return "Une erreur s'est produite dans l'application. Merci de réessayer ou de contacter le support.";
         default:
             return `Une erreur inattendue est survenue. Merci de réessayer ou de contacter le support. (${status})`;
     }
