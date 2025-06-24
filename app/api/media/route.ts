@@ -1,9 +1,17 @@
 
 import {NextResponse} from "next/server";
-import {getPopularMovies} from "@/app/utils/tmdbUtil";
+import {getPopularMovies, searchMedia} from "@/app/utils/tmdbUtil";
 import HomeMediaLists from "@/app/models/homeMediaLists";
 
-export async function GET() {
+export async function GET(request: Request) {
+
+    const {searchParams} = new URL(request.url);
+    const query = searchParams.get('q');
+
+    if (query) {
+        const medias = await searchMedia(query);
+        return NextResponse.json(medias, {status: 200});
+    }
 
     try {
         const medias = await getPopularMovies();

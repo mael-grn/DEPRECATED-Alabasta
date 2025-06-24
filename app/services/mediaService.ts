@@ -5,6 +5,7 @@ import HomeMediaLists from "../models/homeMediaLists";
 import {getErrorMessageFromStatus} from "@/app/utils/stringUtil";
 import {TmdbMagnetLink} from "@/app/models/tmdbMagnetLink";
 import MeService from "@/app/services/meService";
+import LightMedia from "@/app/models/lightMedia";
 
 export default class MediaService {
     static async getPopular(): Promise<HomeMediaLists> {
@@ -41,6 +42,18 @@ export default class MediaService {
         try {
             const response = await axios.get(`/api/media/${mediaId}/magnet-link?search=true`, {withCredentials: true});
             return response.data as TmdbMagnetLink[];
+        } catch (e) {
+            if ((e as AxiosError).response?.status === 404) {
+                return [];
+            }
+            throw getErrorMessageFromStatus((e as AxiosError).status || -1)
+        }
+    }
+
+    static async searchMedia(query: string): Promise<LightMedia[]> {
+        try {
+            const response = await axios.get(`/api/media?q=${query}`, {withCredentials: true});
+            return response.data as LightMedia[];
         } catch (e) {
             if ((e as AxiosError).response?.status === 404) {
                 return [];

@@ -35,7 +35,7 @@ export default function MainPage({children, title, pageAlignment=PageAlignmentEn
                 </div>
                 <hr className={"border-0 h-[1px] w-full bg-on-background-hover"}/>
             </>}
-            <div className={`p-3 w-full flex gap-5  ${pageAlignment === PageAlignmentEnum.center ? 'justify-center items-center flex-col' : pageAlignment === PageAlignmentEnum.start ? 'justify-start items-start flex-col' : pageAlignment === PageAlignmentEnum.tileCenter ? 'justify-center items-center flex-wrap' : 'justify-start items-start flex-wrap'}`}>
+            <div className={`p-3 w-full flex gap-5 ${pageAlignment === PageAlignmentEnum.center ? 'justify-center items-center flex-col' : pageAlignment === PageAlignmentEnum.start ? 'justify-start items-start flex-col' : pageAlignment === PageAlignmentEnum.tileCenter ? 'justify-center items-center flex-wrap' : 'justify-start items-start flex-wrap'}`}>
                 {children}
             </div>
         </main>

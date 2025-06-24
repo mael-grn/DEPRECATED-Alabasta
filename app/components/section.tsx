@@ -6,7 +6,7 @@ import {AnimatePresence, motion} from "framer-motion";
 export default function Section({title, actions, loading=false, children}: {title?: string, loading?: boolean, actions?: ButtonProps[], children: React.ReactNode }) {
 
     return (
-        <div className={"md:w-fit md:max-w-[800px] w-full"}>
+        <div className={"md:w-fit flex-1 w-full"}>
             <div className={`w-full relative p-6 bg-on-background border-[1px] border-on-background-hover ${actions ? "rounded-t-xl" : "rounded-xl"} flex gap-3 flex-col overflow-hidden`}>
                 {title && <h2 className="text-2xl font-bold mb-4">{title}</h2>}
                 <AnimatePresence>

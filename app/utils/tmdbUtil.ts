@@ -112,7 +112,7 @@ export async function getTvDetailsFromTmdb(tmdbId: string, lang: string = "fr"):
 
     const res = await fetch(url, options)
 
-    if (!res.ok) throw  res.status;
+    if (!res.ok) throw res.status;
 
     const data = await res.json();
 
@@ -131,4 +131,49 @@ export async function getTvDetailsFromTmdb(tmdbId: string, lang: string = "fr"):
         voteCount: data.vote_count,
         tmdbId: tmdbId,
     }
+}
+
+export async function searchMedia(queryString: string): Promise<LightMedia[]> {
+
+    const apiKey: string = process.env.TMDB_KEY ?? "";
+
+    const movieUrl = `https://api.themoviedb.org/3/search/tv?query=${queryString}&include_adult=false&language=fr`;
+    const tvUrl = `https://api.themoviedb.org/3/search/movie?query=${queryString}&include_adult=false&language=fr`;
+
+    const options = {
+        method: 'GET',
+        headers: {
+            accept: 'application/json',
+            Authorization: `Bearer ${apiKey}`
+        }
+    };
+
+    const movieRes = await fetch(movieUrl, options);
+    const tvRes = await fetch(tvUrl, options);
+
+    if (!movieRes.ok) {
+        throw movieRes.status;
+    }
+
+    if (!tvRes.ok) {
+        throw tvRes.status;
+    }
+
+    const movieData = await movieRes.json();
+    const tvData = await tvRes.json();
+    const mediaList: LightMedia[] = [];
+
+    for (const item of movieData.results) {
+        if (item.poster_path && item.release_date) {
+            mediaList.push(parseLightMovie(item));
+        }
+    }
+
+    for (const item of tvData.results) {
+        if (item.poster_path && item.release_date) {
+            mediaList.push(parseLightMovie(item));
+        }
+    }
+
+    return mediaList
 }
