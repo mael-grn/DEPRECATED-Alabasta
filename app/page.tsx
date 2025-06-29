@@ -46,7 +46,7 @@ export default function Home() {
               />
           </div>
 
-          <LoadingPopup show={loading}/>
+          <LoadingPopup show={loading} message={"Nous vérifions si vous vous êtes déjà connecté..."}/>
 
       </main>
   );

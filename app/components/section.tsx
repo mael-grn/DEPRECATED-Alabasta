@@ -2,12 +2,39 @@
 
 import Button, {ButtonProps} from "@/app/components/Button";
 import {AnimatePresence, motion} from "framer-motion";
+import {useEffect, useState} from "react";
 
-export default function Section({title, actions, loading=false, children}: {title?: string, loading?: boolean, actions?: ButtonProps[], children: React.ReactNode }) {
+export enum SectionWeight {
+    LIGHT = 1,
+    MEDIUM = 2,
+    HEAVY = 3
+}
+
+export enum SectionWidth {
+    FIT = "fit",
+    FULL = "100%",
+    HALF = "50%",
+    QUARTER = "25%",
+    THIRD = "33%",
+    TWO_THIRDS = "66%",
+    THREE_QUARTERS = "75%"
+}
+
+export default function Section({title, actions, loading=false, children, weight=SectionWeight.LIGHT, width=SectionWidth.FIT}: {title?: string, loading?: boolean, actions?: ButtonProps[], children: React.ReactNode, weight?: SectionWeight, width?: SectionWidth}) {
+
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            if (window.innerWidth < 768) {
+                setIsMobile(true);
+            }
+        }
+    }, []);
 
     return (
-        <div className={"md:w-fit flex-1 w-full"}>
-            <div className={`w-full relative p-6 bg-on-background border-[1px] border-on-background-hover ${actions ? "rounded-t-xl" : "rounded-xl"} flex gap-3 flex-col overflow-hidden`}>
+        <div style={{width: isMobile ? SectionWidth.FULL : width, maxWidth: isMobile ? SectionWidth.FULL : width, minWidth: isMobile ? SectionWidth.FULL : width, flex: weight}} className={` max-h-full min-h-full flex flex-col`}>
+            <div className={`w-full flex-1 relative p-6 bg-on-background border-[1px] border-on-background-hover ${actions ? "rounded-t-xl" : "rounded-xl"} flex gap-3 flex-col overflow-hidden`}>
                 {title && <h2 className="text-2xl font-bold mb-4">{title}</h2>}
                 <AnimatePresence>
                     {

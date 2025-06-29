@@ -1,6 +1,8 @@
 'use client';
 
+import { useScroll, useMotionValueEvent } from "framer-motion";
 import {useRouter} from "next/navigation";
+import {useState} from "react";
 
 export interface pageProps {
     children: React.ReactNode;
@@ -18,24 +20,31 @@ export enum PageAlignmentEnum {
 
 export default function MainPage({children, title, pageAlignment=PageAlignmentEnum.start}: pageProps) {
 
+    const { scrollY } = useScroll();
+    const [scrolled, setScrolled] = useState(false);
+
+    useMotionValueEvent(scrollY, "change", (latest) => {
+        setScrolled(latest > 0);
+    });
+
     const router = useRouter();
 
     return (
-        <main className={"flex items-start justify-start flex-col gap-6 p-6 mb-20"}>
-            {title && <>
-                <div className="flex gap-4 items-center">
+        <main className={`flex items-start justify-start flex-col gap-6 ${title ? "pb-6 pl-6 pr-6" : "p-6"} mb-20`}>
+            {title && <div className={`flex flex-col ${scrolled ? "gap-4 pt-4" : "gap-6 pt-6"} sticky w-full top-0 left-0 z-10 bg-background-opacity backdrop-blur`}>
+                <div className="flex gap-4 items-center " >
                     <button
-                        className="flex gap-2 items-center justify-center border-1 border-on-background-hover pl-4 pr-4 pt-2 pb-2 bg-on-background rounded-lg md:hover:bg-on-background-hover active:bg-on-background-hover cursor-pointer"
+                        className={`flex ${scrolled ? "gap-0" : "gap-2"} items-center justify-center border-1 border-on-background-hover pl-4 pr-4 pt-2 pb-2 bg-on-background rounded-lg md:hover:bg-on-background-hover active:bg-on-background-hover cursor-pointer`}
                         onClick={() => router.back()}
                     >
                         <img src="/icons/arrow-back.svg" alt="Back" className="w-4 invert" />
-                        <span>Retour</span>
+                        <span className={`${scrolled ? "text-[0px]" : "text-[15px]"}`}>Retour</span>
                     </button>
-                    <h1 className={"line-clamp-2"}>{title}</h1>
+                    <h1 className={`line-clamp-2`} style={{fontSize: scrolled ? "20px" : "35px"}}>{title}</h1>
                 </div>
                 <hr className={"border-0 h-[1px] w-full bg-on-background-hover"}/>
-            </>}
-            <div className={`p-3 w-full flex gap-5 ${pageAlignment === PageAlignmentEnum.center ? 'justify-center items-center flex-col' : pageAlignment === PageAlignmentEnum.start ? 'justify-start items-start flex-col' : pageAlignment === PageAlignmentEnum.tileCenter ? 'justify-center items-center flex-wrap' : 'justify-start items-start flex-wrap'}`}>
+            </div>}
+            <div className={`p-3 w-full flex gap-5 items-stretch ${pageAlignment === PageAlignmentEnum.center ? 'justify-center flex-col' : pageAlignment === PageAlignmentEnum.start ? 'justify-start flex-col' : pageAlignment === PageAlignmentEnum.tileCenter ? 'justify-center flex-wrap flex-col md:flex-row' : 'justify-start flex-wrap flex-col md:flex-row'}`}>
                 {children}
             </div>
         </main>

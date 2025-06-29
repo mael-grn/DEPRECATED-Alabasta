@@ -3,17 +3,18 @@ import MediaType from "@/app/enums/mediaTypeEnum";
 import LightMedia from "@/app/models/lightMedia";
 
 
-export function parseLightMovie(data: {
+export function parseLightMedia(data: {
     title: string,
-    release_date: string,
+    release_date: string | undefined,
+    first_air_date: string | undefined,
     poster_path: string,
     id: string
-}): LightMedia {
+}, type: MediaType): LightMedia {
     return {
         title: data.title,
-        year: parseInt(data.release_date?.split('-')[0] ?? 2005),
+        year: parseInt(data.release_date?.split('-')[0] ?? data.first_air_date?.split('-')[0] ?? '1970'),
         posterUrl: data.poster_path ? "https://image.tmdb.org/t/p/w500" + data.poster_path : "",
-        type: MediaType.MOVIE,
+        type: type,
         tmdbId: data.id,
     }
 }
@@ -43,7 +44,7 @@ export async function getPopularMovies(): Promise<LightMedia[]> {
     const mediaList: LightMedia[] = [];
     for (const item of data.results) {
         if (item.poster_path && item.release_date) {
-            mediaList.push(parseLightMovie(item));
+            mediaList.push(parseLightMedia(item, MediaType.MOVIE));
         }
     }
 
@@ -52,10 +53,15 @@ export async function getPopularMovies(): Promise<LightMedia[]> {
 
 export async function getMediaDetails(tmdbId: string, lang: string = "fr") {
     'use server';
-    let media = getMovieDetailsFromTmdb(tmdbId, lang);
-    if (media) return media;
-    media = getTvDetailsFromTmdb(tmdbId, lang);
-    return media;
+    try {
+        return await getMovieDetailsFromTmdb(tmdbId, lang);
+    } catch (error) {
+        if (error === 404) {
+            return await getTvDetailsFromTmdb(tmdbId, lang);
+        } else {
+            throw error; // Re-throw other errors
+        }
+    }
 }
 
 export async function getMovieDetailsFromTmdb(tmdbId: string, lang: string = "fr"): Promise<Media> {
@@ -138,7 +144,7 @@ export async function searchMedia(queryString: string): Promise<LightMedia[]> {
     const apiKey: string = process.env.TMDB_KEY ?? "";
 
     const movieUrl = `https://api.themoviedb.org/3/search/tv?query=${queryString}&include_adult=false&language=fr`;
-    const tvUrl = `https://api.themoviedb.org/3/search/movie?query=${queryString}&include_adult=false&language=fr`;
+    const tvUrl = `https://api.themoviedb.org/3/search/tv?query=${queryString}&include_adult=false&language=fr`;
 
     const options = {
         method: 'GET',
@@ -165,13 +171,14 @@ export async function searchMedia(queryString: string): Promise<LightMedia[]> {
 
     for (const item of movieData.results) {
         if (item.poster_path && item.release_date) {
-            mediaList.push(parseLightMovie(item));
+            mediaList.push(parseLightMedia(item, MediaType.MOVIE));
         }
     }
 
     for (const item of tvData.results) {
-        if (item.poster_path && item.release_date) {
-            mediaList.push(parseLightMovie(item));
+        console.log(item)
+        if (item.poster_path && item.first_air_date) {
+            mediaList.push(parseLightMedia(item, MediaType.SHOW));
         }
     }
 
