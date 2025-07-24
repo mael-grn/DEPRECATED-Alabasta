@@ -11,7 +11,7 @@ export enum SectionWeight {
 }
 
 export enum SectionWidth {
-    FIT = "fit",
+    FIT = "fit-content",
     FULL = "100%",
     HALF = "50%",
     QUARTER = "25%",
@@ -34,7 +34,7 @@ export default function Section({title, actions, loading=false, children, weight
 
     return (
         <div style={{width: isMobile ? SectionWidth.FULL : width, maxWidth: isMobile ? SectionWidth.FULL : width, minWidth: isMobile ? SectionWidth.FULL : width, flex: weight}} className={` max-h-full min-h-full flex flex-col`}>
-            <div className={`w-full flex-1 relative p-6 bg-on-background border-[1px] border-on-background-hover ${actions ? "rounded-t-xl" : "rounded-xl"} flex gap-3 flex-col overflow-hidden`}>
+            <div className={`w-full flex-1 relative p-6 bg-on-background border-[1px] border-on-background-hover ${actions ? "rounded-t-xl" : "rounded-xl"} flex gap-3 flex-col`}>
                 {title && <h2 className="text-2xl font-bold mb-4">{title}</h2>}
                 <AnimatePresence>
                     {

@@ -44,7 +44,7 @@ export default function MainPage({children, title, pageAlignment=PageAlignmentEn
                 </div>
                 <hr className={"border-0 h-[1px] w-full bg-on-background-hover"}/>
             </div>}
-            <div className={`p-3 w-full flex gap-5 items-stretch ${pageAlignment === PageAlignmentEnum.center ? 'justify-center flex-col' : pageAlignment === PageAlignmentEnum.start ? 'justify-start flex-col' : pageAlignment === PageAlignmentEnum.tileCenter ? 'justify-center flex-wrap flex-col md:flex-row' : 'justify-start flex-wrap flex-col md:flex-row'}`}>
+            <div className={`p-3 w-full flex gap-5 ${pageAlignment === PageAlignmentEnum.center ? 'justify-center items-center flex-col' : pageAlignment === PageAlignmentEnum.start ? 'justify-start  items-stretch flex-col' : pageAlignment === PageAlignmentEnum.tileCenter ? 'justify-center  items-stretch flex-wrap flex-col md:flex-row' : 'justify-start  items-stretch flex-wrap flex-col md:flex-row'}`}>
                 {children}
             </div>
         </main>

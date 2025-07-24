@@ -6,7 +6,7 @@ import Popup from "@/app/components/popup";
 import SessionService from "@/app/services/sessionService";
 import {useRouter} from "next/navigation";
 import MainPage, {PageAlignmentEnum} from "@/app/components/mainPage";
-import Section from "@/app/components/section";
+import Section, {SectionWidth} from "@/app/components/section";
 
 export default function Page() {
 
@@ -54,7 +54,7 @@ export default function Page() {
                 onSubmit={handleSubmit}
                 className="flex flex-col gap-4 bg-background-deep p-8 rounded-xl"
             >
-                <Section actions={[{iconName:"ship", text:"Créer un compte", isSecondary:true, onClick: () => router.push("/auth/register")}, {isLoading:loading, isForm:true, iconName:"key", text:"Connexion"}]}>
+                <Section width={SectionWidth.FIT} actions={[{iconName:"ship", text:"Créer un compte", isSecondary:true, onClick: () => router.push("/auth/register")}, {isLoading:loading, isForm:true, iconName:"key", text:"Connexion"}]}>
                     <Input placeholder={"Nom d'utilisateur"} value={usernameForm} setValueAction={setUsernameForm}
                            iconName={"user"} validatorAction={basicStringValidator}/>
                     <Input placeholder={"Mot de passe"} value={passwordForm} setValueAction={setPasswordForm}
